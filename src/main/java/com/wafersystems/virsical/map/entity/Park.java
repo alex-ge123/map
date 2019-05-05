@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
 
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author tandk
- * @since 2019-04-30
+ * @since 2019-05-05
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,24 +29,20 @@ public class Park extends Model<Park> {
 
   private static final long serialVersionUID = 1L;
 
-  @ApiModelProperty(value = "主键")
+  @ApiModelProperty(value = "主键", example = "1")
   @TableId(value = "park_id", type = IdType.AUTO)
   private Integer parkId;
 
-  @ApiModelProperty(value = "租户id")
-  @TableField("tenant_id")
+  @ApiModelProperty(value = "租户id", example = "1")
   private Integer tenantId;
 
-  @ApiModelProperty(value = "国家code")
-  @TableField("country")
+  @ApiModelProperty(value = "国家code", example = "1")
   private String country;
 
-  @ApiModelProperty(value = "国家名称")
-  @TableField("country_name")
+  @ApiModelProperty(value = "国家名称", example = "1")
   private String countryName;
 
-  @ApiModelProperty(value = "删除标记")
-  @TableField("del_flag")
+  @ApiModelProperty(value = "删除标记", example = "1")
   @TableLogic
   private String delFlag;
 
