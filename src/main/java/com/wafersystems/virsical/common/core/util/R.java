@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.common.core.util;
 
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,15 +21,18 @@ public class R<T> implements Serializable {
 
   @Getter
   @Setter
+  @ApiModelProperty(value = "返回标记：成功标记=0，失败标记=1")
   private int code = 0;
 
   @Getter
   @Setter
+  @ApiModelProperty(value = "返回信息")
   private String msg = "success";
 
 
   @Getter
   @Setter
+  @ApiModelProperty(value = "数据")
   private T data;
 
   public R() {
