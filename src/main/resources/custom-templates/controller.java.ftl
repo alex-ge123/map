@@ -57,14 +57,14 @@ public class ${table.controllerName} {
 
   @ApiOperation(value = "修改${table.comment!}", notes = "修改${table.comment!}")
   @ApiImplicitParam(name = "${table.entityPath}", value = "${table.comment!}对象", required = true, dataType = "${entity}")
-  @PutMapping()
+  @PostMapping()
   public R update(@RequestBody ${entity} ${table.entityPath}) {
     return ${table.entityPath}.updateById() ? R.ok() : R.fail();
   }
 
   @ApiOperation(value = "删除${table.comment!}", notes = "删除${table.comment!}")
   @ApiImplicitParam(name = "id", value = "${table.comment!}id", required = true, dataType = "Integer")
-  @DeleteMapping("/{id}")
+  @GetMapping("/{id}")
   public R delete(@PathVariable Integer id) {
     return new ${entity}().deleteById(id) ? R.ok() : R.fail();
   }
