@@ -64,7 +64,7 @@ public class CodeGenerator {
     // 数据源配置
     DataSourceConfig dsc = new DataSourceConfig();
     dsc.setUrl("jdbc:mysql://localhost:3306/virsical_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true");
-    // dsc.setSchemaName("public");
+    // dsc.setSchemaName("public")
     dsc.setDriverName("com.mysql.cj.jdbc.Driver");
     dsc.setUsername("root");
     dsc.setPassword("root");
@@ -72,7 +72,7 @@ public class CodeGenerator {
 
     // 包配置
     PackageConfig pc = new PackageConfig();
-//    pc.setModuleName(scanner("模块名"));
+//    pc.setModuleName(scanner("模块名"))
     pc.setParent("com.wafersystems.virsical.map");
     mpg.setPackageInfo(pc);
 
@@ -98,16 +98,6 @@ public class CodeGenerator {
           + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
       }
     });
-        /*
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录");
-                return false;
-            }
-        });
-        */
     cfg.setFileOutConfigList(focList);
     mpg.setCfg(cfg);
 
@@ -116,9 +106,9 @@ public class CodeGenerator {
 
     // 配置自定义输出模板
     //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-     templateConfig.setEntity("custom-templates/entity.java");
-//     templateConfig.setService();
-     templateConfig.setController("custom-templates/controller.java");
+    templateConfig.setEntity("custom-templates/entity.java");
+//     templateConfig.setService()
+    templateConfig.setController("custom-templates/controller.java");
 
     templateConfig.setXml(null);
     mpg.setTemplate(templateConfig);
@@ -128,7 +118,7 @@ public class CodeGenerator {
     strategy.setNaming(NamingStrategy.underline_to_camel);
     strategy.setColumnNaming(NamingStrategy.underline_to_camel);
     strategy.setLogicDeleteFieldName("del_flag");
-//    strategy.setSuperEntityClass("");
+//    strategy.setSuperEntityClass("")
     strategy.setEntityLombokModel(true);
     strategy.setRestControllerStyle(true);
     strategy.setSuperControllerClass("com.wafersystems.virsical.map.common.BaseController");

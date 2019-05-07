@@ -3,6 +3,7 @@ package ${package.Entity};
 <#list table.importPackages as pkg>
 import ${pkg};
 </#list>
+import com.fasterxml.jackson.annotation.JsonIgnore;
 <#if swagger2>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,7 +35,7 @@ import lombok.experimental.Accessors;
 @TableName("${table.name}")
 </#if>
 <#if swagger2>
-@ApiModel(value="${entity}对象", description="${table.comment!}")
+@ApiModel(value="${entity}", description="${table.comment!}")
 </#if>
 <#if superEntityClass??>
 public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
@@ -88,6 +89,7 @@ public class ${entity} implements Serializable {
     </#if>
 <#-- 逻辑删除注解 -->
     <#if (logicDeleteFieldName!"") == field.name>
+    @JsonIgnore
     @TableLogic
     </#if>
     private ${field.propertyType} ${field.propertyName};

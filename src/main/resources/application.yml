@@ -26,6 +26,11 @@ aaa:
     column: tenant_id
     tables:
       - park
+      - building
+      - floor
+      - map
+      - svg
+      - svg_state
 
 # 暴露监控端点
 management:

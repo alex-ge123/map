@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 <#if superControllerClassPackage??>
 import ${superControllerClassPackage};
 </#if>
+import java.util.List;
 
 /**
  * <p>
@@ -29,7 +31,7 @@ import ${superControllerClassPackage};
  * @author ${author}
  * @since ${date}
  */
-@Api(value = "${table.entityPath}", description = "${table.comment!} 接口")
+@Api(tags = "${table.comment!}", description = "${table.entityPath}")
 @AllArgsConstructor
 <#if restControllerStyle>
 @RestController
@@ -52,44 +54,44 @@ public class ${table.controllerName} {
   @ApiImplicitParam(name = "${table.entityPath}", value = "${table.comment!}对象", required = true, dataType = "${entity}")
   @PostMapping("/add")
   public R add(@RequestBody ${entity} ${table.entityPath}) {
-    return ${table.entityPath}.insert() ? R.ok() : R.fail();
+    return ${table.entityPath}Service.save(${table.entityPath}) ? R.ok() : R.fail();
   }
 
-  @ApiOperation(value = "修改${table.comment!}", notes = "修改${table.comment!}")
+  @ApiOperation(value = "修改${table.comment!}", notes = "根据${table.comment!}id修改${table.comment!}")
   @ApiImplicitParam(name = "${table.entityPath}", value = "${table.comment!}对象", required = true, dataType = "${entity}")
   @PostMapping("/update")
   public R update(@RequestBody ${entity} ${table.entityPath}) {
-    return ${table.entityPath}.updateById() ? R.ok() : R.fail();
+    return ${table.entityPath}Service.updateById(${table.entityPath}) ? R.ok() : R.fail();
   }
 
-  @ApiOperation(value = "删除${table.comment!}", notes = "删除${table.comment!}")
+  @ApiOperation(value = "删除${table.comment!}", notes = "根据${table.comment!}id删除${table.comment!}")
   @ApiImplicitParam(name = "id", value = "${table.comment!}id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
-    return new ${entity}().deleteById(id) ? R.ok() : R.fail();
+    return ${table.entityPath}Service.removeById(id) ? R.ok() : R.fail();
   }
 
-  @ApiOperation(value = "获取单个${table.comment!}", notes = "根据id获取${table.comment!}")
+  @ApiOperation(value = "获取单个${table.comment!}", notes = "根据${table.comment!}id获取${table.comment!}")
   @ApiImplicitParam(name = "id", value = "${table.comment!}id", required = true, dataType = "Integer")
   @GetMapping("/{id}")
-  public R get(@PathVariable Integer id) {
-    return new ${entity}().deleteById(id) ? R.ok() : R.fail();
+  public R<${entity}> get(@PathVariable Integer id) {
+    return R.ok(${table.entityPath}Service.getById(id));
   }
 
-  @ApiOperation(value = "获取所有${table.comment!}", notes = "获取所有${table.comment!}")
+  @ApiOperation(value = "获取${table.comment!}列表", notes = "根据${table.comment!}对象条件获取${table.comment!}列表")
   @GetMapping("/list")
-  public R list() {
-    return R.ok(${table.entityPath}Service.list(Wrappers.emptyWrapper()));
+  public R<List<${entity}>> list(${entity} ${table.entityPath}) {
+    return R.ok(${table.entityPath}Service.list(Wrappers.query(${table.entityPath})));
   }
 
-  @ApiOperation(value = "获取分页${table.comment!}", notes = "获取分页${table.comment!}")
+  @ApiOperation(value = "获取分页${table.comment!}列表", notes = "根据分页条件、${table.comment!}对象条件获取分页${table.comment!}列表")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "page", value = "分页对象", required = true, dataType = "Page"),
     @ApiImplicitParam(name = "${table.entityPath}", value = "${table.comment!}对象", dataType = "${entity}")
   })
   @GetMapping("/page")
-  public R page(Page page, ${entity} ${table.entityPath}) {
-    return R.ok(new ${entity}().selectPage(page, Wrappers.query(${table.entityPath})));
+  public R<IPage<${entity}>> page(Page page, ${entity} ${table.entityPath}) {
+    return R.ok(${table.entityPath}Service.page(page, Wrappers.query(${table.entityPath})));
   }
 
 }
