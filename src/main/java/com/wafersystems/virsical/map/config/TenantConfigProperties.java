@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "aaa.tenant")
+@ConfigurationProperties(prefix = "tenant")
 public class TenantConfigProperties {
 
   /**

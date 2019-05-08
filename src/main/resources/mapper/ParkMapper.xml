@@ -8,12 +8,24 @@
         <result column="tenant_id" property="tenantId" />
         <result column="country" property="country" />
         <result column="country_name" property="countryName" />
+        <result column="province" property="province" />
+        <result column="province_name" property="provinceName" />
+        <result column="city" property="city" />
+        <result column="city_name" property="cityName" />
+        <result column="park_name" property="parkName" />
+        <result column="time_zone" property="timeZone" />
+        <result column="time_zone_name" property="timeZoneName" />
+        <result column="am_time" property="amTime" />
+        <result column="pm_time" property="pmTime" />
+        <result column="all_day" property="allDay" />
         <result column="del_flag" property="delFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        park_id, tenant_id, country, country_name, del_flag
+        park_id, tenant_id, country, country_name, province, province_name, city, city_name, park_name, time_zone, time_zone_name, am_time, pm_time, all_day, del_flag, create_time, update_time
     </sql>
 
 </mapper>

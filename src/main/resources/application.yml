@@ -5,6 +5,8 @@ spring:
     name: virsical-map
   profiles:
     active: dev
+  jackson:
+    default-property-inclusion: non_null
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,16 +23,15 @@ mybatis-plus:
     banner: false
 
 # 租户表维护
-aaa:
-  tenant:
-    column: tenant_id
-    tables:
-      - park
-      - building
-      - floor
-      - map
-      - svg
-      - svg_state
+tenant:
+  column: tenant_id
+  tables:
+    - park
+    - building
+    - floor
+    - map
+    - svg
+    - svg_state
 
 # 暴露监控端点
 management:
