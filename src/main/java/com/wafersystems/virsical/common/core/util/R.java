@@ -72,11 +72,11 @@ public class R<T> implements Serializable {
   }
 
   public static <T> R<T> fail() {
-    return new R(CommonConstants.FAIL, "", "");
+    return new R(CommonConstants.FAIL, null, null);
   }
 
   public static <T> R<T> fail(String msg) {
-    return new R(CommonConstants.FAIL, msg, "");
+    return new R(CommonConstants.FAIL, msg, null);
   }
 
 }
