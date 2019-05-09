@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
   /**
    * validation Exception
    *
-   * @param exception
+   * @param exception 方法参数无效异常
    * @return R
    */
   @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})

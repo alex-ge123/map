@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MsgConstants;
 import com.wafersystems.virsical.map.entity.Floor;
 import com.wafersystems.virsical.map.service.IFloorService;
 import io.swagger.annotations.Api;
@@ -36,6 +37,11 @@ public class FloorController extends BaseController {
   @ApiImplicitParam(name = "floor", value = "楼层对象", required = true, dataType = "Floor")
   @PostMapping("/add")
   public R add(@RequestBody Floor floor) {
+    if (floorService.getOne(Wrappers.<Floor>lambdaQuery()
+      .eq(Floor::getBuildingId, floor.getBuildingId())
+      .eq(Floor::getFloorNum, floor.getFloorNum())) != null) {
+      return R.fail(MsgConstants.FLOOR_NUM_NO_REPEAT);
+    }
     return floorService.save(floor) ? R.ok() : R.fail();
   }
 
@@ -43,6 +49,12 @@ public class FloorController extends BaseController {
   @ApiImplicitParam(name = "floor", value = "楼层对象", required = true, dataType = "Floor")
   @PostMapping("/update")
   public R update(@RequestBody Floor floor) {
+    if (floorService.getOne(Wrappers.<Floor>lambdaQuery()
+      .ne(Floor::getFloorId, floor.getFloorId())
+      .eq(Floor::getBuildingId, floor.getBuildingId())
+      .eq(Floor::getFloorNum, floor.getFloorNum())) != null) {
+      return R.fail(MsgConstants.FLOOR_NUM_NO_REPEAT);
+    }
     return floorService.updateById(floor) ? R.ok() : R.fail();
   }
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wafersystems.virsical.map.mapper.SvgMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.wafersystems.virsical.map.entity.Svg">
+    <id column="svg_id" property="svgId"/>
+    <result column="tenant_id" property="tenantId"/>
+    <result column="svg_type_code" property="svgTypeCode"/>
+    <result column="svg_name" property="svgName"/>
+    <result column="svg_width" property="svgWidth"/>
+    <result column="svg_height" property="svgHeight"/>
+    <result column="svg_element" property="svgElement"/>
+    <result column="view_box" property="viewBox"/>
+    <result column="axisx" property="axisx"/>
+    <result column="axixy" property="axixy"/>
+    <result column="state" property="state"/>
+    <result column="font_size" property="fontSize"/>
+    <result column="del_flag" property="delFlag"/>
+    <result column="create_time" property="createTime"/>
+    <result column="update_time" property="updateTime"/>
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+        svg_id, tenant_id, svg_type_code, svg_name, svg_width, svg_height, svg_pid, svg_element, axisx, axixy, state, view_box, font_size, del_flag, create_time, update_time
+  </sql>
+
+  <select id="selectSvgPage" resultType="com.wafersystems.virsical.map.entity.Svg">
+    select s.*, st.svg_type_name from svg s, svg_type st
+    where s.del_flag = 0 and s.svg_type_code = st.svg_type_code
+    <if test="svg.state != null">
+      and s.state = #{svg.state}
+    </if>
+    <if test="svg.svgName != null and svg.svgName != ''">
+      and s.svg_name like CONCAT('%',#{svg.svgName},'%')
+    </if>
+    <if test="svg.svgTypeCode != null and svg.svgTypeCode != ''">
+      and s.svg_type_code = #{svg.svgTypeCode}
+    </if>
+  </select>
+
+</mapper>
