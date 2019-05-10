@@ -44,7 +44,7 @@ public class Floor extends Model<Floor> {
   private Integer buildingId;
 
   @ApiModelProperty(value = "楼层", example = "0")
-  private Integer floorNum;
+  private String floorNum;
 
   @ApiModelProperty(value = "逻辑删除：0-正常，1-删除", example = "0")
   @JsonIgnore

@@ -27,7 +27,7 @@
     <if test="floor.buildingId != null">
       and b.building_id = #{floor.buildingId}
     </if>
-    <if test="floor.floorNum != null">
+    <if test="floor.floorNum != null and floor.floorNum != ''">
       and f.floor_num = #{floor.floorNum}
     </if>
   </select>

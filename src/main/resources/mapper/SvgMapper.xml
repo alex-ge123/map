@@ -23,7 +23,7 @@
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        svg_id, tenant_id, svg_type_code, svg_name, svg_width, svg_height, svg_pid, svg_element, axisx, axixy, state, view_box, font_size, del_flag, create_time, update_time
+        svg_id, tenant_id, svg_type_code, svg_name, svg_width, svg_height, svg_element, view_box, axisx, axixy, state, font_size, del_flag, create_time, update_time
   </sql>
 
   <select id="selectSvgPage" resultType="com.wafersystems.virsical.map.entity.Svg">

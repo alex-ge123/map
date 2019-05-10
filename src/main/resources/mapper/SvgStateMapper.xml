@@ -17,7 +17,7 @@
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        svg_state_id, tenant_id, svg_id, svg_state_name, svg_state_code, svg_state_element, create_time, update_time
+        svg_state_id, tenant_id, svg_id, svg_state_name, svg_state_code, svg_state_element, view_box, create_time, update_time
     </sql>
 
   <select id="getBySvgIdAndStateCode" resultType="com.wafersystems.virsical.map.entity.SvgState">
