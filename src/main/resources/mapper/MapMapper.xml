@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wafersystems.virsical.map.mapper.MapMapper">
+
+  <!-- 通用查询结果列 -->
+  <resultMap id="BaseResultMap" type="com.wafersystems.virsical.map.entity.Map">
+    <id column="map_id" property="mapId"/>
+    <result column="tenant_id" property="tenantId"/>
+    <result column="floor_id" property="floorId"/>
+    <result column="base_map_url" property="baseMapUrl"/>
+    <result column="base_map_element" property="baseMapElement"/>
+    <result column="view_box" property="viewBox"/>
+    <result column="zoom_image_url" property="zoomImageUrl"/>
+    <result column="area_age" property="areaAge"/>
+    <result column="height" property="height"/>
+    <result column="width" property="width"/>
+    <result column="map_state" property="mapState"/>
+    <result column="map_type" property="mapType"/>
+    <result column="fmap_key" property="fmapKey"/>
+    <result column="fmap_id" property="fmapId"/>
+    <result column="fmap_app_name" property="fmapAppName"/>
+    <result column="fmap_server_url" property="fmapServerUrl"/>
+    <result column="fmap_start_point" property="fmapStartPoint"/>
+    <result column="fmap_name" property="fmapName"/>
+    <result column="fmap_upload_url" property="fmapUploadUrl"/>
+    <result column="del_flag" property="delFlag"/>
+    <result column="create_time" property="createTime"/>
+    <result column="update_time" property="updateTime"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+        map_id, tenant_id, floor_id, base_map_url, base_map_element, view_box, zoom_image_url, area_age, height, width, map_state, map_type, fmap_key, fmap_id, fmap_app_name, fmap_server_url, fmap_start_point, fmap_name, fmap_upload_url, del_flag, create_time, update_time
+  </sql>
+
+  <!-- 通用查询映射结果 -->
+  <select id="selectMapPage" resultType="com.wafersystems.virsical.map.entity.Map">
+    SELECT
+    p.park_id,
+    p.park_name,
+    b.building_id,
+    b.building_name,
+    f.floor_num,
+    m.*
+    FROM
+    park p,
+    building b,
+    floor f
+    LEFT JOIN map m ON m.floor_id = f.floor_id AND m.del_flag = 0
+    WHERE
+    p.park_id = b.park_id
+    AND b.building_id = f.building_id
+    <if test="map.parkId != null">
+      AND p.park_id = #{map.parkId}
+    </if>
+    <if test="map.buildingId != null">
+      AND b.building_id = #{map.buildingId}
+    </if>
+    <if test="map.floorNum != null and map.floorNum != ''">
+      AND f.floor_num = #{map.floorNum}
+    </if>
+    <if test="map.mapState != null">
+      AND m.map_state = #{map.mapState}
+    </if>
+    ORDER BY
+    p.park_id,
+    b.building_id,
+    f.floor_num
+  </select>
+</mapper>
