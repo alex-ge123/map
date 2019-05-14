@@ -3,7 +3,7 @@ package com.wafersystems.virsical.common.filter;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
-import com.wafersystems.virsical.map.config.TenantContextHolder;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

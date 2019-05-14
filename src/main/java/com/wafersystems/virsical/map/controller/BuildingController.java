@@ -68,14 +68,7 @@ public class BuildingController extends BaseController {
   @ApiOperation(value = "获取楼宇列表", notes = "根据楼宇对象条件获取楼宇列表")
   @GetMapping("/list")
   public R<List<Building>> list(Building building) {
-    LambdaQueryWrapper<Building> wrappers = Wrappers.lambdaQuery();
-    if (building.getParkId() != null) {
-      wrappers.eq(Building::getParkId, building.getParkId());
-    }
-    if (building.getBuildingName() != null) {
-      wrappers.like(Building::getBuildingName, building.getBuildingName());
-    }
-    return R.ok(buildingService.list(wrappers));
+    return R.ok(buildingService.list(Wrappers.query(building)));
   }
 
   @ApiOperation(value = "获取分页楼宇列表", notes = "根据分页条件、楼宇对象条件获取分页楼宇列表")

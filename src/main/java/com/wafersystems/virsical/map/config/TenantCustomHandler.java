@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.config;
 
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;

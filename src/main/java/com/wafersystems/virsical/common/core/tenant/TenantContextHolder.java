@@ -1,4 +1,4 @@
-package com.wafersystems.virsical.map.config;
+package com.wafersystems.virsical.common.core.tenant;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import lombok.experimental.UtilityClass;

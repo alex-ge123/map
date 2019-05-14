@@ -1,5 +1,6 @@
 package com.wafersystems.virsical.map.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -67,7 +68,7 @@ public class ParkController extends BaseController {
   @ApiOperation(value = "获取园区列表", notes = "根据园区对象条件获取园区列表")
   @GetMapping("/list")
   public R<List<Park>> list(Park park) {
-    return R.ok(parkService.list(Wrappers.<Park>lambdaQuery().like(Park::getParkName, park.getParkName())));
+    return R.ok(parkService.list(Wrappers.query(park)));
   }
 
   @ApiOperation(value = "获取分页园区列表", notes = "根据分页条件、园区对象条件获取分页园区列表")
@@ -77,7 +78,14 @@ public class ParkController extends BaseController {
   })
   @GetMapping("/page")
   public R<IPage<Park>> page(Page page, Park park) {
-    return R.ok(parkService.page(page, Wrappers.<Park>lambdaQuery().like(Park::getParkName, park.getParkName())));
+    LambdaQueryWrapper<Park> lambdaQueryWrapper = Wrappers.lambdaQuery();
+    if(park != null && park.getParkName() != null){
+      String parkName = park.getParkName();
+      park.setParkName(null);
+      lambdaQueryWrapper.like(Park::getParkName, parkName);
+    }
+    lambdaQueryWrapper.setEntity(park);
+    return R.ok(parkService.page(page, lambdaQueryWrapper));
   }
 
   @ApiOperation(value = "获取园区，楼宇，楼层集合", notes = "获取园区，楼宇，楼层集合")

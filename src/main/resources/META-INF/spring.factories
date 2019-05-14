@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.wafersystems.virsical.map.config.MybatisPlusConfig

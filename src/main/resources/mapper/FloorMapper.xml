@@ -28,7 +28,7 @@
       and b.building_id = #{floor.buildingId}
     </if>
     <if test="floor.floorNum != null and floor.floorNum != ''">
-      and f.floor_num = #{floor.floorNum}
+      and f.floor_num like CONCAT('%',#{floor.floorNum},'%')
     </if>
   </select>
 </mapper>
