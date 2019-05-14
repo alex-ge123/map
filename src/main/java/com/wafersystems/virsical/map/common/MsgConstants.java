@@ -26,4 +26,9 @@ public interface MsgConstants {
    * SVG文件解析异常
    */
   String SVG_FILE_PARSE_EXCEPTION = "2004";
+
+  /**
+   * 地图元素不能为空
+   */
+  String MAP_ELEMENT_NO_NULL = "2005";
 }
