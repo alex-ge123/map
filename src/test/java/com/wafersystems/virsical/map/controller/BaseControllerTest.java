@@ -1,13 +1,15 @@
-package com.wafersystems.virsical.map;
+package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wafersystems.virsical.common.filter.TenantContextHolderFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,6 +22,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * 接口测试基类
  *
@@ -28,20 +32,35 @@ import org.testng.annotations.BeforeClass;
  */
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class BaseControllerTest extends AbstractTestNGSpringContextTests {
-
+public class BaseControllerTest extends AbstractTransactionalTestNGSpringContextTests {
 
   private MockMvc mockMvc;
 
   @Autowired
   private WebApplicationContext wac;
 
+  @Autowired
+  private TenantContextHolderFilter tenantContextHolderFilter;
+
   /**
    * 在测试类中的Test开始运行前执行
    */
   @BeforeClass
   void setup() {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).addFilter(this.tenantContextHolderFilter).build();
+  }
+
+  /**
+   * post requestBuilder
+   *
+   * @param url     url
+   * @param content 请求内容体
+   * @return JSONObject
+   * @throws Exception Exception
+   */
+  JSONObject doMultipartPost(String url, String content, MockMultipartFile mockMultipartFile) throws Exception {
+    MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart(url).file(mockMultipartFile);
+    return doCall(requestBuilder, content, null);
   }
 
   /**
