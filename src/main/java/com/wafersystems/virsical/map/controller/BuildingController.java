@@ -1,13 +1,11 @@
 package com.wafersystems.virsical.map.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.entity.Building;
-import com.wafersystems.virsical.map.entity.Park;
 import com.wafersystems.virsical.map.service.IBuildingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,9 +13,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.bind.annotation.RestController;
-import com.wafersystems.virsical.map.common.BaseController;
 
 import java.util.List;
 
