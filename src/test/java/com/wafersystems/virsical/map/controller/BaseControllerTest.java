@@ -22,8 +22,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * 接口测试基类
  *
