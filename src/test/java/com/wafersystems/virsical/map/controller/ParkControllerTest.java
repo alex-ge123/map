@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 @Rollback
 public class ParkControllerTest extends BaseControllerTest {
 
-  @Test(priority = 1, groups = {"park"})
+  @Test
   public void add() throws Exception {
     String url = "/park/add";
     Park park = new Park();
@@ -27,35 +27,35 @@ public class ParkControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 2, groups = {"park"})
+  @Test
   public void list() throws Exception {
     String url = "/park/list";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 3, groups = {"park"})
+  @Test
   public void get() throws Exception {
     String url = "/park/1";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 4, groups = {"park"})
+  @Test
   public void page() throws Exception {
     String url = "/park/page?parkName=园区";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 5, groups = {"park"})
+  @Test
   public void parkBuildingFloor() throws Exception {
     String url = "/park/building/floor";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 6, groups = {"park"})
+  @Test
   public void update() throws Exception {
     String url = "/park/update";
     Park park = new Park();
@@ -66,7 +66,7 @@ public class ParkControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 7, groups = {"park"})
+  @Test
   public void delete() throws Exception {
     String url = "/park/delete/1";
     JSONObject jsonObject = doPost(url, null, null);

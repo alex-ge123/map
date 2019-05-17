@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 @Rollback
 public class FloorControllerTest extends BaseControllerTest {
 
-  @Test(priority = 1, groups = {"floor"})
+  @Test
   public void add() throws Exception {
     String url = "/floor/add";
     Floor floor = new Floor();
@@ -28,28 +28,28 @@ public class FloorControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 2, groups = {"floor"})
+  @Test
   public void list() throws Exception {
     String url = "/floor/list";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 3, groups = {"floor"})
+  @Test
   public void get() throws Exception {
     String url = "/floor/1";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 4, groups = {"floor"})
+  @Test
   public void page() throws Exception {
     String url = "/floor/page?floorName=楼层";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 6, groups = {"floor"})
+  @Test
   public void update() throws Exception {
     String url = "/floor/update";
     Floor floor = new Floor();
@@ -60,7 +60,7 @@ public class FloorControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 7, groups = {"floor"})
+  @Test
   public void delete() throws Exception {
     String url = "/floor/delete/1";
     JSONObject jsonObject = doPost(url, null, null);

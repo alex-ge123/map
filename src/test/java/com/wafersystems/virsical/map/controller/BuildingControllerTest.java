@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 @Rollback
 public class BuildingControllerTest extends BaseControllerTest {
 
-  @Test(priority = 1, groups = {"building"})
+  @Test
   public void add() throws Exception {
     String url = "/building/add";
     Building building = new Building();
@@ -28,28 +28,28 @@ public class BuildingControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 2, groups = {"building"})
+  @Test
   public void list() throws Exception {
     String url = "/building/list";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 3, groups = {"building"})
+  @Test
   public void get() throws Exception {
     String url = "/building/1";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 4, groups = {"building"})
+  @Test
   public void page() throws Exception {
     String url = "/building/page?buildingName=楼宇";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 6, groups = {"building"})
+  @Test
   public void update() throws Exception {
     String url = "/building/update";
     Building building = new Building();
@@ -60,7 +60,7 @@ public class BuildingControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-  @Test(priority = 7, groups = {"building"})
+  @Test
   public void delete() throws Exception {
     String url = "/building/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
