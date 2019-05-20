@@ -101,7 +101,7 @@ pipeline {
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
                 script {
-                    datas = readYaml file: 'src/main/resources/bootstrap.yml'
+                    datas = readYaml file: 'src/main/resources/application.yml'
                     datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai"
                     datas.spring.datasource.username = "wafer"
                     datas.spring.datasource.password = "wafer"
