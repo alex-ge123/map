@@ -51,7 +51,7 @@ public class SvgControllerTest extends BaseControllerTest {
   @Test
   public void parseForFail() throws Exception {
     String url = "/svg/parse";
-    MockMultipartFile mockMultipartFile = new MockMultipartFile("test", "test.svg", ",multipart/form-data", "".getBytes());
+    MockMultipartFile mockMultipartFile = new MockMultipartFile("svgFile", "test.svg", ",multipart/form-data", "abc".getBytes());
     JSONObject jsonObject = doMultipartPost(url, null, mockMultipartFile);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }

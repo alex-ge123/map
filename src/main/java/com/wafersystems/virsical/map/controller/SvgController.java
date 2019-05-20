@@ -40,9 +40,6 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "解析SVG文件", notes = "解析SVG文件")
   @PostMapping("/parse")
   public R parse(@RequestParam MultipartFile svgFile) {
-    if (svgFile == null) {
-      return R.fail(MsgConstants.SVG_FILE_NO_NULL);
-    }
     java.util.Map<String, String> svgMap;
     try {
       svgMap = SvgUtils.analyzeSvgFile(svgFile.getInputStream());
