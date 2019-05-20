@@ -65,7 +65,7 @@ pipeline {
             }
             steps {
                 withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package'
                 }
                 // stash includes: '**/target/*.jar', name: 'app'
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
@@ -101,7 +101,7 @@ pipeline {
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
                 script {
-                    datas = readYaml file: 'src/main/resources/application-${RD_ENV}.yml'
+                    datas = readYaml file: "src/main/resources/application-${RD_ENV}.yml"
                     datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true"
                     datas.spring.datasource.username = "wafer"
                     datas.spring.datasource.password = "wafer"
