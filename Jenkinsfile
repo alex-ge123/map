@@ -88,7 +88,7 @@ pipeline {
                 sh "cp target/*.jar tmp"
 
                 sh "cp k8s/backend.yml k8s.yml"
-                sh "cat k8s/backend-service.yml ../k8s/ingress.yml > k8s-service.yml"
+                sh "cat k8s/backend-service.yml k8s/ingress.yml > k8s-service.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
                 sh "sed -i s@__ENV__@${RD_ENV}@g k8s.yml"
