@@ -65,7 +65,7 @@ pipeline {
             }
             steps {
                 withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package'
                 }
                 // stash includes: '**/target/*.jar', name: 'app'
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
@@ -88,7 +88,7 @@ pipeline {
                 sh "cp target/*.jar tmp"
 
                 sh "cp k8s/backend.yml k8s.yml"
-                sh "cat ../k8s/backend-service.yml ../k8s/ingress.yml > k8s-service.yml"
+                sh "cat k8s/backend-service.yml ../k8s/ingress.yml > k8s-service.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
                 sh "sed -i s@__ENV__@${RD_ENV}@g k8s.yml"
