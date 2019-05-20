@@ -18,9 +18,7 @@ import java.util.TimeZone;
  * JacksonConfig
  *
  * @author tandk
- * @author: lengleng
- * @author: lishangbu
- * @date: 2018/10/22
+ * @date 2018/10/22
  */
 @Configuration
 @ConditionalOnClass(ObjectMapper.class)

@@ -1,6 +1,5 @@
 package com.wafersystems.virsical.common.filter;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
@@ -45,9 +44,7 @@ public class TenantContextHolderFilter extends GenericFilterBean {
     }
 
     String tenantId = "1";
-    if (StrUtil.isNotBlank(tenantId)) {
-      TenantContextHolder.setTenantId(Integer.parseInt(tenantId));
-    }
+    TenantContextHolder.setTenantId(Integer.parseInt(tenantId));
 
     log.info("【{}】【{}】【{}】【{}】", request.getMethod(), url, tenantId, JSONUtil.toJsonStr(request.getParameterMap()));
     filterChain.doFilter(request, response);

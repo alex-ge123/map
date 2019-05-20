@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
 import com.wafersystems.virsical.map.entity.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
  * @author tandk
  * @date 2019/5/15 15:54
  */
+@Slf4j
 @Rollback
 public class MapControllerTest extends BaseControllerTest {
 
@@ -39,6 +41,8 @@ public class MapControllerTest extends BaseControllerTest {
   public void get() throws Exception {
     String url = "/map/1";
     JSONObject jsonObject = doGet(url);
+    Map map = JSON.parseObject(jsonObject.get("data").toString(), Map.class);
+    log.info(map.toString());
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 

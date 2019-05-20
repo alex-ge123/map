@@ -49,6 +49,14 @@ public class SvgControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void parseForFail() throws Exception {
+    String url = "/svg/parse";
+    MockMultipartFile mockMultipartFile = new MockMultipartFile("test", "test.svg", ",multipart/form-data", "".getBytes());
+    JSONObject jsonObject = doMultipartPost(url, null, mockMultipartFile);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void enableList() throws Exception {
     String url = "/svg/enable-list";
     JSONObject jsonObject = doGet(url);
@@ -103,6 +111,13 @@ public class SvgControllerTest extends BaseControllerTest {
     String url = "/svg/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/svg/delete/0";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
 
