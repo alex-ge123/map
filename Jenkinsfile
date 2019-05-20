@@ -3,14 +3,15 @@ pipeline {
 
     parameters {
         booleanParam(name: 'checkcode', defaultValue: false, description: '是否执行代码检查？')
+        // string(name: 'port', defaultValue: '0', description: '对外访问的端口，范围为30000-32767。如果不需要对外提供端口，请输入0')
+        choice(name: 'reserveDBData', choices: 'Yes\nNo', description: '是否需要保留之前部署的数据库数据？')
     }
 
     environment {
         RD_ENV = 'dev'  // 标识开发测试环境，缺省为开发环境：dev
         GROUP_NAME = ''
-        SERVICE_NAME = '-eureka'
+        SERVICE_NAME = '-map'
         PVC_WORK = ''
-        SUB_DIR = 'map'
         K8S_CLUSTER_NAME = 'kubernetes'
     }
 
@@ -21,29 +22,27 @@ pipeline {
             }
             steps {
                 script {
-                    dir("${SUB_DIR}") {
-                        GROUP_NAME = JOB_NAME.split("/")[0]
-                        SERVICE_NAME = GROUP_NAME + SERVICE_NAME
+                    GROUP_NAME = JOB_NAME.split("/")[0]
+                    SERVICE_NAME = GROUP_NAME + SERVICE_NAME
 
-                        // 如果组在Test视图下，则为测试环境：test
-                        if (Jenkins.instance.getView('Test').contains(Jenkins.instance.getItem(GROUP_NAME))) {
-                            RD_ENV = 'test'
+                    // 如果组在Test视图下，则为测试环境：test
+                    if (Jenkins.instance.getView('Test').contains(Jenkins.instance.getItem(GROUP_NAME))) {
+                        RD_ENV = 'test'
+                    }
+
+                    sh "cp k8s/pvc.yml pvc.yml"
+                    sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g pvc.yml"
+
+                    withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
+                            credentialsId: "k8s-${RD_ENV}",
+                            serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
+                        if (fileExists('k8s.yml')) {
+                            sh "kubectl delete -f k8s.yml -n ${RD_ENV} --ignore-not-found"
                         }
 
-                        sh "cp ../k8s/pvc.yml pvc.yml"
-                        sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g pvc.yml"
-
-                        withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
-                                credentialsId: "k8s-${RD_ENV}",
-                                serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
-                            if (fileExists('k8s.yml')) {
-                                sh "kubectl delete -f k8s.yml -n ${RD_ENV} --ignore-not-found"
-                            }
-
-                            try {
-                                sh "kubectl create -f pvc.yml -n ${RD_ENV}"
-                            } catch (ex) {
-                            }
+                        try {
+                            sh "kubectl create -f pvc.yml -n ${RD_ENV}"
+                        } catch (ex) {
                         }
                     }
                 }
@@ -65,13 +64,11 @@ pipeline {
                 environment name: 'checkcode', value: 'false'
             }
             steps {
-                dir("${SUB_DIR}") {
-                    withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
-                        sh 'mvn clean package -DskipTests'
-                    }
-                    // stash includes: '**/target/*.jar', name: 'app'
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
+                    sh 'mvn clean package -DskipTests'
                 }
+                // stash includes: '**/target/*.jar', name: 'app'
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             }
         }
         stage('Deploy') {
@@ -82,52 +79,88 @@ pipeline {
                 }
             }
             steps {
-                dir("${SUB_DIR}") {
-                    sh "rm -rf tmp"
-                    sh "mkdir -p tmp/config"
+                sh "rm -rf tmp"
+                sh "mkdir -p tmp/config"
 
-                    sh "cp target/*.jar tmp"
+                sh "rm -rf tmp_sql"
+                sh "mkdir -p  tmp_sql/${JOB_NAME}"
 
-                    sh "cp ../k8s/backend.yml k8s.yml"
-                    sh "cat ../k8s/backend-service.yml ../k8s/ingress.yml > k8s-service.yml"
-                    sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
-                    sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
-                    sh "sed -i s@__ENV__@${RD_ENV}@g k8s.yml"
-                    sh "sed -i s@__ARTIFACT_ID__@${readMavenPom().getArtifactId()}@g k8s.yml"
+                sh "cp target/*.jar tmp"
 
-                    script {
-                        datas = readYaml file: "src/main/resources/bootstrap.yml"
-                        datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai"
-                        datas.spring.datasource.username = "wafer"
-                        datas.spring.datasource.password = "wafer"
-                        datas.server.port = 8080
+                sh "cp k8s/backend.yml k8s.yml"
+                sh "cp k8s/backend-service.yml k8s-service.yml"
+                sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
+                sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
+                sh "sed -i s@__ENV__@${RD_ENV}@g k8s.yml"
+                sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g k8s.yml"
+                sh "sed -i s@__ARTIFACT_ID__@${readMavenPom().getArtifactId()}@g k8s.yml"
+                sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
 
-                        writeYaml file: "tmp/config/bootstrap.yml", data: datas
+                sh "cp sql/create.sql tmp_sql/${JOB_NAME}"
+                sh "cp sql/init.sql tmp_sql/${JOB_NAME}"
+                sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
-                        withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
-                                credentialsId: "k8s-${RD_ENV}",
-                                serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
-                            RET = sh(
-                                    script: "kubectl get pvc ${SERVICE_NAME}-work --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
+                script {
+                    datas = readYaml file: 'src/main/resources/bootstrap.yml'
+                    datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai"
+                    datas.spring.datasource.username = "wafer"
+                    datas.spring.datasource.password = "wafer"
+                    datas.server.port = 8080
+
+                    writeYaml file: "tmp/config/bootstrap.yml", data: datas
+
+                    withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
+                            credentialsId: "k8s-${RD_ENV}",
+                            serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
+                        if (params.reserveDBData == 'No') {
+                            MYSQL_POD = sh(
+                                    script: "kubectl get pod -l app=${RD_ENV},tier=mysql -n ${RD_ENV} --field-selector=status.phase=Running --ignore-not-found -o custom-columns=name:.metadata.name --no-headers=true | head -1",
                                     returnStdout: true
                             ).trim()
-                            PVC_WORK = "${RD_ENV}-${SERVICE_NAME}-work-" + RET
+
+                            RET = sh(
+                                    script: "kubectl get pvc sql --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
+                                    returnStdout: true
+                            ).trim()
+
+                            SQL_PATH = "${RD_ENV}-sql-" + RET
 
                             ftpPublisher failOnError: true,
                                     publishers: [
                                             [configName: 'ftp_ds1819_dev', transfers: [
                                                     [cleanRemote: true,
-                                                     remoteDirectory: "${PVC_WORK}",
-                                                     sourceFiles    : 'tmp/',
-                                                     removePrefix   : 'tmp']
+                                                     remoteDirectory: "${SQL_PATH}",
+                                                     sourceFiles    : "tmp_sql/",
+                                                     removePrefix   : "tmp_sql"]
                                             ]]
-                            ]
+                                    ]
 
-                            sh "kubectl apply -f k8s-service.yml -n ${RD_ENV}"
-                            sh "kubectl apply -f k8s.yml -n ${RD_ENV}"
+                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/create.sql'"
+                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/init.sql'"
                         }
+                        RET = sh(
+                                script: "kubectl get pvc ${SERVICE_NAME}-work --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
+                                returnStdout: true
+                        ).trim()
+                        PVC_WORK = "${RD_ENV}-${SERVICE_NAME}-work-" + RET
+
+                        ftpPublisher failOnError: true,
+                                publishers: [
+                                        [configName: 'ftp_ds1819_dev', transfers: [
+                                                [cleanRemote    : true,
+                                                 remoteDirectory: "${PVC_WORK}",
+                                                 sourceFiles    : 'tmp/',
+                                                 removePrefix   : 'tmp']
+                                        ]]
+                                ]
+
+                        sh "kubectl apply -f k8s-service.yml -n ${RD_ENV}"
+                        sh "kubectl apply -f k8s.yml -n ${RD_ENV}"
                     }
                 }
+            sh "rm -rf ${SERVICE_NAME}.zip"
+            zip archive: true, dir: './tmp', glob: '', zipFile: "${SERVICE_NAME}.zip"
+            archiveArtifacts artifacts: "**/${SERVICE_NAME}.zip", fingerprint: true
             }
         }
     }
