@@ -25,6 +25,10 @@ import java.util.Map;
  */
 @Slf4j
 public class SvgUtils {
+  private SvgUtils() {
+    throw new IllegalStateException("SVG Utility class");
+  }
+
   /**
    * 描述：解析SVG文件，获取相关元素 。
    */
