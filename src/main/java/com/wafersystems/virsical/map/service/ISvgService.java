@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wafersystems.virsical.map.entity.Svg;
 
-import java.util.List;
-
 /**
  * <p>
  * 素材 服务类

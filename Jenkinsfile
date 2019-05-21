@@ -97,7 +97,8 @@ pipeline {
                 sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
 
                 sh "cp sql/create.sql tmp_sql/${JOB_NAME}"
-                sh "cp sql/init.sql tmp_sql/${JOB_NAME}"
+                sh "cp sql/int_schema.sql tmp_sql/${JOB_NAME}"
+                sh "cp sql/init_data.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
                 script {
@@ -136,7 +137,8 @@ pipeline {
                                     ]
 
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/create.sql'"
-                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/init.sql'"
+                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/int_schema.sql'"
+                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/init_data.sql'"
                         }
                         RET = sh(
                                 script: "kubectl get pvc ${SERVICE_NAME}-work --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
