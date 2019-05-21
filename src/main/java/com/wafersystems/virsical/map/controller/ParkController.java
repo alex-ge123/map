@@ -71,6 +71,13 @@ public class ParkController extends BaseController {
     return R.ok(parkService.list(Wrappers.query(park)));
   }
 
+  /**
+   * 获取分页园区列表
+   *
+   * @param page 分页对象
+   * @param park 园区对象
+   * @return R
+   */
   @ApiOperation(value = "获取分页园区列表", notes = "根据分页条件、园区对象条件获取分页园区列表")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "page", value = "分页对象", required = true, dataType = "Page"),
@@ -88,6 +95,11 @@ public class ParkController extends BaseController {
     return R.ok(parkService.page(page, lambdaQueryWrapper));
   }
 
+  /**
+   * 获取园区，楼宇，楼层集合
+   *
+   * @return R
+   */
   @ApiOperation(value = "获取园区，楼宇，楼层集合", notes = "获取园区，楼宇，楼层集合")
   @GetMapping("/building/floor")
   public R parkBuildingFloor() {

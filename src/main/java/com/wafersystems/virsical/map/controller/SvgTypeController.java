@@ -33,6 +33,12 @@ public class SvgTypeController extends BaseController {
 
   private final ISvgTypeService svgTypeService;
 
+  /**
+   * 添加素材类型
+   *
+   * @param svgType 素材类型对象
+   * @return R
+   */
   @ApiOperation(value = "添加素材类型", notes = "添加素材类型")
   @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
   @PostMapping("/add")

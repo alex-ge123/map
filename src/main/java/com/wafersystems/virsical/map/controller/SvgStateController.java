@@ -33,6 +33,12 @@ public class SvgStateController extends BaseController {
 
   private final ISvgStateService svgStateService;
 
+  /**
+   * 添加素材状态
+   *
+   * @param svgState 素材状态对象
+   * @return R
+   */
   @ApiOperation(value = "添加素材状态", notes = "添加素材状态")
   @ApiImplicitParam(name = "svgState", value = "素材状态对象", required = true, dataType = "SvgState")
   @PostMapping("/add")
@@ -46,6 +52,12 @@ public class SvgStateController extends BaseController {
     return svgStateService.save(svgState) ? R.ok() : R.fail();
   }
 
+  /**
+   * 修改素材状态
+   *
+   * @param svgState 素材状态对象
+   * @return R
+   */
   @ApiOperation(value = "修改素材状态", notes = "根据素材状态id修改素材状态")
   @ApiImplicitParam(name = "svgState", value = "素材状态对象", required = true, dataType = "SvgState")
   @PostMapping("/update")

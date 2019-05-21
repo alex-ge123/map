@@ -33,6 +33,12 @@ public class FloorController extends BaseController {
 
   private final IFloorService floorService;
 
+  /**
+   * 添加楼层
+   *
+   * @param floor 楼层对象
+   * @return R
+   */
   @ApiOperation(value = "添加楼层", notes = "添加楼层")
   @ApiImplicitParam(name = "floor", value = "楼层对象", required = true, dataType = "Floor")
   @PostMapping("/add")
@@ -45,6 +51,12 @@ public class FloorController extends BaseController {
     return floorService.save(floor) ? R.ok() : R.fail();
   }
 
+  /**
+   * 修改楼层
+   *
+   * @param floor 楼层对象
+   * @return R
+   */
   @ApiOperation(value = "修改楼层", notes = "根据楼层id修改楼层")
   @ApiImplicitParam(name = "floor", value = "楼层对象", required = true, dataType = "Floor")
   @PostMapping("/update")

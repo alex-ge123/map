@@ -37,6 +37,12 @@ public class SvgController extends BaseController {
 
   private final ISvgService svgService;
 
+  /**
+   * 解析SVG文件
+   *
+   * @param svgFile SVG文件
+   * @return R
+   */
   @ApiOperation(value = "解析SVG文件", notes = "解析SVG文件")
   @PostMapping("/parse")
   public R parse(@RequestParam MultipartFile svgFile) {
@@ -99,6 +105,11 @@ public class SvgController extends BaseController {
     return R.ok(svgService.selectSvgPage(page, svg));
   }
 
+  /**
+   * 获取素材分组列表
+   *
+   * @return R
+   */
   @ApiOperation(value = "获取素材分组列表", notes = "获取素材分组列表")
   @GetMapping("/group")
   public R<List<SvgType>> group() {

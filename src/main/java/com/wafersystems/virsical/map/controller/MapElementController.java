@@ -35,6 +35,12 @@ public class MapElementController extends BaseController {
 
   private final IMapElementService mapElementService;
 
+  /**
+   * 添加地图元素
+   *
+   * @param mapElementList 地图元素对象集合
+   * @return R
+   */
   @ApiOperation(value = "添加地图元素", notes = "添加地图元素（支持批量）")
   @ApiImplicitParam(name = "mapElementList", value = "地图元素对象集合", required = true, dataType = "MapElement")
   @PostMapping("/add")
@@ -45,12 +51,24 @@ public class MapElementController extends BaseController {
     return mapElementService.batchSaveMapElement(mapElementList) ? R.ok() : R.fail();
   }
 
+  /**
+   * 获取地图元素列表
+   *
+   * @param mapElement 地图元素
+   * @return R
+   */
   @ApiOperation(value = "获取地图元素列表", notes = "根据地图元素对象条件获取地图元素列表")
   @GetMapping("/list")
   public R<List<MapElement>> list(MapElement mapElement) {
     return R.ok(mapElementService.list(Wrappers.query(mapElement)));
   }
 
+  /**
+   * 地图元素资源绑定
+   *
+   * @param list 地图元素资源对象集合
+   * @return R
+   */
   @ApiOperation(value = "地图元素资源绑定", notes = "地图元素资源绑定（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/bind")
@@ -67,6 +85,12 @@ public class MapElementController extends BaseController {
     return mapElementService.batchUpdateMapElement(mapElementList) ? R.ok() : R.fail();
   }
 
+  /**
+   * 地图元素绘制路径
+   *
+   * @param list 地图元素路径对象集合
+   * @return R
+   */
   @ApiOperation(value = "地图元素绘制路径", notes = "地图元素绘制路径（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素路径对象集合", required = true, dataType = "MapElement")
   @PostMapping("/route")
@@ -83,6 +107,13 @@ public class MapElementController extends BaseController {
     return mapElementService.batchUpdateMapElement(mapElementList) ? R.ok() : R.fail();
   }
 
+  /**
+   * 更新地图元素资源状态
+   *
+   * @param svgTypeCode 素材类型code
+   * @param list        地图元素资源对象集合
+   * @return
+   */
   @ApiOperation(value = "更新地图元素资源状态", notes = "更新地图元素资源状态（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/update-object-state/{svgTypeCode}")
@@ -91,8 +122,8 @@ public class MapElementController extends BaseController {
     if (list.isEmpty()) {
       return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
     }
-    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, list) ?
-      R.ok() : R.fail();
+    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, list)
+      ? R.ok() : R.fail();
   }
 
 }
