@@ -1,7 +1,7 @@
 package com.wafersystems.virsical.map.mapper;
 
-import com.wafersystems.virsical.map.entity.Park;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wafersystems.virsical.map.entity.Park;
 
 /**
  * <p>

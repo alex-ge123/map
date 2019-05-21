@@ -1,8 +1,8 @@
 package com.wafersystems.virsical.map.mapper;
 
 import com.baomidou.mybatisplus.annotation.SqlParser;
-import com.wafersystems.virsical.map.entity.MapElement;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
 import org.apache.ibatis.annotations.Param;
 

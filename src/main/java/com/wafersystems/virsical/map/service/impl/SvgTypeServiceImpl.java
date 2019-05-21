@@ -1,9 +1,9 @@
 package com.wafersystems.virsical.map.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.map.entity.SvgType;
 import com.wafersystems.virsical.map.mapper.SvgTypeMapper;
 import com.wafersystems.virsical.map.service.ISvgTypeService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

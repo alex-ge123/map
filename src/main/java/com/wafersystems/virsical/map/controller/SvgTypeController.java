@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.entity.SvgType;
 import com.wafersystems.virsical.map.service.ISvgTypeService;
@@ -13,9 +14,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.bind.annotation.RestController;
-import com.wafersystems.virsical.map.common.BaseController;
 
 import java.util.List;
 
