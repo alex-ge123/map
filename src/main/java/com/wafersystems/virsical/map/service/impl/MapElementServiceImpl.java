@@ -54,15 +54,15 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   /**
    * 批量更新地图元素资源状态
    *
-   * @param svgTypeCode                 地图元素类型
-   * @param mapElementObjectStateVoList 地图元素资源状态集合
+   * @param svgTypeCode 地图元素类型
+   * @param list        地图元素资源状态集合
    * @return Boolean
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchUpdateMapElementObjectState(String svgTypeCode,
-                                                  List<MapElementObjectStateVO> mapElementObjectStateVoList) {
-    Integer result = mapElementMapper.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList);
+                                                  List<MapElementObjectStateVO> list) {
+    Integer result = mapElementMapper.batchUpdateMapElementObjectState(svgTypeCode, list);
     return result > 0 ? Boolean.TRUE : Boolean.FALSE;
   }
 }

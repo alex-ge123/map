@@ -35,10 +35,11 @@ public interface IMapElementService extends IService<MapElement> {
   /**
    * 批量更新地图元素资源状态
    *
-   * @param svgTypeCode                 地图元素类型
-   * @param mapElementObjectStateVoList 地图元素资源状态集合
+   * @param svgTypeCode 地图元素类型
+   * @param list        地图元素资源状态集合
    * @return Boolean
    */
-  Boolean batchUpdateMapElementObjectState(String svgTypeCode, List<MapElementObjectStateVO> mapElementObjectStateVoList);
+  Boolean batchUpdateMapElementObjectState(String svgTypeCode,
+                                           List<MapElementObjectStateVO> list);
 
 }

@@ -63,7 +63,9 @@
 //
 //    // 数据源配置
 //    DataSourceConfig dsc = new DataSourceConfig();
-//    dsc.setUrl("jdbc:mysql://localhost:3306/virsical_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true");
+//    dsc.setUrl("jdbc:mysql://localhost:3306/virsical_map?characterEncoding=utf8" +
+//      "&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true" +
+//      "&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true");
 //    // dsc.setSchemaName("public")
 //    dsc.setDriverName("com.mysql.cj.jdbc.Driver");
 //    dsc.setUsername("root");
@@ -94,7 +96,8 @@
 //      @Override
 //      public String outputFile(TableInfo tableInfo) {
 //        // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-//        return projectPath + "/src/main/resources/mapper/" + (pc.getModuleName() == null ? "" : pc.getModuleName() + "/")
+//        return projectPath + "/src/main/resources/mapper/" +
+//          (pc.getModuleName() == null ? "" : pc.getModuleName() + "/")
 //          + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
 //      }
 //    });

@@ -67,7 +67,8 @@ public class SvgTypeController extends BaseController {
   @ApiOperation(value = "获取启用的素材类型列表", notes = "获取启用的素材类型列表")
   @GetMapping("/list")
   public R<List<SvgType>> list() {
-    return R.ok(svgTypeService.list(Wrappers.<SvgType>lambdaQuery().eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE)));
+    return R.ok(svgTypeService.list(
+      Wrappers.<SvgType>lambdaQuery().eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE)));
   }
 
   @ApiOperation(value = "获取分页素材类型列表", notes = "根据分页条件、素材类型对象条件获取分页素材类型列表")

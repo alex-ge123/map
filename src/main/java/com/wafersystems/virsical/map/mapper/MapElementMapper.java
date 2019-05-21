@@ -20,11 +20,11 @@ public interface MapElementMapper extends BaseMapper<MapElement> {
   /**
    * 批量更新地图元素资源状态
    *
-   * @param svgTypeCode                 素材类型状态
-   * @param mapElementObjectStateVOList 地图元素资源状态集合
+   * @param svgTypeCode 素材类型状态
+   * @param list        地图元素资源状态集合
    * @return 结果
    */
   @SqlParser(filter = true)
   Integer batchUpdateMapElementObjectState(@Param("svgTypeCode") String svgTypeCode,
-                                           @Param("list") List<MapElementObjectStateVO> mapElementObjectStateVOList);
+                                           @Param("list") List<MapElementObjectStateVO> list);
 }
