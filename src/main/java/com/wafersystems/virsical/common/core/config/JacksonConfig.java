@@ -24,6 +24,12 @@ import java.util.TimeZone;
 @ConditionalOnClass(ObjectMapper.class)
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class JacksonConfig {
+
+  /**
+   * Jackson to Object映射自定义生成器配置
+   *
+   * @return Jackson2ObjectMapperBuilderCustomizer
+   */
   @Bean
   public Jackson2ObjectMapperBuilderCustomizer customizer() {
     return builder -> {

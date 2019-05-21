@@ -79,7 +79,7 @@ public class ParkController extends BaseController {
   @GetMapping("/page")
   public R<IPage<Park>> page(Page page, Park park) {
     LambdaQueryWrapper<Park> lambdaQueryWrapper = Wrappers.lambdaQuery();
-    if(park != null && park.getParkName() != null){
+    if (park != null && park.getParkName() != null) {
       String parkName = park.getParkName();
       park.setParkName(null);
       lambdaQueryWrapper.like(Park::getParkName, parkName);
@@ -93,7 +93,8 @@ public class ParkController extends BaseController {
   public R parkBuildingFloor() {
     Map<String, Object> map = new HashMap<>(3);
     map.put("park", new Park().selectList(Wrappers.<Park>lambdaQuery().select(Park::getParkId, Park::getParkName)));
-    map.put("building", new Building().selectList(Wrappers.<Building>lambdaQuery().select(Building::getBuildingId, Building::getBuildingName)));
+    map.put("building", new Building().selectList(Wrappers.<Building>lambdaQuery()
+      .select(Building::getBuildingId, Building::getBuildingName)));
     map.put("floor", new Floor().selectList(Wrappers.<Floor>lambdaQuery().select(Floor::getFloorId, Floor::getFloorNum)));
     return R.ok(map);
   }

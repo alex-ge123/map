@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
 import com.wafersystems.virsical.map.entity.Svg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
  * @author tandk
  * @date 2019/5/15 15:54
  */
+@Slf4j
 @Rollback
 public class SvgControllerTest extends BaseControllerTest {
 

@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 响应信息主体
  *
- * @param <T>
+ * @param <T> 泛型
  * @author tandk
  */
 @Builder
@@ -42,18 +42,6 @@ public class R<T> implements Serializable {
   public R(T data) {
     super();
     this.data = data;
-  }
-
-  public R(T data, String msg) {
-    super();
-    this.data = data;
-    this.msg = msg;
-  }
-
-  public R(Throwable e) {
-    super();
-    this.msg = e.getMessage();
-    this.code = 1;
   }
 
   public R(int code, String msg, T data) {

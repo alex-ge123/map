@@ -86,11 +86,13 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "更新地图元素资源状态", notes = "更新地图元素资源状态（支持批量）")
   @ApiImplicitParam(name = "mapElementBindVOList", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/update-object-state/{svgTypeCode}")
-  public R updateObjectState(@PathVariable String svgTypeCode, @RequestBody List<MapElementObjectStateVO> mapElementObjectStateVOList) {
+  public R updateObjectState(@PathVariable String svgTypeCode,
+                             @RequestBody List<MapElementObjectStateVO> mapElementObjectStateVOList) {
     if (mapElementObjectStateVOList.isEmpty()) {
       return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
     }
-    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVOList) ? R.ok() : R.fail();
+    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVOList) ?
+      R.ok() : R.fail();
   }
 
 }

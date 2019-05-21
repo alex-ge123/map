@@ -74,7 +74,8 @@ public class SvgStateController extends BaseController {
   })
   @GetMapping("/{svgId}/{code}")
   public R<SvgState> get(@PathVariable Integer svgId, @PathVariable String code) {
-    return R.ok(svgStateService.getOne(Wrappers.<SvgState>lambdaQuery().eq(SvgState::getSvgId, svgId).eq(SvgState::getSvgStateCode, code)));
+    return R.ok(svgStateService.getOne(Wrappers.<SvgState>lambdaQuery()
+      .eq(SvgState::getSvgId, svgId).eq(SvgState::getSvgStateCode, code)));
   }
 
   @ApiOperation(value = "获取素材状态列表", notes = "根据素材状态对象条件获取素材状态列表")

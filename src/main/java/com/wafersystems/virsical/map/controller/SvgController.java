@@ -106,7 +106,8 @@ public class SvgController extends BaseController {
       .select(SvgType::getSvgTypeCode, SvgType::getSvgTypeName)
       .eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE));
     svgTypeList.forEach(svgType -> svgType.setSvgList(svgService.list(Wrappers.<Svg>lambdaQuery()
-      .select(Svg::getSvgId, Svg::getSvgTypeCode, Svg::getSvgName, Svg::getSvgWidth, Svg::getSvgHeight, Svg::getSvgElement, Svg::getViewBox, Svg::getAxisx, Svg::getAxixy, Svg::getFontSize)
+      .select(Svg::getSvgId, Svg::getSvgTypeCode, Svg::getSvgName, Svg::getSvgWidth,
+        Svg::getSvgHeight, Svg::getSvgElement, Svg::getViewBox, Svg::getAxisx, Svg::getAxixy, Svg::getFontSize)
       .eq(Svg::getSvgTypeCode, svgType.getSvgTypeCode())
       .eq(Svg::getState, MapConstants.OPEN_STATE))));
     return R.ok(svgTypeList);

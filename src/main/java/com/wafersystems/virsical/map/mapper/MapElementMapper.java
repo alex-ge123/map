@@ -25,5 +25,6 @@ public interface MapElementMapper extends BaseMapper<MapElement> {
    * @return 结果
    */
   @SqlParser(filter = true)
-  Integer batchUpdateMapElementObjectState(@Param("svgTypeCode") String svgTypeCode, @Param("list") List<MapElementObjectStateVO> mapElementObjectStateVOList);
+  Integer batchUpdateMapElementObjectState(@Param("svgTypeCode") String svgTypeCode,
+                                           @Param("list") List<MapElementObjectStateVO> mapElementObjectStateVOList);
 }

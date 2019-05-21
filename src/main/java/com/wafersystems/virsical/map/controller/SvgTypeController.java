@@ -39,7 +39,7 @@ public class SvgTypeController extends BaseController {
   @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
   @PostMapping("/add")
   public R add(@RequestBody SvgType svgType) {
-    if(svgTypeService.getById(svgType.getSvgTypeCode()) != null){
+    if (svgTypeService.getById(svgType.getSvgTypeCode()) != null) {
       return R.fail("素材类型标识不能重复");
     }
     return svgTypeService.save(svgType) ? R.ok() : R.fail();

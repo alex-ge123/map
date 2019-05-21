@@ -29,7 +29,6 @@ public class SvgUtils {
    * 描述：解析SVG文件，获取相关元素 。
    */
   public static Map<String, String> analyzeSvgFile(InputStream in) throws DocumentException {
-    Map<String, String> map = new HashMap<>(4);
     // 创建SAXReader对象
     SAXReader reader = new SAXReader();
     reader.setEntityResolver(new IgnoreDtdEntityResolver());
@@ -45,6 +44,7 @@ public class SvgUtils {
       childString.append(child.asXML());
     }
     Attribute vb = root.attribute("viewBox");
+    Map<String, String> map = new HashMap<>(4);
     map.put("width", width != null ? width.getText().replace("px", "") : "");
     map.put("height", height != null ? height.getText().replace("px", "") : "");
     map.put("viewBox", vb != null ? vb.getText() : "");

@@ -16,7 +16,7 @@ public interface SvgStateMapper extends BaseMapper<SvgState> {
   /**
    * 根据素材状态标识查询素材状态
    *
-   * @param svgId 素材id
+   * @param svgId        素材id
    * @param svgStateCode 素材状态标识
    * @return 素材状态
    */
