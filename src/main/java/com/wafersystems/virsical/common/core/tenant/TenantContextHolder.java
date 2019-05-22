@@ -15,14 +15,14 @@ public class TenantContextHolder {
   /**
    * 存放租户id
    */
-  private final ThreadLocal<Integer> TENANTID = new TransmittableThreadLocal<>();
+  private final ThreadLocal<Integer> tenantId = new TransmittableThreadLocal<>();
 
 
   /**
    * 清除TTL中数据
    */
   public void clear() {
-    TENANTID.remove();
+    tenantId.remove();
   }
 
   /**
@@ -31,7 +31,7 @@ public class TenantContextHolder {
    * @param tenantId 租户ID
    */
   public void setTenantId(Integer tenantId) {
-    TENANTID.set(tenantId);
+    TenantContextHolder.tenantId.set(tenantId);
   }
 
   /**
@@ -40,7 +40,7 @@ public class TenantContextHolder {
    * @return 租户ID
    */
   public Integer getTenantId() {
-    return TENANTID.get();
+    return tenantId.get();
   }
 
 }
