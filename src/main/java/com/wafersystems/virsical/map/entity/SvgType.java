@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,9 +21,9 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-08
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
+@Setter
+@Getter
+@ToString
 @ApiModel(value = "SvgType", description = "素材类型")
 public class SvgType extends Model<SvgType> {
 

@@ -71,6 +71,7 @@ DROP TABLE IF EXISTS `map_element`;
 CREATE TABLE `map_element`  (
   `map_element_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '地图元素主键',
   `map_id` int(11) NOT NULL COMMENT '地图id',
+  `svg_type_code` varchar(50) NOT NULL DEFAULT '' COMMENT '素材类型标识',
   `svg_id` int(11) NOT NULL COMMENT '素材id',
   `custom_element` varchar(500) NULL DEFAULT NULL COMMENT '自定义素材',
   `map_web_id` varchar(50) NOT NULL COMMENT '页面元素ID',

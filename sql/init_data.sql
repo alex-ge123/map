@@ -34,10 +34,10 @@ INSERT INTO `map` VALUES (3, 1, 7, 'string', 'string', NULL, 'cccc', 'string', '
 -- ----------------------------
 -- Records of map_element
 -- ----------------------------
-INSERT INTO `map_element` VALUES (1, 1, 1, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1001', '会议室1', '#111111', '0', 'lineStartlineStart5', 'lineMidlineMid5', 'lineEndlineEnd5', NULL, '2019-05-13 18:10:27', '2019-05-16 17:24:57');
-INSERT INTO `map_element` VALUES (2, 1, 2, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1002', '会议室2', '#222222', '0', 'lineStartlineStart6', 'lineMidlineMid6', 'lineEndlineEnd6', NULL, '2019-05-13 18:10:27', '2019-05-16 17:24:57');
-INSERT INTO `map_element` VALUES (3, 1, 3, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1003', '会议室3', '#333333', '0', NULL, NULL, NULL, NULL, '2019-05-13 18:10:27', '2019-05-16 17:10:13');
-INSERT INTO `map_element` VALUES (4, 1, 1, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1004', '会议室4', '#444444', '0', NULL, NULL, NULL, NULL, '2019-05-13 18:10:27', '2019-05-16 17:10:14');
+INSERT INTO `map_element` VALUES (1, 1, 'meeting-room', 1, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1001', '会议室1', '#111111', '0', 'lineStartlineStart5', 'lineMidlineMid5', 'lineEndlineEnd5', NULL, '2019-05-13 18:10:27', '2019-05-16 17:24:57');
+INSERT INTO `map_element` VALUES (2, 1, 'meeting-room', 2, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1002', '会议室2', '#222222', '0', 'lineStartlineStart6', 'lineMidlineMid6', 'lineEndlineEnd6', NULL, '2019-05-13 18:10:27', '2019-05-16 17:24:57');
+INSERT INTO `map_element` VALUES (3, 1, 'meeting-room', 3, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1003', '会议室3', '#333333', '0', NULL, NULL, NULL, NULL, '2019-05-13 18:10:27', '2019-05-16 17:10:13');
+INSERT INTO `map_element` VALUES (4, 1, 'meeting-room', 1, NULL, 'mapWebId', 'string', 'stationx', 'stationy', 'A1004', '会议室4', '#444444', '0', NULL, NULL, NULL, NULL, '2019-05-13 18:10:27', '2019-05-16 17:10:14');
 
 
 -- ----------------------------

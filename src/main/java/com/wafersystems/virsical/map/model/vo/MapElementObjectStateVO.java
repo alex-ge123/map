@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
  */
 @Setter
 @Getter
+@ToString
 @ApiModel(value = "MapElementObjectStateVO", description = "地图元素资源状态对象")
 public class MapElementObjectStateVO implements Serializable {
 

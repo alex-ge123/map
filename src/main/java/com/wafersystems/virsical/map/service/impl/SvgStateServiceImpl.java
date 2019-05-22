@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.map.entity.SvgState;
 import com.wafersystems.virsical.map.mapper.SvgStateMapper;
 import com.wafersystems.virsical.map.service.ISvgStateService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**

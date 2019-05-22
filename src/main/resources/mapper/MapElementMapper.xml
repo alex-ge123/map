@@ -6,6 +6,7 @@
   <resultMap id="BaseResultMap" type="com.wafersystems.virsical.map.entity.MapElement">
     <id column="map_element_id" property="mapElementId"/>
     <result column="map_id" property="mapId"/>
+    <result column="svg_type_code" property="svgTypeCode"/>
     <result column="svg_id" property="svgId"/>
     <result column="custom_element" property="customElement"/>
     <result column="map_web_id" property="mapWebId"/>
@@ -20,38 +21,57 @@
     <result column="line_mid" property="lineMid"/>
     <result column="line_end" property="lineEnd"/>
     <result column="extend" property="extend"/>
-    <result column="del_flag" property="delFlag"/>
     <result column="create_time" property="createTime"/>
     <result column="update_time" property="updateTime"/>
   </resultMap>
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        map_element_id, map_id, svg_id, custom_element, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, line_start, line_mid, line_end, extend, del_flag, create_time, update_time
+        map_element_id, map_id, svg_id, custom_element, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, line_start, line_mid, line_end, extend, create_time, update_time
   </sql>
 
-  <!-- 批量更新 -->
-  <update id="batchUpdateMapElementObjectState" parameterType="java.util.List">
+  <!-- 使用CASE WHEN批量更新 -->
+  <!--<update id="batchUpdateMapElementObjectState" parameterType="java.util.List">-->
+    <!--UPDATE map_element e-->
+    <!--LEFT JOIN svg s ON e.svg_id = s.svg_id-->
+    <!--AND s.svg_type_code = #{svgTypeCode}-->
+    <!--SET-->
+    <!--e.object_name =-->
+    <!--<foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end,">-->
+      <!--WHEN #{item.objectId} THEN #{item.objectName}-->
+    <!--</foreach>-->
+    <!--e.object_color =-->
+    <!--<foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end,">-->
+      <!--WHEN #{item.objectId} THEN #{item.objectColor}-->
+    <!--</foreach>-->
+    <!--e.object_svg_state_code =-->
+    <!--<foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end">-->
+      <!--WHEN #{item.objectId} THEN #{item.objectSvgStateCode}-->
+    <!--</foreach>-->
+    <!--WHERE-->
+    <!--e.object_id IN-->
+    <!--<foreach collection="list" index="index" item="item" separator="," open="(" close=")">-->
+      <!--#{item.objectId}-->
+    <!--</foreach>-->
+  <!--</update>-->
+
+  <!-- 单条更新 -->
+  <update id="updateMapElementObjectState">
     UPDATE map_element e
-    LEFT JOIN svg s ON e.svg_id = s.svg_id
-    AND s.svg_type_code = #{svgTypeCode}
     SET
-    e.object_name =
-    <foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end,">
-      WHEN #{item.objectId} THEN #{item.objectName}
-    </foreach>
-    e.object_color =
-    <foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end,">
-      WHEN #{item.objectId} THEN #{item.objectColor}
-    </foreach>
-    e.object_svg_state_code =
-    <foreach collection="list" item="item" index="index" separator=" " open="CASE e.object_id" close="end">
-      WHEN #{item.objectId} THEN #{item.objectSvgStateCode}
-    </foreach>
+    <if test="objectName != null and objectName != ''">
+      e.object_name = #{objectName},
+    </if>
+    <if test="objectColor != null and objectColor != ''">
+      e.object_color = #{objectColor},
+    </if>
+    <if test="objectSvgStateCode != null and objectSvgStateCode != ''">
+      e.object_svg_state_code = #{objectSvgStateCode}
+    </if>
     WHERE
-    e.object_id IN
-    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-      #{item.objectId}
-    </foreach>
+    e.object_id = #{objectId}
+    <if test="svgTypeCode != null and svgTypeCode != ''">
+      and e.svg_type_code = #{svgTypeCode}
+    </if>
   </update>
 </mapper>

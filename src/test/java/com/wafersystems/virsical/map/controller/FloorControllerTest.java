@@ -22,10 +22,21 @@ public class FloorControllerTest extends BaseControllerTest {
     String url = "/floor/add";
     Floor floor = new Floor();
     floor.setBuildingId(1);
-    floor.setFloorNum("测试楼层1");
+    floor.setFloorNum("100F");
     String content = JSON.toJSONString(floor);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void addForFail() throws Exception {
+    String url = "/floor/add";
+    Floor floor = new Floor();
+    floor.setBuildingId(1);
+    floor.setFloorNum("1F");
+    String content = JSON.toJSONString(floor);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
   @Test
@@ -54,10 +65,23 @@ public class FloorControllerTest extends BaseControllerTest {
     String url = "/floor/update";
     Floor floor = new Floor();
     floor.setFloorId(1);
+    floor.setBuildingId(1);
     floor.setFloorNum("修改测试楼层1");
     String content = JSON.toJSONString(floor);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void updateForFail() throws Exception {
+    String url = "/floor/update";
+    Floor floor = new Floor();
+    floor.setFloorId(2);
+    floor.setBuildingId(1);
+    floor.setFloorNum("1F");
+    String content = JSON.toJSONString(floor);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
   @Test

@@ -29,6 +29,17 @@ public class SvgTypeControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void addForFail() throws Exception {
+    String url = "/svg-type/add";
+    SvgType svgType = new SvgType();
+    svgType.setSvgTypeCode("meeting-room");
+    svgType.setSvgTypeName("测试添加素材分类");
+    String content = JSON.toJSONString(svgType);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void list() throws Exception {
     String url = "/svg-type/list";
     JSONObject jsonObject = doGet(url);

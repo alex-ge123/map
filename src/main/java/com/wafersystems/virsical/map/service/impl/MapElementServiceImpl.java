@@ -62,7 +62,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                                   List<MapElementObjectStateVO> list) {
-    Integer result = mapElementMapper.batchUpdateMapElementObjectState(svgTypeCode, list);
-    return result > 0 ? Boolean.TRUE : Boolean.FALSE;
+    list.forEach(vo ->
+      mapElementMapper.updateMapElementObjectState(svgTypeCode,
+        vo.getObjectId(), vo.getObjectName(), vo.getObjectColor(), vo.getObjectSvgStateCode())
+    );
+    return Boolean.TRUE;
   }
 }
