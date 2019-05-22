@@ -97,7 +97,7 @@ pipeline {
                 sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
 
                 sh "cp sql/create.sql tmp_sql/${JOB_NAME}"
-                sh "cp sql/int_schema.sql tmp_sql/${JOB_NAME}"
+                sh "cp sql/init_schema.sql tmp_sql/${JOB_NAME}"
                 sh "cp sql/init_data.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
