@@ -22,7 +22,7 @@ spec:
       containers:
       - name: __PROJECT__
         image: openjdk:8-jre-alpine
-        command: ['/bin/sh', '-c', 'cd /work && java -jar __ARTIFACT_ID__.jar']
+        command: ['/bin/sh', '-c', 'cd /work && java -jar __ARTIFACT_ID__.jar --spring.profiles.active=k8s']
         ports:
         - containerPort: 8080
           name: http

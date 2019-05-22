@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @since 2019-05-07
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "MapElement", description = "地图元素")
 public class MapElement extends Model<MapElement> {

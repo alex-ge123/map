@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
  * @since 2019-05-07
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "Map", description = "地图")
 public class Map extends Model<Map> {

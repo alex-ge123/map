@@ -2,7 +2,8 @@ package com.wafersystems.virsical.map.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -14,7 +15,8 @@ import java.io.Serializable;
  * @author tandk
  * @since 2019-05-13
  */
-@Data
+@Setter
+@Getter
 @ApiModel(value = "MapElementBindVO", description = "地图元素绑定对象")
 public class MapElementBindVO implements Serializable {
 

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @since 2019-05-08
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "SvgState", description = "素材状态")
 public class SvgState extends Model<SvgState> {

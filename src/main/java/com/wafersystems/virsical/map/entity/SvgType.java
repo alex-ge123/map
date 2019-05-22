@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2019-05-08
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "SvgType", description = "素材类型")
 public class SvgType extends Model<SvgType> {

@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
@@ -50,7 +51,7 @@ public class SvgController extends BaseController {
     try {
       svgMap = SvgUtils.analyzeSvgFile(svgFile.getInputStream());
     } catch (Exception e) {
-      return R.fail(MsgConstants.SVG_FILE_PARSE_EXCEPTION);
+      throw new BusinessException(MsgConstants.SVG_FILE_PARSE_EXCEPTION);
     }
     return R.ok(svgMap);
   }

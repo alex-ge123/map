@@ -43,6 +43,14 @@ public class MapElementControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void addForParamErrorFail() throws Exception {
+    String url = "/map-element/add";
+    String content = JSON.toJSONString(new ArrayList<>());
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void list() throws Exception {
     String url = "/map-element/list";
     JSONObject jsonObject = doGet(url);
@@ -69,6 +77,14 @@ public class MapElementControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void bindForParamErrorFail() throws Exception {
+    String url = "/map-element/bind";
+    String content = JSON.toJSONString(new ArrayList<>());
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void route() throws Exception {
     String url = "/map-element/route";
     List<MapElementRouteVO> list = new ArrayList<>();
@@ -90,6 +106,14 @@ public class MapElementControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void routeForParamErrorFail() throws Exception {
+    String url = "/map-element/route";
+    String content = JSON.toJSONString(new ArrayList<>());
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void updateObjectState() throws Exception {
     String url = "/map-element/update-object-state/meeting-room";
     List<MapElementObjectStateVO> list = new ArrayList<>();
@@ -108,6 +132,14 @@ public class MapElementControllerTest extends BaseControllerTest {
     String content = JSON.toJSONString(list);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void updateObjectStateForParamErrorFail() throws Exception {
+    String url = "/map-element/update-object-state/meeting-room";
+    String content = JSON.toJSONString(new ArrayList<>());
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
 

@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
  * @since 2019-05-07
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "Floor", description = "楼层")
 public class Floor extends Model<Floor> {

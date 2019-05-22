@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
  * @since 2019-05-08
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ApiModel(value = "Svg", description = "素材")
 public class Svg extends Model<Svg> {

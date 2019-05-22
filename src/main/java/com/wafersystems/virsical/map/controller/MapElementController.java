@@ -66,18 +66,18 @@ public class MapElementController extends BaseController {
   /**
    * 地图元素资源绑定
    *
-   * @param list 地图元素资源对象集合
+   * @param mapElementBindVoList 地图元素资源对象集合
    * @return R
    */
   @ApiOperation(value = "地图元素资源绑定", notes = "地图元素资源绑定（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/bind")
-  public R bind(@RequestBody List<MapElementBindVO> list) {
-    if (list.isEmpty()) {
+  public R bind(@RequestBody List<MapElementBindVO> mapElementBindVoList) {
+    if (mapElementBindVoList.isEmpty()) {
       return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
     }
     List<MapElement> mapElementList = new ArrayList<>();
-    list.forEach(mapElementRouteVO -> {
+    mapElementBindVoList.forEach(mapElementRouteVO -> {
       MapElement mapElement = new MapElement();
       BeanUtils.copyProperties(mapElementRouteVO, mapElement);
       mapElementList.add(mapElement);
@@ -88,18 +88,18 @@ public class MapElementController extends BaseController {
   /**
    * 地图元素绘制路径
    *
-   * @param list 地图元素路径对象集合
+   * @param mapElementRouteVoList 地图元素路径对象集合
    * @return R
    */
   @ApiOperation(value = "地图元素绘制路径", notes = "地图元素绘制路径（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素路径对象集合", required = true, dataType = "MapElement")
   @PostMapping("/route")
-  public R route(@RequestBody List<MapElementRouteVO> list) {
-    if (list.isEmpty()) {
+  public R route(@RequestBody List<MapElementRouteVO> mapElementRouteVoList) {
+    if (mapElementRouteVoList.isEmpty()) {
       return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
     }
     List<MapElement> mapElementList = new ArrayList<>();
-    list.forEach(mapElementRouteVO -> {
+    mapElementRouteVoList.forEach(mapElementRouteVO -> {
       MapElement mapElement = new MapElement();
       BeanUtils.copyProperties(mapElementRouteVO, mapElement);
       mapElementList.add(mapElement);
@@ -110,19 +110,19 @@ public class MapElementController extends BaseController {
   /**
    * 更新地图元素资源状态
    *
-   * @param svgTypeCode 素材类型code
-   * @param list        地图元素资源对象集合
-   * @return
+   * @param svgTypeCode                 素材类型code
+   * @param mapElementObjectStateVoList 地图元素资源对象集合
+   * @return R
    */
   @ApiOperation(value = "更新地图元素资源状态", notes = "更新地图元素资源状态（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/update-object-state/{svgTypeCode}")
   public R updateObjectState(@PathVariable String svgTypeCode,
-                             @RequestBody List<MapElementObjectStateVO> list) {
-    if (list.isEmpty()) {
+                             @RequestBody List<MapElementObjectStateVO> mapElementObjectStateVoList) {
+    if (mapElementObjectStateVoList.isEmpty()) {
       return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
     }
-    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, list)
+    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList)
       ? R.ok() : R.fail();
   }
 
