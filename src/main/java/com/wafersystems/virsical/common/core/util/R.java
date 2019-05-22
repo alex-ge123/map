@@ -38,15 +38,30 @@ public class R<T> implements Serializable {
   @ApiModelProperty(value = "数据")
   private T data;
 
+  /**
+   * 构造方法
+   */
   public R() {
     super();
   }
 
+  /**
+   * 构造方法
+   *
+   * @param data 数据
+   */
   public R(T data) {
     super();
     this.data = data;
   }
 
+  /**
+   * 构造方法
+   *
+   * @param code 返回标记：成功标记=0，失败标记=1
+   * @param msg  返回信息
+   * @param data 数据
+   */
   public R(int code, String msg, T data) {
     super();
     this.code = code;
