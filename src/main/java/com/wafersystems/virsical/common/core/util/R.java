@@ -69,20 +69,41 @@ public class R<T> implements Serializable {
     this.data = data;
   }
 
-  public static <T> R<T> ok() {
-    return new R();
+  /**
+   * 创建成功返回对象
+   *
+   * @return R
+   */
+  public static R ok() {
+    return R.builder().build();
   }
 
-  public static <T> R<T> ok(T data) {
-    return new R(data);
+  /**
+   * 创建成功返回对象
+   *
+   * @param data 数据
+   * @return R
+   */
+  public static <T> R ok(T data) {
+    return R.builder().data(data).build();
   }
 
-  public static <T> R<T> fail() {
-    return new R(CommonConstants.FAIL, null, null);
+  /**
+   * 创建失败返回对象
+   *
+   * @return R
+   */
+  public static R fail() {
+    return R.builder().code(CommonConstants.FAIL).build();
   }
 
-  public static <T> R<T> fail(String msg) {
-    return new R(CommonConstants.FAIL, msg, null);
+  /**
+   * 创建失败返回对象
+   *
+   * @param msg 提示
+   * @return R
+   */
+  public static R fail(String msg) {
+    return R.builder().code(CommonConstants.FAIL).msg(msg).build();
   }
-
 }
