@@ -4,7 +4,6 @@ import com.wafersystems.virsical.common.core.constants.CommonConstants;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 

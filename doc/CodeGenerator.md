@@ -1,3 +1,18 @@
+### 代码生成工具
+> 此代码生成工具类是基于Mybatis-plus
+
+- 依赖包
+```xml
+<!--代码生成插件-->
+    <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-generator</artifactId>
+      <version>${mybatis-plus.version}</version>
+    </dependency>
+```
+
+- 执行程序（运行main方法，控制台输入需要生成代码的表名，多个表用,分隔）
+```java
 package com.wafersystems.virsical.map;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -51,9 +66,9 @@ public class CodeGenerator {
   }
 
   /**
-   * 代码生成入口（使用时 create() 改成 main(String[] args) 方法）
+   * 代码生成入口
    */
-  public static void create() {
+  public static void main(String[] args) {
     // 全局配置
     GlobalConfig gc = new GlobalConfig();
     String projectPath = System.getProperty("user.dir");
@@ -159,3 +174,4 @@ public class CodeGenerator {
   }
 
 }
+```
