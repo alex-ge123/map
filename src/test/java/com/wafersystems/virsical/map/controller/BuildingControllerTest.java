@@ -61,11 +61,27 @@ public class BuildingControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void updateForFail() throws Exception {
+    String url = "/building/update";
+    Building building = new Building();
+    building.setBuildingId(0);
+    building.setBuildingName("测试修改楼宇");
+    String content = JSON.toJSONString(building);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void delete() throws Exception {
     String url = "/building/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/building/delete/0";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
 }

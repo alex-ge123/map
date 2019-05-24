@@ -65,10 +65,28 @@ public class MapControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void updateForFail() throws Exception {
+    String url = "/map/update";
+    Map map = new Map();
+    map.setMapId(0);
+    map.setBaseMapElement("test-eee-update");
+    String content = JSON.toJSONString(map);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void delete() throws Exception {
     String url = "/map/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/map/delete/0";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
 

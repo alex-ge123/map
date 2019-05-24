@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.common;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -24,10 +25,8 @@ import java.util.Map;
  * @date 2019/5/9 13:30
  */
 @Slf4j
+@UtilityClass
 public class SvgUtils {
-  private SvgUtils() {
-    throw new IllegalStateException("SVG Utility class");
-  }
 
   /**
    * 描述：解析SVG文件，获取相关元素 。

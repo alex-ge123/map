@@ -64,10 +64,29 @@ public class SvgStateControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void updateForFail() throws Exception {
+    String url = "/svg-state/update";
+    SvgState svgState = new SvgState();
+    svgState.setSvgStateId(0);
+    svgState.setSvgStateCode("test-aaa");
+    svgState.setSvgStateName("会议室");
+    String content = JSON.toJSONString(svgState);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void delete() throws Exception {
     String url = "/svg-state/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/svg-state/delete/0";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
 

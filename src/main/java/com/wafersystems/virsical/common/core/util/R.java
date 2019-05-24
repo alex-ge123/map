@@ -49,16 +49,6 @@ public class R<T> implements Serializable {
   /**
    * 构造方法
    *
-   * @param data 数据
-   */
-  public R(T data) {
-    super();
-    this.data = data;
-  }
-
-  /**
-   * 构造方法
-   *
    * @param code 返回标记：成功标记=0，失败标记=1
    * @param msg  返回信息
    * @param data 数据

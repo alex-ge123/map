@@ -78,5 +78,10 @@ public class SvgTypeControllerTest extends BaseControllerTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/svg-type/delete/aaa";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
 }

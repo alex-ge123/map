@@ -76,6 +76,18 @@ public class FloorControllerTest extends BaseControllerTest {
   public void updateForFail() throws Exception {
     String url = "/floor/update";
     Floor floor = new Floor();
+    floor.setFloorId(0);
+    floor.setBuildingId(1);
+    floor.setFloorNum("修改测试楼层1");
+    String content = JSON.toJSONString(floor);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
+  public void updateForExistFail() throws Exception {
+    String url = "/floor/update";
+    Floor floor = new Floor();
     floor.setFloorId(2);
     floor.setBuildingId(1);
     floor.setFloorNum("1F");
@@ -89,6 +101,13 @@ public class FloorControllerTest extends BaseControllerTest {
     String url = "/floor/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteForFail() throws Exception {
+    String url = "/floor/delete/0";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
 
