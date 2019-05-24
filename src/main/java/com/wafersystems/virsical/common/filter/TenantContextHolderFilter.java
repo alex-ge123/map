@@ -37,11 +37,6 @@ public class TenantContextHolderFilter extends GenericFilterBean {
     HttpServletResponse response = (HttpServletResponse) servletResponse;
 
     String url = request.getServletPath();
-    // 过滤服务监控请求
-    if (url.startsWith(CommonConstants.ACTUATOR_PREFIX_URL)) {
-      filterChain.doFilter(request, response);
-      return;
-    }
 
     String tenantId = "1";
     TenantContextHolder.setTenantId(Integer.parseInt(tenantId));

@@ -26,6 +26,10 @@ import java.util.Scanner;
 @Slf4j
 @UtilityClass
 public class CodeGenerator {
+  /**
+   * 如果模板引擎是 freemarker
+   */
+  private final String templatePath = "/templates/mapper.xml.ftl";
 
   /**
    * <p>
@@ -48,7 +52,6 @@ public class CodeGenerator {
 
   /**
    * 代码生成入口（使用时 create() 改成 main(String[] args) 方法）
-   *
    */
   public static void create() {
     // 全局配置
@@ -82,9 +85,6 @@ public class CodeGenerator {
         // to do nothing
       }
     };
-
-    // 如果模板引擎是 freemarker
-    String templatePath = "/templates/mapper.xml.ftl";
 
     // 自定义输出配置
     List<FileOutConfig> focList = new ArrayList<>();
