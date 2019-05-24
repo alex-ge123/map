@@ -25,7 +25,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-07
  */
-@Api(tags = "楼层", description = "floor")
+@Api(tags = "楼层")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/floor")

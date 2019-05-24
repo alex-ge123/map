@@ -24,7 +24,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-07
  */
-@Api(tags = "楼宇", description = "building")
+@Api(tags = "楼宇")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/building")

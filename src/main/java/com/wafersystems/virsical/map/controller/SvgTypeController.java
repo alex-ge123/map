@@ -25,7 +25,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-08
  */
-@Api(tags = "素材类型", description = "svgType")
+@Api(tags = "素材类型")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/svg-type")

@@ -30,7 +30,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-08
  */
-@Api(tags = "素材", description = "svg")
+@Api(tags = "素材")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/svg")

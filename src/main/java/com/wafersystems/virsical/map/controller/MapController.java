@@ -24,7 +24,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-13
  */
-@Api(tags = "地图", description = "map")
+@Api(tags = "地图")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/map")

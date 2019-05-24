@@ -27,7 +27,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-13
  */
-@Api(tags = "地图元素", description = "mapElement")
+@Api(tags = "地图元素")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/map-element")

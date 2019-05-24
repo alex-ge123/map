@@ -29,7 +29,7 @@ import java.util.Map;
  * @author tandk
  * @since 2019-05-07
  */
-@Api(tags = "园区", description = "park")
+@Api(tags = "园区")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/park")

@@ -25,7 +25,7 @@ import java.util.List;
  * @author tandk
  * @since 2019-05-08
  */
-@Api(tags = "素材状态", description = "svgState")
+@Api(tags = "素材状态")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/svg-state")

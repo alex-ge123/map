@@ -15,6 +15,7 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "tenant")
 public class TenantConfigProperties {
+  private static final String TENANT_ID = "tenant_id";
 
   /**
    * 多租户的数据表集合
@@ -25,7 +26,7 @@ public class TenantConfigProperties {
    * 维护租户列名称
    */
   public String getColumn() {
-    return "tenant_id";
+    return TENANT_ID;
   }
 
   public List<String> getTables() {
