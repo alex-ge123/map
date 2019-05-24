@@ -66,7 +66,7 @@ pipeline {
             }
             steps {
                 withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
-                    sh 'mvn clean package'
+                    sh 'mvn clean package -DskipTests'
                 }
                 // stash includes: '**/target/*.jar', name: 'app'
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
@@ -82,6 +82,7 @@ pipeline {
             steps {
                 sh "rm -rf tmp"
                 sh "mkdir -p tmp/config"
+                sh "cp src/main/resources/application.yml tmp/config"
 
                 sh "rm -rf tmp_sql"
                 sh "mkdir -p  tmp_sql/${JOB_NAME}"
@@ -106,13 +107,13 @@ pipeline {
                 sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g ${DEPLOY_PATH}.cnf"
 
                 script {
-                    datas = readYaml file: "src/main/resources/application-${RD_ENV}.yml"
+                    datas = readYaml file: "src/main/resources/application-k8s.yml"
                     datas.spring.datasource.url = "jdbc:mysql://__ENV__-mysql:3306/__GROUP_NAME___map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true"
                     datas.spring.datasource.username = "wafer"
                     datas.spring.datasource.password = "wafer"
                     datas.server.port = 8080
 
-                    writeYaml file: "tmp/config/bootstrap.yml", data: datas
+                    writeYaml file: "tmp/config/application-k8s.yml", data: datas
 
                     withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
                             credentialsId: "k8s-${RD_ENV}",
