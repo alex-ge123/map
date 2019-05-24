@@ -16,6 +16,7 @@ import java.io.Serializable;
  * @param <T> 泛型
  * @author tandk
  */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 @Builder
 @ToString
 @Accessors(chain = true)
