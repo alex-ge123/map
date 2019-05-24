@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.Scanner;
  * @author tandk
  * @date 2019/4/30 10:57
  */
+@Slf4j
+@UtilityClass
 public class CodeGenerator {
 
   /**
@@ -32,7 +36,7 @@ public class CodeGenerator {
     Scanner scanner = new Scanner(System.in, "UTF-8");
     StringBuilder help = new StringBuilder();
     help.append("请输入" + tip + "：");
-    System.out.println(help.toString());
+    log.info(help.toString());
     if (scanner.hasNext()) {
       String ipt = scanner.next();
       if (StringUtils.isNotEmpty(ipt)) {
@@ -43,11 +47,10 @@ public class CodeGenerator {
   }
 
   /**
-   * 代码生成入口（使用时 create 改成 main 方法）
+   * 代码生成入口（使用时 create() 改成 main(String[] args) 方法）
    *
-   * @param args args
    */
-  public static void create(String[] args) {
+  public static void create() {
     // 全局配置
     GlobalConfig gc = new GlobalConfig();
     String projectPath = System.getProperty("user.dir");
