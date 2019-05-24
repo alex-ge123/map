@@ -108,7 +108,7 @@ pipeline {
 
                 script {
                     datas = readYaml file: "src/main/resources/application-k8s.yml"
-                    datas.spring.datasource.url = "jdbc:mysql://__ENV__-mysql:3306/__GROUP_NAME___map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true"
+                    datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true"
                     datas.spring.datasource.username = "wafer"
                     datas.spring.datasource.password = "wafer"
                     datas.server.port = 8080
