@@ -1,0 +1,3 @@
+location /map {
+   proxy_pass   http://__GROUP_NAME__-map:8080/;
+}

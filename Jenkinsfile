@@ -12,6 +12,7 @@ pipeline {
         GROUP_NAME = ''
         SERVICE_NAME = '-map'
         PVC_WORK = ''
+        DEPLOY_PATH = 'map'
         K8S_CLUSTER_NAME = 'kubernetes'
     }
 
@@ -88,7 +89,7 @@ pipeline {
                 sh "cp target/*.jar tmp"
 
                 sh "cp k8s/backend.yml k8s.yml"
-                sh "cat k8s/backend-service.yml k8s/ingress.yml > k8s-service.yml"
+                sh "cp k8s/backend-service.yml k8s-service.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
                 sh "sed -i s@__ENV__@${RD_ENV}@g k8s.yml"
@@ -100,6 +101,9 @@ pipeline {
                 sh "cp sql/init_schema.sql tmp_sql/${JOB_NAME}"
                 sh "cp sql/init_data.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
+
+                sh "cp k8s/nginx.cnf ${DEPLOY_PATH}.cnf"
+                sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g ${DEPLOY_PATH}.cnf"
 
                 script {
                     datas = readYaml file: "src/main/resources/application-${RD_ENV}.yml"
@@ -158,6 +162,29 @@ pipeline {
 
                         sh "kubectl apply -f k8s-service.yml -n ${RD_ENV}"
                         sh "kubectl apply -f k8s.yml -n ${RD_ENV}"
+
+                        RET = sh(
+                                script: "kubectl get pvc ${GROUP_NAME}-nginx-conf --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
+                                returnStdout: true
+                        ).trim()
+
+                        PVC_NGCONF = "${RD_ENV}-${GROUP_NAME}-nginx-conf-" + RET
+
+                        NGINX_POD = sh(
+                                script: "kubectl get pod -l app=${GROUP_NAME},tier=nginx -n ${RD_ENV} --field-selector=status.phase=Running --ignore-not-found -o custom-columns=name:.metadata.name --no-headers=true | head -1",
+                                returnStdout: true
+                        ).trim()
+
+                        ftpPublisher failOnError: true,
+                                publishers: [
+                                        [configName: 'ftp_ds1819_dev', transfers: [
+                                                [cleanRemote    : false,
+                                                 remoteDirectory: "${PVC_NGCONF}",
+                                                 sourceFiles    : "${DEPLOY_PATH}.cnf",
+                                                 removePrefix   : '']
+                                        ]]
+                                ]
+                        sh "kubectl exec ${NGINX_POD} -n ${RD_ENV} -- nginx -s reload"
                     }
                 }
             sh "rm -rf ${SERVICE_NAME}.zip"
