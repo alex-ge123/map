@@ -3,8 +3,8 @@ server:
 spring:
   application:
     name: virsical-map
-  jackson:
-    default-property-inclusion: non_null
+#  jackson:
+#    default-property-inclusion: non_null
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
