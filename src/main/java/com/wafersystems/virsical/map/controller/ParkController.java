@@ -106,9 +106,9 @@ public class ParkController extends BaseController {
     Map<String, Object> map = new HashMap<>(3);
     map.put("park", new Park().selectList(Wrappers.<Park>lambdaQuery().select(Park::getParkId, Park::getParkName)));
     map.put("building", new Building().selectList(Wrappers.<Building>lambdaQuery()
-      .select(Building::getBuildingId, Building::getBuildingName)));
-    map.put("floor",
-      new Floor().selectList(Wrappers.<Floor>lambdaQuery().select(Floor::getFloorId, Floor::getFloorNum)));
+      .select(Building::getParkId, Building::getBuildingId, Building::getBuildingName)));
+    map.put("floor", new Floor().selectList(Wrappers.<Floor>lambdaQuery()
+        .select(Floor::getBuildingId, Floor::getFloorId, Floor::getFloorNum)));
     return R.ok(map);
   }
 }
