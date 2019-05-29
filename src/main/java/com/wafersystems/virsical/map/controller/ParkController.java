@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.entity.Building;
-import com.wafersystems.virsical.map.entity.Floor;
 import com.wafersystems.virsical.map.entity.Park;
+import com.wafersystems.virsical.map.service.IFloorService;
 import com.wafersystems.virsical.map.service.IParkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,6 +36,8 @@ import java.util.Map;
 public class ParkController extends BaseController {
 
   private final IParkService parkService;
+
+  private final IFloorService floorService;
 
   @ApiOperation(value = "添加园区", notes = "添加园区")
   @ApiImplicitParam(name = "park", value = "园区对象", required = true, dataType = "Park")
@@ -107,8 +109,7 @@ public class ParkController extends BaseController {
     map.put("park", new Park().selectList(Wrappers.<Park>lambdaQuery().select(Park::getParkId, Park::getParkName)));
     map.put("building", new Building().selectList(Wrappers.<Building>lambdaQuery()
       .select(Building::getParkId, Building::getBuildingId, Building::getBuildingName)));
-    map.put("floor", new Floor().selectList(Wrappers.<Floor>lambdaQuery()
-        .select(Floor::getBuildingId, Floor::getFloorId, Floor::getFloorNum)));
+    map.put("floor", floorService.selectFloorList());
     return R.ok(map);
   }
 }

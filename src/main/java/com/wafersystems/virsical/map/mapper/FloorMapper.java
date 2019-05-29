@@ -25,4 +25,11 @@ public interface FloorMapper extends BaseMapper<Floor> {
    * @return 楼层分页
    */
   List<Floor> selectFloorPage(@Param("page") Page page, @Param("floor") Floor floor);
+
+  /**
+   * 获取楼层列表
+   *
+   * @return 楼层列表
+   */
+  List<Floor> selectFloorList();
 }

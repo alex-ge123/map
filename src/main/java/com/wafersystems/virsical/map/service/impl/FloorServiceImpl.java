@@ -9,6 +9,8 @@ import com.wafersystems.virsical.map.service.IFloorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 楼层 服务实现类
@@ -32,5 +34,15 @@ public class FloorServiceImpl extends ServiceImpl<FloorMapper, Floor> implements
   @Override
   public IPage<Floor> selectFloorPage(Page<Floor> page, Floor floor) {
     return page.setRecords(floorMapper.selectFloorPage(page, floor));
+  }
+
+  /**
+   * 获取楼层列表
+   *
+   * @return 楼层分页
+   */
+  @Override
+  public List<Floor> selectFloorList() {
+    return floorMapper.selectFloorList();
   }
 }

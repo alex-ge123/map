@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wafersystems.virsical.map.entity.Floor;
 
+import java.util.List;
+
 /**
  * <p>
  * 楼层 服务类
@@ -22,4 +24,11 @@ public interface IFloorService extends IService<Floor> {
    * @return 楼层分页
    */
   IPage<Floor> selectFloorPage(Page<Floor> page, Floor floor);
+
+  /**
+   * 获取楼层列表
+   *
+   * @return 楼层分页
+   */
+  List<Floor> selectFloorList();
 }
