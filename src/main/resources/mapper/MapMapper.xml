@@ -39,6 +39,7 @@
     p.park_name,
     b.building_id,
     b.building_name,
+    f.floor_id,
     f.floor_num,
     m.*
     FROM
