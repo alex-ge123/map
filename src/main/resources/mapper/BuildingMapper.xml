@@ -29,5 +29,6 @@
     <if test="building.buildingName != null and building.buildingName != ''">
       and b.building_name like CONCAT('%',#{building.buildingName},'%')
     </if>
+    order by b.building_id desc
   </select>
 </mapper>

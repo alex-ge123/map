@@ -30,6 +30,7 @@
     <if test="floor.floorNum != null and floor.floorNum != ''">
       and f.floor_num like CONCAT('%',#{floor.floorNum},'%')
     </if>
+    order by f.floor_id desc
   </select>
 
   <select id="selectFloorList" resultType="com.wafersystems.virsical.map.entity.Floor">

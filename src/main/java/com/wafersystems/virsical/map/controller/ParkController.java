@@ -94,6 +94,7 @@ public class ParkController extends BaseController {
       lambdaQueryWrapper.like(Park::getParkName, parkName);
     }
     lambdaQueryWrapper.setEntity(park);
+    lambdaQueryWrapper.orderByDesc(Park::getParkId);
     return R.ok(parkService.page(page, lambdaQueryWrapper));
   }
 

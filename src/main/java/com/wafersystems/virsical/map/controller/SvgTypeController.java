@@ -84,7 +84,7 @@ public class SvgTypeController extends BaseController {
   })
   @GetMapping("/page")
   public R<IPage<SvgType>> page(Page page, SvgType svgType) {
-    return R.ok(svgTypeService.page(page, Wrappers.query(svgType)));
+    return R.ok(svgTypeService.page(page, Wrappers.query(svgType).orderByDesc("create_time")));
   }
 
 }

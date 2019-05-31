@@ -103,7 +103,7 @@ public class SvgStateController extends BaseController {
   })
   @GetMapping("/page")
   public R<IPage<SvgState>> page(Page page, SvgState svgState) {
-    return R.ok(svgStateService.page(page, Wrappers.query(svgState)));
+    return R.ok(svgStateService.page(page, Wrappers.query(svgState).orderByDesc("svg_state_id")));
   }
 
 }
