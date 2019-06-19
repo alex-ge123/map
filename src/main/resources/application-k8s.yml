@@ -46,3 +46,8 @@ logging:
   level:
     root: info
     com.wafersystems.virsical.map.mapper: debug
+
+# 推送服务地址
+push:
+  service:
+    url: http://localhost:5200/send-to-user
