@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Building;
+import com.wafersystems.virsical.map.entity.Floor;
 import com.wafersystems.virsical.map.service.IBuildingService;
+import com.wafersystems.virsical.map.service.IFloorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,10 +35,23 @@ public class BuildingController extends BaseController {
 
   private final IBuildingService buildingService;
 
+  private final IFloorService floorService;
+
   @ApiOperation(value = "添加楼宇", notes = "添加楼宇")
   @ApiImplicitParam(name = "building", value = "楼宇对象", required = true, dataType = "Building")
   @PostMapping("/add")
   public R add(@RequestBody Building building) {
+    Building b = buildingService.getOne(Wrappers.<Building>query().lambda()
+      .eq(Building::getBuildingName, building.getBuildingName())
+      .eq(Building::getParkId, building.getParkId()));
+    if (b != null) {
+      return R.fail(MapMsgConstants.BUILDING_HAS_EXIST);
+    }
+    Building b1 = buildingService.getOne(Wrappers.<Building>query().lambda()
+      .eq(Building::getBuildingToken, building.getBuildingToken()));
+    if (b1 != null) {
+      return R.fail(MapMsgConstants.BUILDING_TOKEN_HAS_EXIST);
+    }
     return buildingService.save(building) ? R.ok() : R.fail();
   }
 
@@ -43,6 +59,19 @@ public class BuildingController extends BaseController {
   @ApiImplicitParam(name = "building", value = "楼宇对象", required = true, dataType = "Building")
   @PostMapping("/update")
   public R update(@RequestBody Building building) {
+    Building b = buildingService.getOne(Wrappers.<Building>query().lambda()
+        .eq(Building::getBuildingName, building.getBuildingName())
+        .eq(Building::getParkId, building.getParkId())
+        .ne(Building::getBuildingId, building.getBuildingId()));
+    if (b != null) {
+      return R.fail(MapMsgConstants.BUILDING_HAS_EXIST);
+    }
+    Building b1 = buildingService.getOne(Wrappers.<Building>query().lambda()
+        .eq(Building::getBuildingToken, building.getBuildingToken())
+        .ne(Building::getBuildingId, building.getBuildingId()));
+    if (b1 != null) {
+      return R.fail(MapMsgConstants.BUILDING_TOKEN_HAS_EXIST);
+    }
     return buildingService.updateById(building) ? R.ok() : R.fail();
   }
 
@@ -50,6 +79,10 @@ public class BuildingController extends BaseController {
   @ApiImplicitParam(name = "id", value = "楼宇id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
+    int count = floorService.count(Wrappers.<Floor>query().lambda().eq(Floor::getBuildingId, id));
+    if (count > 0) {
+      return R.fail(MapMsgConstants.THIS_BUILDING_HAS_FLOOR);
+    }
     return buildingService.removeById(id) ? R.ok() : R.fail();
   }
 

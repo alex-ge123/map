@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
-import com.wafersystems.virsical.map.common.MsgConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.SvgState;
 import com.wafersystems.virsical.map.service.ISvgStateService;
 import io.swagger.annotations.Api;
@@ -47,7 +47,7 @@ public class SvgStateController extends BaseController {
       .eq(SvgState::getSvgId, svgState.getSvgId())
       .eq(SvgState::getSvgStateCode, svgState.getSvgStateCode()));
     if (!list.isEmpty()) {
-      return R.fail(MsgConstants.SVG_STATE_NO_REPEAT);
+      return R.fail(MapMsgConstants.SVG_STATE_NO_REPEAT);
     }
     return svgStateService.save(svgState) ? R.ok() : R.fail();
   }
@@ -67,7 +67,7 @@ public class SvgStateController extends BaseController {
       .eq(SvgState::getSvgStateCode, svgState.getSvgStateCode())
       .ne(SvgState::getSvgStateId, svgState.getSvgStateId()));
     if (!list.isEmpty()) {
-      return R.fail(MsgConstants.SVG_STATE_NO_REPEAT);
+      return R.fail(MapMsgConstants.SVG_STATE_NO_REPEAT);
     }
     return svgStateService.updateById(svgState) ? R.ok() : R.fail();
   }

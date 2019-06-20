@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
-import com.wafersystems.virsical.map.common.MsgConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Floor;
+import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.service.IFloorService;
+import com.wafersystems.virsical.map.service.IMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,6 +35,8 @@ public class FloorController extends BaseController {
 
   private final IFloorService floorService;
 
+  private final IMapService mapService;
+
   /**
    * 添加楼层
    *
@@ -46,7 +50,7 @@ public class FloorController extends BaseController {
     if (floorService.getOne(Wrappers.<Floor>lambdaQuery()
       .eq(Floor::getBuildingId, floor.getBuildingId())
       .eq(Floor::getFloorNum, floor.getFloorNum())) != null) {
-      return R.fail(MsgConstants.FLOOR_NUM_NO_REPEAT);
+      return R.fail(MapMsgConstants.FLOOR_NUM_NO_REPEAT);
     }
     return floorService.save(floor) ? R.ok() : R.fail();
   }
@@ -65,7 +69,7 @@ public class FloorController extends BaseController {
       .ne(Floor::getFloorId, floor.getFloorId())
       .eq(Floor::getBuildingId, floor.getBuildingId())
       .eq(Floor::getFloorNum, floor.getFloorNum())) != null) {
-      return R.fail(MsgConstants.FLOOR_NUM_NO_REPEAT);
+      return R.fail(MapMsgConstants.FLOOR_NUM_NO_REPEAT);
     }
     return floorService.updateById(floor) ? R.ok() : R.fail();
   }
@@ -74,6 +78,10 @@ public class FloorController extends BaseController {
   @ApiImplicitParam(name = "id", value = "楼层id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
+    int count = mapService.count(Wrappers.<Map>query().lambda().eq(Map::getFloorId, id));
+    if (count > 0) {
+      return R.fail(MapMsgConstants.THIS_FLOOR_HAS_MAP);
+    }
     return floorService.removeById(id) ? R.ok() : R.fail();
   }
 

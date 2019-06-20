@@ -3,7 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
-import com.wafersystems.virsical.map.common.MsgConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
@@ -46,7 +46,7 @@ public class MapElementController extends BaseController {
   @PostMapping("/add")
   public R add(@RequestBody List<MapElement> mapElementList) {
     if (mapElementList.isEmpty()) {
-      return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
+      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
     return mapElementService.batchSaveMapElement(mapElementList) ? R.ok() : R.fail();
   }
@@ -81,7 +81,7 @@ public class MapElementController extends BaseController {
   @PostMapping("/bind")
   public R bind(@RequestBody List<MapElementBindVO> mapElementBindVoList) {
     if (mapElementBindVoList.isEmpty()) {
-      return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
+      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
     List<MapElement> mapElementList = new ArrayList<>();
     mapElementBindVoList.forEach(mapElementRouteVO -> {
@@ -103,7 +103,7 @@ public class MapElementController extends BaseController {
   @PostMapping("/route")
   public R route(@RequestBody List<MapElementRouteVO> mapElementRouteVoList) {
     if (mapElementRouteVoList.isEmpty()) {
-      return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
+      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
     List<MapElement> mapElementList = new ArrayList<>();
     mapElementRouteVoList.forEach(mapElementRouteVO -> {
@@ -127,7 +127,7 @@ public class MapElementController extends BaseController {
   public R updateObjectState(@PathVariable String svgTypeCode,
                              @RequestBody List<MapElementObjectStateVO> mapElementObjectStateVoList) {
     if (mapElementObjectStateVoList.isEmpty()) {
-      return R.fail(MsgConstants.MAP_ELEMENT_NO_NULL);
+      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
     return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList)
       ? R.ok() : R.fail();

@@ -7,7 +7,7 @@ import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
-import com.wafersystems.virsical.map.common.MsgConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.common.SvgUtils;
 import com.wafersystems.virsical.map.entity.Svg;
 import com.wafersystems.virsical.map.entity.SvgType;
@@ -51,7 +51,7 @@ public class SvgController extends BaseController {
     try {
       svgMap = SvgUtils.analyzeSvgFile(svgFile.getInputStream());
     } catch (Exception e) {
-      throw new BusinessException(MsgConstants.SVG_FILE_PARSE_EXCEPTION);
+      throw new BusinessException(MapMsgConstants.SVG_FILE_PARSE_EXCEPTION);
     }
     return R.ok(svgMap);
   }
