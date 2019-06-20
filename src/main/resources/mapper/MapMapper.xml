@@ -49,6 +49,7 @@
     LEFT JOIN map m ON m.floor_id = f.floor_id AND m.del_flag = 0
     WHERE
     p.park_id = b.park_id
+    AND f.del_flag = 0
     AND b.building_id = f.building_id
     <if test="map.parkId != null">
       AND p.park_id = #{map.parkId}
