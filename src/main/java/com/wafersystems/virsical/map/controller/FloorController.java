@@ -78,10 +78,7 @@ public class FloorController extends BaseController {
   @ApiImplicitParam(name = "id", value = "楼层id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
-    int count = mapService.count(Wrappers.<Map>query().lambda().eq(Map::getFloorId, id));
-    if (count > 0) {
-      return R.fail(MapMsgConstants.THIS_FLOOR_HAS_MAP);
-    }
+    mapService.remove(Wrappers.<Map>update().lambda().eq(Map::getFloorId, id));
     return floorService.removeById(id) ? R.ok() : R.fail();
   }
 
