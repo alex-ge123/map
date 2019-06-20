@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MsgConstants;
 import com.wafersystems.virsical.map.entity.Building;
 import com.wafersystems.virsical.map.entity.Park;
 import com.wafersystems.virsical.map.service.IFloorService;
@@ -43,6 +44,10 @@ public class ParkController extends BaseController {
   @ApiImplicitParam(name = "park", value = "园区对象", required = true, dataType = "Park")
   @PostMapping("/add")
   public R add(@RequestBody Park park) {
+    Park one = parkService.getOne(Wrappers.<Park>query().lambda().eq(Park::getParkName, park.getParkName()));
+    if (one != null) {
+      return R.fail(MsgConstants.PARK_NAME_NO_REPEAT);
+    }
     return parkService.save(park) ? R.ok() : R.fail();
   }
 
@@ -50,6 +55,11 @@ public class ParkController extends BaseController {
   @ApiImplicitParam(name = "park", value = "园区对象", required = true, dataType = "Park")
   @PostMapping("/update")
   public R update(@RequestBody Park park) {
+    Park one = parkService.getOne(Wrappers.<Park>query().lambda().eq(Park::getParkName, park.getParkName())
+        .ne(Park::getParkId, park.getParkId()));
+    if (one != null) {
+      return R.fail(MsgConstants.PARK_NAME_NO_REPEAT);
+    }
     return parkService.updateById(park) ? R.ok() : R.fail();
   }
 

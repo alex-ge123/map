@@ -31,4 +31,9 @@ public interface MsgConstants {
    * 地图元素不能为空
    */
   String MAP_ELEMENT_NO_NULL = "2005";
+
+  /**
+   * 已存在此园区名称
+   */
+  String PARK_NAME_NO_REPEAT = "2006";
 }
