@@ -36,6 +36,10 @@ public class MapController extends BaseController {
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/add")
   public R add(@RequestBody Map map) {
+    List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, map.getFloorId()));
+    if (list != null && list.size() > 0) {
+      return update(map);
+    }
     return mapService.save(map) ? R.ok() : R.fail();
   }
 

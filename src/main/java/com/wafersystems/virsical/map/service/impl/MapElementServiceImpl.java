@@ -40,6 +40,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Autowired
   private MapElementMapper mapElementMapper;
 
+  @Value("${push.service.enable}")
+  private Boolean pushServiceEnable;
+
   @Value("${push.service.url}")
   private String pushServiceUrl;
 
@@ -131,15 +134,17 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param data      内容
    */
   private void push(String clientId, String msgType, String msgAction, String data) {
-    HashMap<String, Object> paramMap = new HashMap<>(2);
-    paramMap.put("clientId", clientId);
-    paramMap.put("msg", new MessageDTO(ProductEnum.Map.name(), msgType, msgAction, data));
-    try {
-      String result = HttpUtil.post(pushServiceUrl, paramMap, 20000);
-      log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}] | [{}]", result, clientId, msgType, msgAction, data);
-    } catch (Exception e) {
-      log.error("调用推送服务推送失败：{}", e);
-      throw new BusinessException("调用推送服务推送失败");
+    if (pushServiceEnable) {
+      HashMap<String, Object> paramMap = new HashMap<>(2);
+      paramMap.put("clientId", clientId);
+      paramMap.put("msg", new MessageDTO(ProductEnum.Map.name(), msgType, msgAction, data));
+      try {
+        String result = HttpUtil.post(pushServiceUrl, paramMap, 20000);
+        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}] | [{}]", result, clientId, msgType, msgAction, data);
+      } catch (Exception e) {
+        log.error("调用推送服务推送失败：{}", e);
+        throw new BusinessException("调用推送服务推送失败");
+      }
     }
   }
 }
