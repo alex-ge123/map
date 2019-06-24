@@ -55,4 +55,5 @@ logging:
 # 推送服务地址
 push:
   service:
+    enable: false
     url: http://localhost:5200/send-to-user
