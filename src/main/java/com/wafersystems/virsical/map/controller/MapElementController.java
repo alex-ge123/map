@@ -1,6 +1,5 @@
 package com.wafersystems.virsical.map.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
@@ -61,13 +60,13 @@ public class MapElementController extends BaseController {
   /**
    * 获取地图元素列表
    *
-   * @param mapElement 地图元素
+   * @param mapId mapId
    * @return R
    */
   @ApiOperation(value = "获取地图元素列表", notes = "根据地图元素对象条件获取地图元素列表")
   @GetMapping("/list")
-  public R<List<MapElement>> list(MapElement mapElement) {
-    return R.ok(mapElementService.list(Wrappers.query(mapElement)));
+  public R list(@RequestParam Integer mapId) {
+    return R.ok(mapElementService.selectListByMapId(mapId));
   }
 
   /**

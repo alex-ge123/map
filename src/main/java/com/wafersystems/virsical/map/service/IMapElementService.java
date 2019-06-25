@@ -15,6 +15,13 @@ import java.util.List;
  * @since 2019-05-07
  */
 public interface IMapElementService extends IService<MapElement> {
+  /**
+   * 地图元素集合
+   *
+   * @param mapId 地图id
+   * @return 地图元素集合
+   */
+  List<MapElement> selectListByMapId(Integer mapId);
 
   /**
    * 批量保存地图元素

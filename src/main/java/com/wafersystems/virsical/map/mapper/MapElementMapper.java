@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wafersystems.virsical.map.entity.MapElement;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  * 地图元素 Mapper 接口
@@ -13,6 +15,14 @@ import org.apache.ibatis.annotations.Param;
  * @since 2019-05-13
  */
 public interface MapElementMapper extends BaseMapper<MapElement> {
+
+  /**
+   * 查询地图元素集合
+   *
+   * @param mapId mapId
+   * @return 地图元素集合
+   */
+  List<MapElement> selectListByMapId(Integer mapId);
 
   /**
    * 更新地图元素资源状态

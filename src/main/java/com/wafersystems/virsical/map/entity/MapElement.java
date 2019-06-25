@@ -92,4 +92,5 @@ public class MapElement extends Model<MapElement> {
     return this.mapElementId;
   }
 
+  private transient String svgStateElement;
 }

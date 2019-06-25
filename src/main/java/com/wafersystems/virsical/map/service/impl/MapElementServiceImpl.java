@@ -47,6 +47,17 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   private String pushServiceUrl;
 
   /**
+   * 地图元素集合
+   *
+   * @param mapId 地图id
+   * @return 地图元素集合
+   */
+  @Override
+  public List<MapElement> selectListByMapId(Integer mapId) {
+    return mapElementMapper.selectListByMapId(mapId);
+  }
+
+  /**
    * 批量保存地图元素（先删再存）
    *
    * @param mapElementList 地图元素集合
