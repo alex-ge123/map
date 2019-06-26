@@ -30,6 +30,31 @@ public class BuildingControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void addForFail() throws Exception {
+    String url = "/building/add";
+    Building building = new Building();
+    building.setParkId(1);
+    building.setBuildingName("1号楼");
+    String content = JSON.toJSONString(building);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("msg"), MapMsgConstants.BUILDING_HAS_EXIST);
+  }
+
+  @Test
+  public void addForFail2() throws Exception {
+    String url = "/building/add";
+    Building building = new Building();
+    building.setParkId(1);
+    building.setBuildingName("123号楼");
+    building.setBuildingToken("123");
+    String content = JSON.toJSONString(building);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("msg"), MapMsgConstants.BUILDING_TOKEN_HAS_EXIST);
+  }
+
+  @Test
   public void list() throws Exception {
     String url = "/building/list";
     JSONObject jsonObject = doGet(url);
@@ -70,6 +95,32 @@ public class BuildingControllerTest extends BaseControllerTest {
     String content = JSON.toJSONString(building);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
+  public void updateForFail2() throws Exception {
+    String url = "/building/update";
+    Building building = new Building();
+    building.setBuildingId(1);
+    building.setBuildingName("2号楼");
+    building.setParkId(1);
+    String content = JSON.toJSONString(building);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("msg"), MapMsgConstants.BUILDING_HAS_EXIST);
+  }
+
+  @Test
+  public void updateForFail3() throws Exception {
+    String url = "/building/update";
+    Building building = new Building();
+    building.setBuildingId(2);
+    building.setBuildingName("111号楼");
+    building.setBuildingToken("123");
+    String content = JSON.toJSONString(building);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("msg"), MapMsgConstants.BUILDING_TOKEN_HAS_EXIST);
   }
 
   @Test

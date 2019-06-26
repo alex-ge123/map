@@ -1,6 +1,8 @@
 package com.wafersystems.virsical.map.model.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -11,7 +13,9 @@ import java.util.UUID;
  * @author tandk
  * @date 2019/4/3 16:35
  */
-@Data
+@Setter
+@Getter
+@ToString
 public class MessageDTO {
 
   /**
@@ -54,9 +58,6 @@ public class MessageDTO {
    */
   private Serializable data;
 
-  public MessageDTO() {
-  }
-
   /**
    * constructor
    *
@@ -68,28 +69,6 @@ public class MessageDTO {
   public MessageDTO(String product, String msgType, String msgAction, Serializable data) {
     this.msgId = UUID.randomUUID().toString();
     this.msgTime = System.currentTimeMillis();
-    this.product = product;
-    this.msgType = msgType;
-    this.msgAction = msgAction;
-    this.data = data;
-  }
-
-  /**
-   * constructor
-   *
-   * @param userId    userId
-   * @param clientId  clientId
-   * @param product   消息所属产品（会议-smartmeeting，工位-smartworkspace，地图-map）
-   * @param msgType   消息类型（ONE单条(点对点)|BATCH批量|ALL(广播)）
-   * @param msgAction 消息动作（ADD|DELETE|UPDATE|NONE: 增|删|改|无）
-   * @param data      消息体
-   */
-  public MessageDTO(Integer userId, String clientId, String product, String msgType, String msgAction,
-                    Serializable data) {
-    this.msgId = UUID.randomUUID().toString();
-    this.msgTime = System.currentTimeMillis();
-    this.userId = userId;
-    this.clientId = clientId;
     this.product = product;
     this.msgType = msgType;
     this.msgAction = msgAction;

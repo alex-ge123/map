@@ -2,7 +2,7 @@
 -- ----------------------------
 -- Records of building
 -- ----------------------------
-INSERT INTO `building` VALUES (1, 1, 1, '1号楼', NULL, NULL, 0, '2019-05-08 09:41:36', '2019-05-16 17:28:18');
+INSERT INTO `building` VALUES (1, 1, 1, '1号楼', '123', NULL, 0, '2019-05-08 09:41:36', '2019-05-16 17:28:18');
 INSERT INTO `building` VALUES (2, 1, 1, '2号楼', NULL, NULL, 0, '2019-05-08 09:41:42', NULL);
 INSERT INTO `building` VALUES (3, 1, 1, '3号楼', NULL, NULL, 0, '2019-05-08 09:41:45', NULL);
 INSERT INTO `building` VALUES (4, 1, 2, '1号楼', NULL, NULL, 0, '2019-05-08 09:43:08', NULL);

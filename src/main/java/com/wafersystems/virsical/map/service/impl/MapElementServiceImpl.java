@@ -144,9 +144,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param data      内容
    */
   private void push(String msgType, String msgAction, String data) {
+    HashMap<String, Object> paramMap = new HashMap<>(1);
+    paramMap.put("msg", new MessageDTO(ProductEnum.MAP.name(), msgType, msgAction, data));
     if (pushServiceEnable) {
-      HashMap<String, Object> paramMap = new HashMap<>(1);
-      paramMap.put("msg", new MessageDTO(ProductEnum.MAP.name(), msgType, msgAction, data));
       try {
         String result = HttpUtil.post(pushServiceUrl + ProductEnum.MAP.name(), paramMap, 20000);
         log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", result, msgType, msgAction, data);
