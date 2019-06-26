@@ -15,20 +15,20 @@ public enum ProductEnum {
   /**
    * 会议
    */
-  SmartMeeting,
+  SMARTMEETING,
 
   /**
    * 工位
    */
-  SmartWorkspace,
+  SMARTWORKSPACE,
 
   /**
    * 访客
    */
-  Visitor,
+  VISITOR,
 
   /**
    * 地图
    */
-  Map
+  MAP
 }

@@ -37,7 +37,7 @@ public class MapController extends BaseController {
   @PostMapping("/add")
   public R add(@RequestBody Map map) {
     List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, map.getFloorId()));
-    if (list != null && list.size() > 0) {
+    if (list != null && !list.isEmpty()) {
       return update(map);
     }
     return mapService.save(map) ? R.ok() : R.fail();

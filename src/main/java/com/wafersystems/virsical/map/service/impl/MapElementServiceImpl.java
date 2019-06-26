@@ -72,7 +72,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
     if (b) {
-      push("DSM001", MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId + "");
+      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId + "");
     }
     return b;
   }
@@ -91,7 +91,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       if (me != null) {
         mapElementList.forEach(mapElement -> mapElement.setMapId(me.getMapId()));
         // 消息推送
-        push("DSM001", MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
+        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
       }
     }
     return b;
@@ -131,7 +131,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = this.updateBatchById(mapElementList);
     if (b) {
       // 消息推送
-      push("DSM001", MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
+      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
     }
     return Boolean.TRUE;
   }
@@ -139,19 +139,17 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   /**
    * 消息推送
    *
-   * @param clientId  终端id
    * @param msgType   消息类型
    * @param msgAction 消息动作
    * @param data      内容
    */
-  private void push(String clientId, String msgType, String msgAction, String data) {
+  private void push(String msgType, String msgAction, String data) {
     if (pushServiceEnable) {
-      HashMap<String, Object> paramMap = new HashMap<>(2);
-      paramMap.put("clientId", clientId);
-      paramMap.put("msg", new MessageDTO(ProductEnum.Map.name(), msgType, msgAction, data));
+      HashMap<String, Object> paramMap = new HashMap<>(1);
+      paramMap.put("msg", new MessageDTO(ProductEnum.MAP.name(), msgType, msgAction, data));
       try {
-        String result = HttpUtil.post(pushServiceUrl, paramMap, 20000);
-        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}] | [{}]", result, clientId, msgType, msgAction, data);
+        String result = HttpUtil.post(pushServiceUrl + ProductEnum.MAP.name(), paramMap, 20000);
+        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", result, msgType, msgAction, data);
       } catch (Exception e) {
         log.error("调用推送服务推送失败：{}", e);
         throw new BusinessException("调用推送服务推送失败");
