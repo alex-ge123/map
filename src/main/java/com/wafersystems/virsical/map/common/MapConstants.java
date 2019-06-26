@@ -1,9 +1,14 @@
 package com.wafersystems.virsical.map.common;
 
+import lombok.experimental.UtilityClass;
+
 /**
+ * 地图常量
+ *
  * @author tandk
  * @date 2019/4/30 10:13
  */
+@UtilityClass
 public final class MapConstants {
   /**
    * 默认地图

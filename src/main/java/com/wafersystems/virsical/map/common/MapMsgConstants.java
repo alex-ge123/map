@@ -1,5 +1,7 @@
 package com.wafersystems.virsical.map.common;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * 接口返回提示信息编号，用于前端国际化
  * <p>
@@ -19,6 +21,7 @@ package com.wafersystems.virsical.map.common;
  * @author tandk
  * @date 2019/4/30 10:13
  */
+@UtilityClass
 public final class MapMsgConstants {
   /**
    * 同一楼下楼层号不能重复
