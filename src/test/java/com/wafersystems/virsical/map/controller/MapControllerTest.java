@@ -23,7 +23,7 @@ public class MapControllerTest extends BaseControllerTest {
   public void add() throws Exception {
     String url = "/map/add";
     Map map = new Map();
-    map.setFloorId(1);
+    map.setFloorId(100);
     map.setBaseMapElement("test-eee");
     String content = JSON.toJSONString(map);
     JSONObject jsonObject = doPost(url, content, null);

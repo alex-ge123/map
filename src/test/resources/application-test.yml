@@ -56,4 +56,4 @@ logging:
 push:
   service:
     enable: false
-    url: http://localhost:5200/send-to-user
+    url: http://localhost:5200/send/

@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Park;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
@@ -81,7 +82,8 @@ public class ParkControllerTest extends BaseControllerTest {
   public void delete() throws Exception {
     String url = "/park/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("msg"), MapMsgConstants.THIS_PARK_HAS_BUILDING);
   }
 
   @Test

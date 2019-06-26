@@ -52,7 +52,7 @@ public class MapElementControllerTest extends BaseControllerTest {
 
   @Test
   public void list() throws Exception {
-    String url = "/map-element/list";
+    String url = "/map-element/list?mapId=1";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
