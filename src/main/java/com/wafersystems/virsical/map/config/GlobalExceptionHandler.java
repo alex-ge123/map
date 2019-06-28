@@ -47,9 +47,8 @@ public class GlobalExceptionHandler {
    * @return R
    */
   @ExceptionHandler(BusinessException.class)
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public R handleBusinessException(BusinessException e) {
-    log.warn("【业务异常】{}", e.getMessage(), e);
     return R.builder()
       .msg(e.getLocalizedMessage())
       .code(CommonConstants.FAIL)

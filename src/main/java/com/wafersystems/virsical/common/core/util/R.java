@@ -1,6 +1,6 @@
 package com.wafersystems.virsical.common.core.util;
 
-import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import com.wafersystems.virsical.common.core.exception.BusinessException;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -81,7 +81,7 @@ public class R<T> implements Serializable {
    * @return R
    */
   public static R fail() {
-    return R.builder().code(CommonConstants.FAIL).build();
+    throw new BusinessException();
   }
 
   /**
@@ -91,6 +91,6 @@ public class R<T> implements Serializable {
    * @return R
    */
   public static R fail(String msg) {
-    return R.builder().code(CommonConstants.FAIL).msg(msg).build();
+    throw new BusinessException(msg);
   }
 }
