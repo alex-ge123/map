@@ -9,7 +9,7 @@ CREATE TABLE `building`  (
   `park_id` int(11) NOT NULL COMMENT '园区id',
   `building_name` varchar(50) NOT NULL COMMENT '办公楼名称,B1',
   `building_token` varchar(255) NULL DEFAULT NULL COMMENT '办公楼与一体机唯一对应',
-  `building_img` varchar(255) NULL DEFAULT NULL COMMENT '办公楼与楼宇外景图一一对应',
+  `building_img` varchar(2000) NULL DEFAULT NULL COMMENT '办公楼与楼宇外景图一一对应',
   `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-删除',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
