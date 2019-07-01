@@ -48,7 +48,7 @@ CREATE TABLE `map`  (
   `area_age` varchar(20) NULL DEFAULT NULL COMMENT '面积',
   `height` varchar(10) NULL DEFAULT NULL COMMENT '高度',
   `width` varchar(10) NULL DEFAULT NULL COMMENT '宽度',
-  `map_state` tinyint(1) NULL DEFAULT NULL COMMENT '地图状态：0=正常，1=停用',
+  `map_state` tinyint(1) NOT NULL DEFAULT 0 COMMENT '地图状态：0=正常，1=停用',
   `map_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '地图类型：默认0=wafer2D，1=蜂鸟map',
   `fmap_key` varchar(100) NULL DEFAULT NULL COMMENT '蜂鸟mapKey',
   `fmap_id` varchar(100) NULL DEFAULT NULL COMMENT '蜂鸟fmapID 即上传的文件名',
