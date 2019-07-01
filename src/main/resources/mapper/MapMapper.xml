@@ -57,8 +57,8 @@
     <if test="map.buildingId != null">
       AND b.building_id = #{map.buildingId}
     </if>
-    <if test="map.floorNum != null and map.floorNum != ''">
-      AND f.floor_num = #{map.floorNum}
+    <if test="map.floorId != null">
+      AND f.floor_id = #{map.floorId}
     </if>
     <if test="map.mapState != null">
       AND m.map_state = #{map.mapState}
