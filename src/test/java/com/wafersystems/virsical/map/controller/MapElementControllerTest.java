@@ -2,7 +2,7 @@ package com.wafersystems.virsical.map.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;

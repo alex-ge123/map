@@ -6,9 +6,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wafersystems.virsical.common.core.constants.enums.MsgActionEnum;
-import com.wafersystems.virsical.common.core.constants.enums.MsgTypeEnum;
-import com.wafersystems.virsical.common.core.constants.enums.ProductEnum;
+import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
+import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
+import com.wafersystems.virsical.common.core.constant.enums.ProductEnum;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
@@ -126,7 +126,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
         me.setObjectSvgStateCode(vo.getObjectSvgStateCode());
       }
     }));
-
+    if (mapElementList.isEmpty()) {
+      return Boolean.FALSE;
+    }
     // 批量更新地图元素
     boolean b = this.updateBatchById(mapElementList);
     if (b) {
@@ -145,10 +147,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    */
   private void push(String msgType, String msgAction, String data) {
     HashMap<String, Object> paramMap = new HashMap<>(1);
-    paramMap.put("msg", new MessageDTO(ProductEnum.MAP.name(), msgType, msgAction, data));
+    paramMap.put("msg", new MessageDTO(ProductEnum.map.name(), msgType, msgAction, data));
     if (pushServiceEnable) {
       try {
-        String result = HttpUtil.post(pushServiceUrl + ProductEnum.MAP.name(), paramMap, 20000);
+        String result = HttpUtil.post(pushServiceUrl + ProductEnum.map.name(), paramMap, 20000);
         log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", result, msgType, msgAction, data);
       } catch (Exception e) {
         log.error("调用推送服务推送失败：{}", e);

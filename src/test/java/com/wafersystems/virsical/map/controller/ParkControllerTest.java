@@ -2,7 +2,7 @@ package com.wafersystems.virsical.map.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Park;
 import org.springframework.test.annotation.Rollback;

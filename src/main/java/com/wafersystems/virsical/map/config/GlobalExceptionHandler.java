@@ -1,18 +1,13 @@
 package com.wafersystems.virsical.map.config;
 
-import com.wafersystems.virsical.common.core.constants.CommonConstants;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
 
 /**
  * 全局异常处理器
@@ -47,27 +42,15 @@ public class GlobalExceptionHandler {
    * @return R
    */
   @ExceptionHandler(BusinessException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public R handleBusinessException(BusinessException e) {
+    if (log.isDebugEnabled()) {
+      log.debug("【业务异常】{}", e.getMessage(), e);
+    } else {
+      log.warn("【业务异常】{}", e.getMessage());
+    }
     return R.builder()
       .msg(e.getLocalizedMessage())
-      .code(CommonConstants.FAIL)
-      .build();
-  }
-
-  /**
-   * validation Exception
-   *
-   * @param exception 方法参数无效异常
-   * @return R
-   */
-  @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public R handleBodyValidException(MethodArgumentNotValidException exception) {
-    List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-    log.error("参数绑定异常,ex = {}", fieldErrors.get(0).getDefaultMessage());
-    return R.builder()
-      .msg(fieldErrors.get(0).getDefaultMessage())
       .code(CommonConstants.FAIL)
       .build();
   }
