@@ -1,15 +1,18 @@
 package com.wafersystems.virsical.map.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wafersystems.virsical.common.core.constant.SecurityConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.constant.enums.ProductEnum;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
+import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.feign.RemotePushService;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
 import com.wafersystems.virsical.map.model.dto.MessageDTO;
@@ -22,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,8 +45,8 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Value("${push.service.enable}")
   private Boolean pushServiceEnable;
 
-  @Value("${push.service.url}")
-  private String pushServiceUrl;
+  @Autowired
+  private RemotePushService remotePushService;
 
   /**
    * 地图元素集合
@@ -146,12 +148,12 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param data      内容
    */
   private void push(String msgType, String msgAction, String data) {
-    HashMap<String, Object> paramMap = new HashMap<>(1);
-    paramMap.put("msg", new MessageDTO(ProductEnum.map.name(), msgType, msgAction, data));
+    MessageDTO messageDTO = new MessageDTO(null, null, ProductEnum.map.name(), msgType, msgAction, data);
     if (pushServiceEnable) {
       try {
-        String result = HttpUtil.post(pushServiceUrl + ProductEnum.map.name(), paramMap, 20000);
-        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", result, msgType, msgAction, data);
+        R r = remotePushService.sendTopic(ProductEnum.map.name(), JSONUtil.toJsonStr(messageDTO),
+          SecurityConstants.FROM_IN);
+        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", r, msgType, msgAction, data);
       } catch (Exception e) {
         log.error("调用推送服务推送失败：{}", e);
         throw new BusinessException("调用推送服务推送失败");

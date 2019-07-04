@@ -1,5 +1,7 @@
 package com.wafersystems.virsical.map.model.dto;
 
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
+@Data
 public class MessageDTO {
 
   /**
@@ -29,7 +32,7 @@ public class MessageDTO {
   private Long msgTime;
 
   /**
-   * 消息所属产品（会议-smartmeeting，工位-smartworkspace，地图-map）
+   * 消息所属产品（会议-smt，工位-smw，地图-map）
    */
   private String product;
 
@@ -58,20 +61,43 @@ public class MessageDTO {
    */
   private Serializable data;
 
+  public MessageDTO() {
+  }
+
   /**
    * constructor
    *
-   * @param product   消息所属产品（会议-smartmeeting，工位-smartworkspace，地图-map）
+   * @param userId    userId
+   * @param clientId  clientId
+   * @param product   消息所属产品（会议-smt，工位-smw，地图-map）
    * @param msgType   消息类型（ONE单条(点对点)|BATCH批量|ALL(广播)）
    * @param msgAction 消息动作（ADD|DELETE|UPDATE|NONE: 增|删|改|无）
    * @param data      消息体
    */
-  public MessageDTO(String product, String msgType, String msgAction, Serializable data) {
+  public MessageDTO(Integer userId, String clientId, String product, String msgType, String msgAction,
+                    Serializable data) {
     this.msgId = UUID.randomUUID().toString();
     this.msgTime = System.currentTimeMillis();
+    this.userId = userId;
+    this.clientId = clientId;
     this.product = product;
     this.msgType = msgType;
     this.msgAction = msgAction;
+    this.data = data;
+  }
+
+  /**
+   * constructor
+   * @param msgType 消息类型（ONE单条|BATCH批量）
+   * @param msgAction 消息动作（ADD|DELETE|UPDATE: 增删改）
+   * @param data 消息体
+   */
+  public MessageDTO(String msgType, String msgAction, Serializable data) {
+    this.msgType = msgType;
+    this.msgId = UUID.randomUUID().toString();
+    this.msgTime = System.currentTimeMillis();
+    this.msgAction = msgAction;
+    this.userId = TenantContextHolder.getUserId();
     this.data = data;
   }
 }
