@@ -1,5 +1,5 @@
 server:
-  port: 5100
+  port: 8008
 spring:
   application:
     name: virsical-map
@@ -56,4 +56,4 @@ logging:
 push:
   service:
     enable: false
-    url: http://localhost:5200/send/
+    url: http://localhost:8009/send/
