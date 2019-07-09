@@ -4,11 +4,17 @@
 - 依赖包
 ```xml
 <!--代码生成插件-->
-    <dependency>
-      <groupId>com.baomidou</groupId>
-      <artifactId>mybatis-plus-generator</artifactId>
-      <version>${mybatis-plus.version}</version>
-    </dependency>
+<dependency>
+  <groupId>com.baomidou</groupId>
+  <artifactId>mybatis-plus-generator</artifactId>
+  <version>${mybatis-plus.version}</version>
+</dependency>
+<!--freemarker支持-->
+<dependency>
+  <groupId>org.freemarker</groupId>
+  <artifactId>freemarker</artifactId>
+  <version>2.3.28</version>
+</dependency>
 ```
 
 - 执行程序（运行main方法，控制台输入需要生成代码的表名，多个表用,分隔）
