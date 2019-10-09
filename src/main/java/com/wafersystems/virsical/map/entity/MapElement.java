@@ -29,8 +29,8 @@ public class MapElement extends Model<MapElement> {
   private static final long serialVersionUID = 1L;
 
   @ApiModelProperty(value = "地图元素主键", example = "0")
-  @TableId(value = "map_element_id", type = IdType.AUTO)
-  private Integer mapElementId;
+  @TableId(value = "map_element_id", type = IdType.UUID)
+  private String mapElementId;
 
   @ApiModelProperty(value = "地图id", example = "0")
   private Integer mapId;

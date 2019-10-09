@@ -80,4 +80,9 @@ public class MapController extends BaseController {
     return R.ok(mapService.selectMapPage(page, map));
   }
 
+  @ApiOperation(value = "根据空间节点id查询地图", notes = "根据空间节点id查询地图")
+  @GetMapping("/listBySpaceIds")
+  public R<List<Map>> listBySpaceIds(Integer[] spaceIds) {
+    return R.ok(mapService.list(Wrappers.<Map>query().lambda().in(Map::getFloorId, spaceIds)));
+  }
 }

@@ -25,7 +25,7 @@ public class MapElementRouteVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @ApiModelProperty(value = "地图元素主键", example = "0")
-  private Integer mapElementId;
+  private String mapElementId;
 
   @ApiModelProperty(value = "引导线起点", example = "string")
   private String lineStart;

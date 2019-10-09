@@ -53,7 +53,7 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "批量删除地图元素", notes = "批量根据地图id删除地图元素")
   @ApiImplicitParam(name = "ids", value = "地图元素id集合", required = true, dataType = "Integer")
   @PostMapping("/delete")
-  public R delete(@RequestBody List<Integer> ids) {
+  public R delete(@RequestBody List<String> ids) {
     return mapElementService.removeByIds(ids) ? R.ok() : R.fail();
   }
 
