@@ -1,11 +1,15 @@
 package com.wafersystems.virsical.map.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.entity.SysSpace;
+import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.model.dto.SpaceMapDTO;
 import com.wafersystems.virsical.map.service.IMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +18,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,6 +37,8 @@ import java.util.List;
 public class MapController extends BaseController {
 
   private final IMapService mapService;
+
+  private final RemoteSpaceService remoteSpaceService;
 
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
@@ -73,11 +81,38 @@ public class MapController extends BaseController {
   @ApiOperation(value = "获取分页地图列表", notes = "根据分页条件、地图对象条件获取分页地图列表")
   @ApiImplicitParams({
     @ApiImplicitParam(name = "page", value = "分页对象", required = true, dataType = "Page"),
-    @ApiImplicitParam(name = "map", value = "地图对象", dataType = "Map")
+    @ApiImplicitParam(name = "spaceId", value = "空间节点id", dataType = "Integer")
   })
   @GetMapping("/page")
-  public R<IPage<Map>> page(Page page, Map map) {
-    return R.ok(mapService.selectMapPage(page, map));
+  public R page(Page page, Integer spaceId) {
+    // 从用户服务查询空间叶子节点分页
+    R<Page<SysSpace>> r = remoteSpaceService.getLeafNodePage(page.getSize(), page.getCurrent(), spaceId);
+    if (CommonConstants.SUCCESS != r.getCode()) {
+      return R.fail("查询失败");
+    }
+    Page<SysSpace> spacePage = r.getData();
+    Page<SpaceMapDTO> spaceMapPage = new Page<>();
+    BeanUtil.copyProperties(spacePage, spaceMapPage);
+    List<SpaceMapDTO> spaceMapList = new ArrayList<>();
+    List<Integer> spaceIds = new ArrayList<>();
+    for (SysSpace sysSpace : spacePage.getRecords()) {
+      spaceIds.add(sysSpace.getSpaceId());
+      SpaceMapDTO spaceMapDTO =  new SpaceMapDTO();
+      BeanUtil.copyProperties(sysSpace, spaceMapDTO);
+      spaceMapList.add(spaceMapDTO);
+    }
+    // 根据空间节点查询地图
+    List<Map> mapList = mapService.list(Wrappers.<Map>query().lambda().in(Map::getFloorId,
+      spaceIds.toArray()));
+    for (SpaceMapDTO dto : spaceMapList) {
+      for (Map m : mapList) {
+        if (dto.getSpaceId().equals(m.getFloorId())) {
+          dto.setMap(m);
+        }
+      }
+    }
+    spaceMapPage.setRecords(spaceMapList);
+    return R.ok(spaceMapPage);
   }
 
   @ApiOperation(value = "根据空间节点id查询地图", notes = "根据空间节点id查询地图")

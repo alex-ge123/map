@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.common.core.constant.SecurityConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
-import com.wafersystems.virsical.common.core.constant.enums.ProductEnum;
+import com.wafersystems.virsical.common.core.constant.enums.ProductCodeEnum;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.feign.RemotePushService;
@@ -148,10 +148,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param data      内容
    */
   private void push(String msgType, String msgAction, String data) {
-    MessageDTO messageDTO = new MessageDTO(null, null, ProductEnum.map.name(), msgType, msgAction, data);
+    MessageDTO messageDTO = new MessageDTO(null, null, ProductCodeEnum.COMMON.name(), msgType, msgAction, data);
     if (pushServiceEnable) {
       try {
-        R r = remotePushService.sendTopic(ProductEnum.map.name(), JSONUtil.toJsonStr(messageDTO),
+        R r = remotePushService.sendTopic(ProductCodeEnum.COMMON.name(), JSONUtil.toJsonStr(messageDTO),
           SecurityConstants.FROM_IN);
         log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", r, msgType, msgAction, data);
       } catch (Exception e) {
