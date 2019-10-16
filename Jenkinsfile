@@ -97,8 +97,8 @@ pipeline {
                 sh "sed -i s@__ARTIFACT_ID__@${readMavenPom().getArtifactId()}@g k8s.yml"
                 sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
 
-                sh "cp sql/create.sql tmp_sql/${JOB_NAME}"
                 sh "cp sql/init_schema.sql tmp_sql/${JOB_NAME}"
+                sh "sed -i s@\\`virsical_map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
                 sh "cp sql/init_data.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
@@ -139,7 +139,6 @@ pipeline {
                                             ]]
                                     ]
 
-                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/create.sql'"
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/int_schema.sql'"
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'source /sql/${JOB_NAME}/init_data.sql'"
                         }

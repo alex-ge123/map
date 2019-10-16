@@ -1,3 +1,10 @@
+DROP DATABASE IF EXISTS `virsical_map`;
+CREATE DATABASE `virsical_map` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE `virsical_map`;
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for building
