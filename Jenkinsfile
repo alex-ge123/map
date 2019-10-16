@@ -100,9 +100,6 @@ pipeline {
                 sh "cp sql/init.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`virsical_map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
-                sh "cp k8s/nginx.cnf virsical-map.cnf"
-                sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g virsical-map.cnf"
-
                 script {
                     datas = readYaml file: 'src/main/resources/bootstrap.yml'
                     datas.eureka.client['service-url'].defaultZone = "http://wafer:wafer@${GROUP_NAME}-eureka:8080/eureka/"
@@ -170,16 +167,6 @@ pipeline {
                                 returnStdout: true
                         ).trim()
 
-                        ftpPublisher failOnError: true,
-                                publishers: [
-                                        [configName: 'ftp_ds1819_dev', transfers: [
-                                                [cleanRemote    : false,
-                                                 remoteDirectory: "${PVC_NGCONF}",
-                                                 sourceFiles    : "virsical-map.cnf",
-                                                 removePrefix   : '']
-                                        ]]
-                                ]
-                        sh "kubectl exec ${NGINX_POD} -n ${RD_ENV} -- nginx -s reload"
                     }
                 }
             sh "rm -rf ${SERVICE_NAME}.zip"
