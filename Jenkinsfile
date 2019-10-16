@@ -175,7 +175,7 @@ pipeline {
                                         [configName: 'ftp_ds1819_dev', transfers: [
                                                 [cleanRemote    : false,
                                                  remoteDirectory: "${PVC_NGCONF}",
-                                                 sourceFiles    : "${DEPLOY_PATH}.cnf",
+                                                 sourceFiles    : "virsical-map.cnf",
                                                  removePrefix   : '']
                                         ]]
                                 ]
