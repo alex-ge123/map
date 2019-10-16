@@ -21,7 +21,7 @@ CREATE TABLE `building`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`building_id`)
-) COMMENT = '楼宇';
+) ENGINE = InnoDB COMMENT = '楼宇';
 
 
 -- ----------------------------
@@ -37,7 +37,7 @@ CREATE TABLE `floor`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`floor_id`)
-) COMMENT = '楼层';
+) ENGINE = InnoDB COMMENT = '楼层';
 
 
 -- ----------------------------
@@ -68,7 +68,7 @@ CREATE TABLE `map`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`map_id`)
-) COMMENT = '地图';
+) ENGINE = InnoDB COMMENT = '地图';
 
 
 -- ----------------------------
@@ -96,7 +96,7 @@ CREATE TABLE `map_element`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`map_element_id`)
-) COMMENT = '地图元素';
+) ENGINE = InnoDB COMMENT = '地图元素';
 
 
 -- ----------------------------
@@ -122,7 +122,7 @@ CREATE TABLE `park`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`park_id`)
-) COMMENT = '园区';
+) ENGINE = InnoDB COMMENT = '园区';
 
 
 -- ----------------------------
@@ -146,7 +146,7 @@ CREATE TABLE `svg`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`svg_id`)
-) COMMENT = '素材';
+) ENGINE = InnoDB COMMENT = '素材';
 
 
 -- ----------------------------
@@ -164,7 +164,7 @@ CREATE TABLE `svg_state`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`svg_state_id`)
-) COMMENT = '素材状态';
+) ENGINE = InnoDB COMMENT = '素材状态';
 
 
 -- ----------------------------
@@ -178,7 +178,7 @@ CREATE TABLE `svg_type`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`svg_type_code`)
-) COMMENT = '素材类型';
+) ENGINE = InnoDB COMMENT = '素材类型';
 
 
 SET FOREIGN_KEY_CHECKS = 1;
