@@ -106,10 +106,9 @@ pipeline {
                 sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g virsical-map.cnf"
 
                 script {
-                    datas = readYaml file: "src/main/resources/application-k8s.yml"
-                    datas.spring.datasource.url = "jdbc:mysql://${RD_ENV}-mysql:3306/${GROUP_NAME}_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true"
-                    datas.spring.datasource.username = "wafer"
-                    datas.spring.datasource.password = "wafer"
+                    datas = readYaml file: 'src/main/resources/bootstrap.yml'
+                    datas.eureka.client['service-url'].defaultZone = "http://wafer:wafer@${GROUP_NAME}-eureka:8080/eureka/"
+                    datas.spring.cloud.config.uri = "http://wafer:wafer@${GROUP_NAME}-config:8080"
                     datas.server.port = 8080
 
                     writeYaml file: "tmp/config/bootstrap.yml", data: datas
