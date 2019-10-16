@@ -91,6 +91,9 @@ public class MapController extends BaseController {
       return R.fail("查询失败");
     }
     Page<SysSpace> spacePage = r.getData();
+    if (spacePage.getTotal() == 0) {
+      return R.fail("查询空间叶子节点为空");
+    }
     Page<SpaceMapDTO> spaceMapPage = new Page<>();
     BeanUtil.copyProperties(spacePage, spaceMapPage);
     List<SpaceMapDTO> spaceMapList = new ArrayList<>();
