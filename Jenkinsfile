@@ -82,7 +82,6 @@ pipeline {
             steps {
                 sh "rm -rf tmp"
                 sh "mkdir -p tmp/config"
-                sh "cp src/main/resources/application.yml tmp/config"
 
                 sh "rm -rf tmp_sql"
                 sh "mkdir -p  tmp_sql/${JOB_NAME}"
@@ -103,8 +102,8 @@ pipeline {
                 sh "cp sql/init_data.sql tmp_sql/${JOB_NAME}"
                 sh "sed -i s@\\`map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
 
-                sh "cp k8s/nginx.cnf ${DEPLOY_PATH}.cnf"
-                sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g ${DEPLOY_PATH}.cnf"
+                sh "cp k8s/nginx.cnf virsical-map.cnf"
+                sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g virsical-map.cnf"
 
                 script {
                     datas = readYaml file: "src/main/resources/application-k8s.yml"
@@ -113,7 +112,7 @@ pipeline {
                     datas.spring.datasource.password = "wafer"
                     datas.server.port = 8080
 
-                    writeYaml file: "tmp/config/application-k8s.yml", data: datas
+                    writeYaml file: "tmp/config/bootstrap.yml", data: datas
 
                     withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
                             credentialsId: "k8s-${RD_ENV}",
