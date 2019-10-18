@@ -10,8 +10,10 @@ import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.common.SvgUtils;
 import com.wafersystems.virsical.map.entity.Svg;
+import com.wafersystems.virsical.map.entity.SvgState;
 import com.wafersystems.virsical.map.entity.SvgType;
 import com.wafersystems.virsical.map.service.ISvgService;
+import com.wafersystems.virsical.map.service.ISvgStateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -37,6 +39,7 @@ import java.util.List;
 public class SvgController extends BaseController {
 
   private final ISvgService svgService;
+  private final ISvgStateService svgStateService;
 
   /**
    * 解析SVG文件
@@ -88,6 +91,16 @@ public class SvgController extends BaseController {
   @GetMapping("/enable-list")
   public R<List<Svg>> enableList() {
     return R.ok(svgService.list(Wrappers.<Svg>lambdaQuery().eq(Svg::getState, MapConstants.OPEN_STATE)));
+  }
+
+  @ApiOperation(value = "获取启用的素材列表及对应素材状态集合", notes = "获取启用的素材列表及对应素材状态集合")
+  @GetMapping("/enable-list-and-svg-state")
+  public R<List<Svg>> enableListAndSvgState() {
+    List<Svg> list = svgService.list(Wrappers.<Svg>lambdaQuery().eq(Svg::getState, MapConstants.OPEN_STATE));
+    for (Svg svg : list) {
+      svg.setSvgStateList(svgStateService.list(Wrappers.<SvgState>lambdaQuery().eq(SvgState::getSvgId, svg.getSvgId())));
+    }
+    return R.ok(list);
   }
 
   @ApiOperation(value = "获取素材列表", notes = "根据素材对象条件获取素材列表")

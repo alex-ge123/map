@@ -13,6 +13,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -78,6 +79,7 @@ public class Svg extends Model<Svg> {
   @ApiModelProperty(value = "修改时间")
   private LocalDateTime updateTime;
 
+  private transient List<SvgState> svgStateList;
 
   @Override
   protected Serializable pkVal() {
