@@ -117,12 +117,12 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     }
     List<String> objectIdList = new ArrayList<>();
     voList.forEach(vo -> objectIdList.add(vo.getObjectId()));
-    wrapper.in(MapElement::getObjectId, objectIdList);
+    wrapper.in(MapElement::getMapElementId, objectIdList);
     // 查询对应地图id与元素id集合
     List<MapElement> mapElementList = mapElementMapper.selectList(wrapper);
     // 组装待更新对象集合
     mapElementList.forEach(me -> voList.forEach(vo -> {
-      if (vo.getObjectId().equals(me.getObjectId())) {
+      if (vo.getObjectId().equals(me.getMapElementId())) {
         me.setObjectName(vo.getObjectName());
         me.setObjectColor(vo.getObjectColor());
         me.setObjectSvgStateCode(vo.getObjectSvgStateCode());
