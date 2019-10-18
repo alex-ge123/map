@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
@@ -120,6 +121,7 @@ public class MapElementController extends BaseController {
    * @param mapElementObjectStateVoList 地图元素资源对象集合
    * @return R
    */
+  @Inner
   @ApiOperation(value = "更新地图元素资源状态", notes = "更新地图元素资源状态（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/update-object-state/{svgTypeCode}")
