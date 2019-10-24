@@ -113,6 +113,11 @@
       <artifactId>virsical-common-security</artifactId>
       <version>5.0.0.108</version>
     </dependency>
+    <!--MQ依赖-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
     <!--接口文档-->
     <dependency>
       <groupId>io.springfox</groupId>
