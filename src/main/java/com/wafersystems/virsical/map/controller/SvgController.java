@@ -87,7 +87,7 @@ public class SvgController extends BaseController {
   public R delete(@PathVariable Integer id) {
     if (svgService.removeById(id)) {
       MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), id);
-      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, JSON.toJSONString(messageDTO));
+      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
       return R.ok();
     } else {
       return R.fail();
