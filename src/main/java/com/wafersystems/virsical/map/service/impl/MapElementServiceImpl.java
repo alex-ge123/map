@@ -77,34 +77,32 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchSaveMapElement(List<MapElement> mapElementList) {
     Integer mapId = mapElementList.get(0).getMapId();
-    List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
+    List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
+      mapId));
     //查询老的素材id列表
-    Set<String> oldIds = mapElements.stream().map(s -> s.getMapElementId()).collect(Collectors.toSet());
+    Set<String> oldIds = mapElements.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
     ArrayList<String> delIds = new ArrayList<>(oldIds.size());
     //获取新的素材id列表
-    Set<String> newIds = mapElementList.stream().map(s -> s.getMapElementId()).collect(Collectors.toSet());
+    Set<String> newIds = mapElementList.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
     //查询出删除掉的素材id
     oldIds.forEach(i -> {
-      if (!newIds.contains(i)){
+      if (!newIds.contains(i)) {
         delIds.add(i);
       }
     });
-    //发送删除通知
-    asynSendMQMessage(delIds);
     super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
     if (b) {
+      //发送删除通知
+      MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), delIds);
+      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
+      //推送地图更新消息
       push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId + "");
     }
     return b;
   }
 
-  @Async("mqAsync")
-  public void asynSendMQMessage(ArrayList<String> delIds){
-    MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), delIds);
-    amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
-  }
   /**
    * 批量更新地图元素（资源绑定、路径保存）
    *

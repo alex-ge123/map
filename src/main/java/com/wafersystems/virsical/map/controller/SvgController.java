@@ -1,15 +1,8 @@
 package com.wafersystems.virsical.map.controller;
 
-import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wafersystems.virsical.common.core.constant.MapMqConstants;
-import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
-import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
-import com.wafersystems.virsical.common.core.dto.MessageDTO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
@@ -28,11 +21,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,7 +81,7 @@ public class SvgController extends BaseController {
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
     List<MapElement> list = mapElementService.list(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getSvgId, id));
-    if (!list.isEmpty()){
+    if (!list.isEmpty()) {
       return R.fail("素材已被使用，不能删除");
     }
     if (svgService.removeById(id)) {
@@ -118,7 +109,8 @@ public class SvgController extends BaseController {
   public R<List<Svg>> enableListAndSvgState() {
     List<Svg> list = svgService.list(Wrappers.<Svg>lambdaQuery().eq(Svg::getState, MapConstants.OPEN_STATE));
     for (Svg svg : list) {
-      svg.setSvgStateList(svgStateService.list(Wrappers.<SvgState>lambdaQuery().eq(SvgState::getSvgId, svg.getSvgId())));
+      svg.setSvgStateList(svgStateService.list(Wrappers.<SvgState>lambdaQuery().eq(SvgState::getSvgId,
+        svg.getSvgId())));
     }
     return R.ok(list);
   }
