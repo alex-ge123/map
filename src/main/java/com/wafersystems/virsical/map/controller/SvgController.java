@@ -1,6 +1,8 @@
 package com.wafersystems.virsical.map.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,9 +16,11 @@ import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.common.SvgUtils;
+import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.entity.Svg;
 import com.wafersystems.virsical.map.entity.SvgState;
 import com.wafersystems.virsical.map.entity.SvgType;
+import com.wafersystems.virsical.map.service.IMapElementService;
 import com.wafersystems.virsical.map.service.ISvgService;
 import com.wafersystems.virsical.map.service.ISvgStateService;
 import io.swagger.annotations.Api;
@@ -47,7 +51,7 @@ public class SvgController extends BaseController {
 
   private final ISvgService svgService;
   private final ISvgStateService svgStateService;
-  private final AmqpTemplate amqpTemplate;
+  private final IMapElementService mapElementService;
 
   /**
    * 解析SVG文件
@@ -85,9 +89,11 @@ public class SvgController extends BaseController {
   @ApiImplicitParam(name = "id", value = "素材id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
+    List<MapElement> list = mapElementService.list(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getSvgId, id));
+    if (!list.isEmpty()){
+      return R.fail("素材已被使用，不能删除");
+    }
     if (svgService.removeById(id)) {
-      MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), id);
-      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
       return R.ok();
     } else {
       return R.fail();

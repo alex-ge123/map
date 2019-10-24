@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wafersystems.virsical.common.core.constant.MapMqConstants;
 import com.wafersystems.virsical.common.core.constant.SecurityConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
@@ -19,13 +20,17 @@ import com.wafersystems.virsical.map.model.dto.MessageDTO;
 import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -48,6 +53,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Autowired
   private RemotePushService remotePushService;
 
+  @Autowired
+  private AmqpTemplate amqpTemplate;
+
   /**
    * 地图元素集合
    *
@@ -68,8 +76,21 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchSaveMapElement(List<MapElement> mapElementList) {
-    // 删除此地图所有地图元素
     Integer mapId = mapElementList.get(0).getMapId();
+    List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
+    //查询老的素材id列表
+    Set<String> oldIds = mapElements.stream().map(s -> s.getMapElementId()).collect(Collectors.toSet());
+    ArrayList<String> delIds = new ArrayList<>(oldIds.size());
+    //获取新的素材id列表
+    Set<String> newIds = mapElementList.stream().map(s -> s.getMapElementId()).collect(Collectors.toSet());
+    //查询出删除掉的素材id
+    oldIds.forEach(i -> {
+      if (!newIds.contains(i)){
+        delIds.add(i);
+      }
+    });
+    //发送删除通知
+    asynSendMQMessage(delIds);
     super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
@@ -79,6 +100,11 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     return b;
   }
 
+  @Async("mqAsync")
+  public void asynSendMQMessage(ArrayList<String> delIds){
+    MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), delIds);
+    amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
+  }
   /**
    * 批量更新地图元素（资源绑定、路径保存）
    *
