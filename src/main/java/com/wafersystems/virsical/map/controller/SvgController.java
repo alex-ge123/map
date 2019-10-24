@@ -1,8 +1,13 @@
 package com.wafersystems.virsical.map.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wafersystems.virsical.common.core.constant.MapMqConstants;
+import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
+import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
+import com.wafersystems.virsical.common.core.dto.MessageDTO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
@@ -19,9 +24,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +47,7 @@ public class SvgController extends BaseController {
 
   private final ISvgService svgService;
   private final ISvgStateService svgStateService;
+  private final AmqpTemplate amqpTemplate;
 
   /**
    * 解析SVG文件
@@ -77,7 +85,13 @@ public class SvgController extends BaseController {
   @ApiImplicitParam(name = "id", value = "素材id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
   public R delete(@PathVariable Integer id) {
-    return svgService.removeById(id) ? R.ok() : R.fail();
+    if (svgService.removeById(id)) {
+      MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), id);
+      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, JSON.toJSONString(messageDTO));
+      return R.ok();
+    } else {
+      return R.fail();
+    }
   }
 
   @ApiOperation(value = "获取单个素材", notes = "根据素材id获取素材")
