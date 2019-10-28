@@ -38,17 +38,15 @@ public class MapElementController extends BaseController {
   /**
    * 添加地图元素
    *
+   * @param mapId             地图id
    * @param mapElementList 地图元素对象集合
    * @return R
    */
   @ApiOperation(value = "添加地图元素", notes = "添加地图元素（支持批量）")
   @ApiImplicitParam(name = "mapElementList", value = "地图元素对象集合", required = true, dataType = "MapElement")
-  @PostMapping("/add")
-  public R add(@RequestBody List<MapElement> mapElementList) {
-    if (mapElementList.isEmpty()) {
-      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
-    }
-    return mapElementService.batchSaveMapElement(mapElementList) ? R.ok() : R.fail();
+  @PostMapping("/add/{mapId}")
+  public R add(@PathVariable Integer mapId, @RequestBody List<MapElement> mapElementList) {
+    return mapElementService.batchSaveMapElement(mapId, mapElementList) ? R.ok() : R.fail();
   }
 
   @ApiOperation(value = "批量删除地图元素", notes = "批量根据地图id删除地图元素")

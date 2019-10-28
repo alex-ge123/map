@@ -26,10 +26,11 @@ public interface IMapElementService extends IService<MapElement> {
   /**
    * 批量保存地图元素
    *
+   * @param mapId 地图id
    * @param mapElementList 地图元素集合
    * @return Boolean
    */
-  Boolean batchSaveMapElement(List<MapElement> mapElementList);
+  Boolean batchSaveMapElement(Integer mapId ,List<MapElement> mapElementList);
 
   /**
    * 批量更新地图元素

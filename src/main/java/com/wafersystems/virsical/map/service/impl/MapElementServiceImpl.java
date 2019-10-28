@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,13 +71,13 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   /**
    * 批量保存地图元素（先删再存）
    *
+   * @param mapId 地图Id
    * @param mapElementList 地图元素集合
    * @return Boolean
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Boolean batchSaveMapElement(List<MapElement> mapElementList) {
-    Integer mapId = mapElementList.get(0).getMapId();
+  public Boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
     List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
       mapId));
     //查询老的素材id列表
