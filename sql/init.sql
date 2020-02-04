@@ -176,7 +176,7 @@ CREATE TABLE `svg_type`  (
 -- ----------------------------
 -- Records of svg_type
 -- ----------------------------
-INSERT INTO `svg_type` VALUES ('meeting-room', '会议室', 0, '2019-05-08 15:39:56', NULL);
+-- INSERT INTO `svg_type` VALUES ('meeting-room', '会议室', 0, '2019-05-08 15:39:56', NULL);
 INSERT INTO `svg_type` VALUES ('workspace', '工位', 0, '2019-05-08 15:47:52', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
