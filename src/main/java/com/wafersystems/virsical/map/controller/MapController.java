@@ -8,6 +8,7 @@ import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
 import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.model.dto.SpaceMapDTO;
 import com.wafersystems.virsical.map.service.IMapService;
@@ -88,11 +89,11 @@ public class MapController extends BaseController {
     // 从用户服务查询空间叶子节点分页
     R<Page<SysSpace>> r = remoteSpaceService.getLeafNodePage(page.getSize(), page.getCurrent(), spaceId);
     if (CommonConstants.SUCCESS != r.getCode()) {
-      return R.fail("查询失败");
+      return R.fail(MapMsgConstants.QUERY_MAP_FAILED);
     }
     Page<SysSpace> spacePage = r.getData();
     if (spacePage.getTotal() == 0) {
-      return R.fail("查询空间叶子节点为空");
+      return R.fail(MapMsgConstants.QUERY_LEAFNODE_NULL);
     }
     Page<SpaceMapDTO> spaceMapPage = new Page<>();
     BeanUtil.copyProperties(spacePage, spaceMapPage);
@@ -100,7 +101,7 @@ public class MapController extends BaseController {
     List<Integer> spaceIds = new ArrayList<>();
     for (SysSpace sysSpace : spacePage.getRecords()) {
       spaceIds.add(sysSpace.getSpaceId());
-      SpaceMapDTO spaceMapDTO =  new SpaceMapDTO();
+      SpaceMapDTO spaceMapDTO = new SpaceMapDTO();
       BeanUtil.copyProperties(sysSpace, spaceMapDTO);
       spaceMapList.add(spaceMapDTO);
     }

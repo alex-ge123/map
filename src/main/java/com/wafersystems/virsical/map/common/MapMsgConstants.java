@@ -16,6 +16,10 @@ import lombok.experimental.UtilityClass;
  * 104009: 当前园区存在楼宇，请先删除楼宇
  * 104010: 当前楼宇存在楼层，请先删除楼层
  * 104011: 当前楼层存在对应地图，请先删除地图
+ * 104012: 查询地图失败
+ * 104013: 查询空间叶子节点为空
+ * 104014: 素材已被使用，不能删除
+ * 104015: 素材类型标识不能重复
  * </p>
  *
  * @author tandk
@@ -77,4 +81,24 @@ public final class MapMsgConstants {
    * 当前楼层存在对应地图，请先删除地图
    */
   public static final String THIS_FLOOR_HAS_MAP = "104011";
+
+  /**
+   * 查询地图失败
+   */
+  public static final String QUERY_MAP_FAILED = "104012";
+
+  /**
+   * 查询空间叶子节点为空
+   */
+  public static final String QUERY_LEAFNODE_NULL = "104013";
+
+  /**
+   * 素材已被使用，不能删除
+   */
+  public static final String MATERIAL_USED = "104014";
+
+  /**
+   * 素材类型标识不能重复
+   */
+  public static final String MATERIAL_TYPE_REPETITION = "104015";
 }

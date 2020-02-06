@@ -82,7 +82,7 @@ public class SvgController extends BaseController {
   public R delete(@PathVariable Integer id) {
     List<MapElement> list = mapElementService.list(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getSvgId, id));
     if (!list.isEmpty()) {
-      return R.fail("素材已被使用，不能删除");
+      return R.fail(MapMsgConstants.MATERIAL_USED);
     }
     if (svgService.removeById(id)) {
       return R.ok();

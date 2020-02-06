@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
+import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.SvgType;
 import com.wafersystems.virsical.map.service.ISvgTypeService;
 import io.swagger.annotations.Api;
@@ -44,7 +45,7 @@ public class SvgTypeController extends BaseController {
   @PostMapping("/add")
   public R add(@RequestBody SvgType svgType) {
     if (svgTypeService.getById(svgType.getSvgTypeCode()) != null) {
-      return R.fail("素材类型标识不能重复");
+      return R.fail(MapMsgConstants.MATERIAL_TYPE_REPETITION);
     }
     return svgTypeService.save(svgType) ? R.ok() : R.fail();
   }
