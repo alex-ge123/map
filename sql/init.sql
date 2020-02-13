@@ -7,38 +7,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for building
--- ----------------------------
-DROP TABLE IF EXISTS `building`;
-CREATE TABLE `building`  (
-  `building_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '楼宇主键',
-  `tenant_id` int(11) NOT NULL COMMENT '租户id',
-  `park_id` int(11) NOT NULL COMMENT '园区id',
-  `building_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '办公楼名称,B1',
-  `building_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '办公楼与一体机唯一对应',
-  `building_img` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '办公楼与楼宇外景图一一对应',
-  `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-删除',
-  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`building_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '楼宇' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for floor
--- ----------------------------
-DROP TABLE IF EXISTS `floor`;
-CREATE TABLE `floor`  (
-  `floor_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '楼层主键',
-  `tenant_id` int(11) NOT NULL COMMENT '租户id',
-  `building_id` int(11) NOT NULL COMMENT '楼宇id',
-  `floor_num` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '楼层',
-  `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-删除',
-  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`floor_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '楼层' ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for map
 -- ----------------------------
 DROP TABLE IF EXISTS `map`;
@@ -95,30 +63,6 @@ CREATE TABLE `map_element`  (
   PRIMARY KEY (`map_element_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '地图元素' ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for park
--- ----------------------------
-DROP TABLE IF EXISTS `park`;
-CREATE TABLE `park`  (
-  `park_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '园区主键',
-  `tenant_id` int(11) NOT NULL COMMENT '租户id',
-  `country` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '国家标识',
-  `country_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '国家名称',
-  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '省份标识',
-  `province_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '省份名称',
-  `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '城市标识',
-  `city_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '城市名称',
-  `park_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '园区名字',
-  `time_zone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '时区',
-  `time_zone_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '时区名称',
-  `am_time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '上午时间段',
-  `pm_time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '下午时间段',
-  `all_day` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '全天时间段',
-  `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-删除',
-  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
-  PRIMARY KEY (`park_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '园区' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for svg

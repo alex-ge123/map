@@ -6,7 +6,7 @@
 
   <groupId>com.wafersystems</groupId>
   <artifactId>virsical-map</artifactId>
-  <version>1.0.0</version>
+  <version>5.1.2.100</version>
   <packaging>jar</packaging>
 
   <name>map</name>
@@ -111,7 +111,7 @@
     <dependency>
       <groupId>com.wafersystems</groupId>
       <artifactId>virsical-common-security</artifactId>
-      <version>5.0.0.113</version>
+      <version>5.1.1.100.3</version>
     </dependency>
     <!--MQ依赖-->
     <dependency>
