@@ -93,7 +93,7 @@ public class MapController extends BaseController {
     }
     Page<SysSpace> spacePage = r.getData();
     if (spacePage.getTotal() == 0) {
-      return R.fail(MapMsgConstants.QUERY_LEAFNODE_NULL);
+      return R.ok(new Page<>());
     }
     Page<SpaceMapDTO> spaceMapPage = new Page<>();
     BeanUtil.copyProperties(spacePage, spaceMapPage);
