@@ -54,10 +54,10 @@ pipeline {
                 environment name: 'checkcode', value: 'true'
             }
             steps {
-                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
-                    sh 'mvn clean compile checkstyle:checkstyle findbugs:findbugs pmd:pmd test sonar:sonar -P jacoco -Dmaven.test.failure.ignore=true'
-                }
-                recordIssues(tools: [checkStyle(), findBugs(useRankAsPriority: true), pmdParser()])
+                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
+                sh 'mvn clean install checkstyle:checkstyle spotbugs:spotbugs pmd:pmd jacoco:report sonar:sonar'
+                     }
+                recordIssues(tools: [checkStyle(pattern: '**/checkstyle-result.xml'), spotBugs(useRankAsPriority: true), pmdParser()])
             }
         }
         stage('Package') {
@@ -65,7 +65,7 @@ pipeline {
                 environment name: 'checkcode', value: 'false'
             }
             steps {
-                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec', options: [findbugsPublisher(disabled: true)]) {
+                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
                     sh 'mvn clean package -DskipTests'
                 }
                 // stash includes: '**/target/*.jar', name: 'app'
