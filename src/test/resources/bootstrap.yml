@@ -1,0 +1,93 @@
+server:
+  port: 8008
+spring:
+  application:
+    name: virsical-map
+  profiles:
+    active: testcase
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.203.20:20000/virsical_map_testcase?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: wafer
+    password: wafer
+  rabbitmq:
+    host: 192.168.203.141
+    port: 5672
+    virtual-host: /testcase-map
+    username: testcase-map
+    password: testcase-map
+  # 配置中心
+  cloud:
+    config:
+      enabled: false
+
+# 注册中心配置
+eureka:
+  client:
+    enabled: false
+
+# mybatis-plus配置
+mybatis-plus:
+  # MyBatis Mapper所对应的XML文件位置
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    # 关闭MP3.0自带的banner
+    banner: false
+
+# 租户表维护
+tenant:
+  column: tenant_id
+  tables:
+    - map
+    - svg
+    - svg_state
+
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+# 日志文件
+logging:
+  file: ${user.dir}/logs/${spring.application.name}-${server.port}.log
+  level:
+    root: info
+    com.wafersystems.virsical.map.mapper: debug
+
+# 推送服务地址
+push:
+  service:
+    enable: false
+    url: http://localhost:8009/send/
+
+## spring security 配置
+security:
+  oauth2:
+    client:
+      client-id: ENC(KmOp5EIyjX0n6hoYE0jMSIDq12xwlmcs)
+      client-secret: ENC(KmOp5EIyjX0n6hoYE0jMSIDq12xwlmcs)
+      scope: server
+      ignore-urls:
+      - '/actuator/**'
+      - '/map-element/bind'
+      - '/map-element/update-object-state/*'
+    resource:
+      loadBalanced: true
+      # token解码的URI
+      token-info-uri: http://virsical-auth/oauth/check_token
+
+# 加解密根密码
+jasypt:
+  encryptor:
+    password: wafer
+aes:
+  # 前端密码密钥，必须16位
+  key: 'XDH206VF30Nf9q7t'

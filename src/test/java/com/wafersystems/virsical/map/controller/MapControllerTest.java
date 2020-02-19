@@ -3,8 +3,15 @@ package com.wafersystems.virsical.map.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.feign.RemoteSpaceService;
+import com.wafersystems.virsical.common.feign.fallback.RemoteSpaceServiceFallbackImpl;
+import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,7 +24,8 @@ import org.testng.annotations.Test;
  */
 @Slf4j
 @Rollback
-public class MapControllerTest extends BaseControllerTest {
+@WithMockUser(authorities = {"admin@common@xx"})
+public class MapControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
@@ -39,7 +47,7 @@ public class MapControllerTest extends BaseControllerTest {
 
   @Test
   public void get() throws Exception {
-    String url = "/map/1";
+    String url = "/map/7";
     JSONObject jsonObject = doGet(url);
     Map map = JSON.parseObject(jsonObject.get("data").toString(), Map.class);
     log.info(map.toString());
@@ -48,16 +56,16 @@ public class MapControllerTest extends BaseControllerTest {
 
   @Test
   public void page() throws Exception {
-    String url = "/map/page?parkId=1&buildingId=1&floorNum=1";
+    String url = "/map/page";
     JSONObject jsonObject = doGet(url);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
   @Test
   public void update() throws Exception {
     String url = "/map/update";
     Map map = new Map();
-    map.setMapId(1);
+    map.setMapId(7);
     map.setBaseMapElement("test-eee-update");
     String content = JSON.toJSONString(map);
     JSONObject jsonObject = doPost(url, content, null);
@@ -77,7 +85,7 @@ public class MapControllerTest extends BaseControllerTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/map/delete/1";
+    String url = "/map/delete/7";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }

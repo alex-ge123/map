@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Svg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mock.web.MockMultipartFile;
@@ -20,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Rollback
-public class SvgControllerTest extends BaseControllerTest {
+public class SvgControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
@@ -125,14 +126,14 @@ public class SvgControllerTest extends BaseControllerTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/svg/delete/1";
+    String url = "/svg/delete/3";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
   public void deleteForFail() throws Exception {
-    String url = "/svg/delete/0";
+    String url = "/svg/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }

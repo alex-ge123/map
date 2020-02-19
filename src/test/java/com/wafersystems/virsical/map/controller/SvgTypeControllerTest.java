@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.SvgType;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
@@ -15,7 +16,7 @@ import org.testng.annotations.Test;
  * @date 2019/5/15 15:54
  */
 @Rollback
-public class SvgTypeControllerTest extends BaseControllerTest {
+public class SvgTypeControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
