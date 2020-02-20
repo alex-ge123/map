@@ -1,14 +1,10 @@
 package com.wafersystems.virsical.map.model.dto;
 
-import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.map.entity.Map;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * 消息传输对象
