@@ -91,3 +91,8 @@ jasypt:
 aes:
   # 前端密码密钥，必须16位
   key: 'XDH206VF30Nf9q7t'
+
+# feign 配置
+feign:
+  hystrix:
+    enabled: true
