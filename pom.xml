@@ -11,7 +11,6 @@
 
   <name>map</name>
   <description>地图服务</description>
-  <sonar.scm.provider>git</sonar.scm.provider>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -31,6 +30,7 @@
     <spring-boot-admin.version>2.0.4</spring-boot-admin.version>
     <swagger.version>2.9.2</swagger.version>
     <hutool.version>4.3.2</hutool.version>
+    <sonar.scm.provider>git</sonar.scm.provider>
   </properties>
 
   <dependencies>
