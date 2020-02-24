@@ -3,7 +3,6 @@ package com.wafersystems.virsical.map.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
-import com.wafersystems.virsical.common.core.constant.WdfMqConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
@@ -86,7 +85,6 @@ public class MapController extends BaseController {
   })
   @GetMapping("/page")
   public R page(Page page, Integer spaceId) {
-    System.out.println(WdfMqConstants.ROUTINT_KEY_APPWAFER);
     // 从用户服务查询空间叶子节点分页
     R<Page<SysSpace>> r = remoteSpaceService.getLeafNodePage(page.getSize(), page.getCurrent(), spaceId);
     if (CommonConstants.SUCCESS != r.getCode()) {
