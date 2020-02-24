@@ -69,7 +69,7 @@ pipeline {
                     sh 'mvn clean package -DskipTests'
                 }
                 // stash includes: '**/target/*.jar', name: 'app'
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'target/*.jar'
             }
         }
         stage('Deploy') {
