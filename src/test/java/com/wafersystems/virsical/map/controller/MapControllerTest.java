@@ -3,8 +3,9 @@ package com.wafersystems.virsical.map.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.util.R;
-import com.wafersystems.virsical.common.feign.RemoteSpaceService;
+import com.wafersystems.virsical.common.entity.SysSpace;
 import com.wafersystems.virsical.common.feign.fallback.RemoteSpaceServiceFallbackImpl;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Map;
@@ -16,6 +17,8 @@ import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+
 /**
  * 地图测试类
  *
@@ -26,6 +29,9 @@ import org.testng.annotations.Test;
 @Rollback
 @WithMockUser(authorities = {"admin@common@xx"})
 public class MapControllerTest extends BaseTest {
+
+  @MockBean
+  RemoteSpaceServiceFallbackImpl remoteSpaceServiceFallback;
 
   @Test
   public void add() throws Exception {
@@ -56,9 +62,20 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void page() throws Exception {
+    Page<SysSpace> page = new Page<>();
+    SysSpace space = new SysSpace();
+    space.setSpaceId(1);
+    space.setName("test");
+    space.setPathName("-1-");
+    space.setParentId(0);
+    page.setRecords(Arrays.asList(space));
+    page.setTotal(1);
+    Mockito.when(remoteSpaceServiceFallback.getLeafNodePage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
+      .thenReturn(R.ok(page));
+
     String url = "/map/page";
     JSONObject jsonObject = doGet(url);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
