@@ -11,6 +11,7 @@
 
   <name>map</name>
   <description>地图服务</description>
+  <sonar.scm.provider>git</sonar.scm.provider>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
