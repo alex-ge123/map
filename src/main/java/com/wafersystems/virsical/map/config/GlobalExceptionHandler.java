@@ -60,7 +60,6 @@ public class GlobalExceptionHandler {
       .build();
   }
 
-
   /**
    * validation Exception
    *
@@ -69,11 +68,11 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public R handleBodyValidException(MethodArgumentNotValidException exception) {
+  public R handleBodyValidException(BindException exception) {
     List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
     log.error("参数绑定异常,ex = {}", fieldErrors.get(0).getDefaultMessage());
     return R.builder()
-      .msg(fieldErrors.get(0).getDefaultMessage())
+      .msg("101001")
       .code(CommonConstants.FAIL)
       .build();
   }
