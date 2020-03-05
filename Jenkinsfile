@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     parameters {
-        booleanParam(name: 'checkcode', defaultValue: false, description: '是否执行代码检查？')
-        // string(name: 'port', defaultValue: '0', description: '对外访问的端口，范围为30000-32767。如果不需要对外提供端口，请输入0')
         choice(name: 'reserveDBData', choices: 'Yes\nNo', description: '是否需要保留之前部署的数据库数据？')
     }
 
@@ -18,9 +16,6 @@ pipeline {
 
     stages {
         stage('Clean') {
-            when {
-                environment name: 'checkcode', value: 'false'
-            }
             steps {
                 script {
                     GROUP_NAME = JOB_NAME.split("/")[0]
@@ -37,44 +32,22 @@ pipeline {
                     withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
                             credentialsId: "k8s-${RD_ENV}",
                             serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
-                        if (fileExists('k8s.yml')) {
-                            sh "kubectl delete -f k8s.yml -n ${RD_ENV} --ignore-not-found"
-                        }
-
-                        try {
-                            sh "kubectl create -f pvc.yml -n ${RD_ENV}"
-                        } catch (ex) {
-                        }
+                        sh "kubectl delete -n ${RD_ENV} deployment ${SERVICE_NAME} --ignore-not-found"
+                        sh "kubectl apply -f pvc.yml -n ${RD_ENV}"
                     }
                 }
             }
         }
-        stage('Check Code') {
-            when {
-                environment name: 'checkcode', value: 'true'
-            }
-            steps {
-                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
-                sh 'mvn clean compile checkstyle:checkstyle spotbugs:spotbugs pmd:pmd test jacoco:report sonar:sonar'
-                     }
-                recordIssues(tools: [checkStyle(pattern: '**/checkstyle-result.xml'), spotBugs(useRankAsPriority: true), pmdParser()])
-            }
-        }
         stage('Package') {
-            when {
-                environment name: 'checkcode', value: 'false'
-            }
             steps {
                 withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
                     sh 'mvn clean package -DskipTests'
                 }
-                // stash includes: '**/target/*.jar', name: 'app'
                 archiveArtifacts artifacts: 'target/*.jar'
             }
         }
         stage('Deploy') {
             when {
-                environment name: 'checkcode', value: 'false'
                 expression {
                     currentBuild.result == null || currentBuild.result == 'SUCCESS'
                 }
@@ -169,9 +142,9 @@ pipeline {
 
                     }
                 }
-            sh "rm -rf ${SERVICE_NAME}.zip"
-            zip archive: true, dir: './tmp', glob: '', zipFile: "${SERVICE_NAME}.zip"
-            archiveArtifacts artifacts: "**/${SERVICE_NAME}.zip", fingerprint: true
+                sh "rm -rf ${SERVICE_NAME}.zip"
+                zip archive: true, dir: './tmp', glob: '', zipFile: "${SERVICE_NAME}.zip"
+                archiveArtifacts artifacts: "${SERVICE_NAME}.zip"
             }
         }
     }
