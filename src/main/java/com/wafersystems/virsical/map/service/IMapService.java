@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wafersystems.virsical.map.entity.Map;
 
+import java.util.List;
+
 /**
  * <p>
  * 地图 服务类
@@ -22,4 +24,12 @@ public interface IMapService extends IService<Map> {
    * @return 地图分页列表
    */
   IPage<Map> selectMapPage(Page<Map> page, Map map);
+
+  /**
+   * 根据空间节点id查询地图
+   *
+   * @param spaceIds 空间id集合
+   * @return mapList
+   */
+  List<Map> selectMapListBySpaceId(Integer[] spaceIds);
 }

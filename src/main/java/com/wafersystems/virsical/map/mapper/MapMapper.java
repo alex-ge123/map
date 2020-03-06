@@ -24,4 +24,12 @@ public interface MapMapper extends BaseMapper<Map> {
    * @return 地图分页列表
    */
   List<Map> selectMapPage(@Param("page") Page page, @Param("map") Map map);
+
+  /**
+   * 根据空间节点id查询地图
+   *
+   * @param spaceIds 空间id集合
+   * @return mapList
+   */
+  List<Map> selectMapListBySpaceId(Integer[] spaceIds);
 }
