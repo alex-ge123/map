@@ -76,8 +76,9 @@
     map AS m
     WHERE
     m.floor_id In
-    <foreach collection="array" item="id" index="index" open="(" separator="," close=")">
-      #{id}
+    <foreach item="item" index="index" collection="ids"
+             open="(" separator="," close=")">
+      #{item}
     </foreach>
     and m.del_flag=0
   </select>

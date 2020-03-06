@@ -9,6 +9,8 @@ import com.wafersystems.virsical.map.service.IMapService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +46,6 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
    */
   @Override
   public List<Map> selectMapListBySpaceId(Integer[] spaceIds) {
-    return mapMapper.selectMapListBySpaceId(spaceIds);
+    return mapMapper.selectMapListBySpaceId(Arrays.asList(spaceIds));
   }
 }
