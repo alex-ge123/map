@@ -28,8 +28,8 @@ public interface MapMapper extends BaseMapper<Map> {
   /**
    * 根据空间节点id查询地图
    *
-   * @param spaceIds 空间id集合
+   * @param ids 空间id集合
    * @return mapList
    */
-  List<Map> selectMapListBySpaceId(Integer[] spaceIds);
+  List<Map> selectMapListBySpaceId(Integer[] ids);
 }
