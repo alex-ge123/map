@@ -79,6 +79,7 @@ CREATE TABLE `svg`  (
   `view_box` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SVG属性',
   `axisx` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文字坐标轴X',
   `axixy` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文字坐标轴Y',
+  `direction` smallint(1) NOT NULL DEFAULT 0 COMMENT '文字方向',
   `state` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启用状态：0—启用，1—停用',
   `font_size` tinyint(2) NOT NULL DEFAULT 12 COMMENT '字体大小',
   `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常，1-删除',

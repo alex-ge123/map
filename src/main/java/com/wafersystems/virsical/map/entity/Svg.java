@@ -62,6 +62,9 @@ public class Svg extends Model<Svg> {
   @ApiModelProperty(value = "文字坐标轴Y", example = "string")
   private String axixy;
 
+  @ApiModelProperty(value = "文字方向", example = "0")
+  private Integer direction;
+
   @ApiModelProperty(value = "启用状态：0—启用，1—停用", example = "0")
   private Integer state;
 

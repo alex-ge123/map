@@ -32,6 +32,7 @@ public class SvgControllerTest extends BaseTest {
     svg.setSvgWidth("100");
     svg.setSvgHeight("100");
     svg.setSvgElement("test-eee");
+    svg.setDirection(888);
     svg.setState(0);
     svg.setFontSize(12);
     String content = JSON.toJSONString(svg);
