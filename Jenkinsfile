@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Package') {
             steps {
-                withMaven(jdk: 'oracle_jdk18', maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
+                withMaven(maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
                     sh 'mvn clean package -DskipTests'
                 }
                 archiveArtifacts artifacts: 'target/*.jar'
