@@ -80,12 +80,12 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   public Boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
     List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
       mapId));
-    //查询老的素材id列表
+    //查询老的地图元素id列表
     Set<String> oldIds = mapElements.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
     ArrayList<String> delIds = new ArrayList<>(oldIds.size());
-    //获取新的素材id列表
+    //获取新的地图元素id列表
     Set<String> newIds = mapElementList.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
-    //查询出删除掉的素材id
+    //查询出删除掉的地图元素id
     oldIds.forEach(i -> {
       if (!newIds.contains(i)) {
         delIds.add(i);

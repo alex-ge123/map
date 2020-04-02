@@ -44,6 +44,12 @@ public class MapElement extends Model<MapElement> {
   @ApiModelProperty(value = "自定义素材", example = "string")
   private String customElement;
 
+  @ApiModelProperty(value = "自定义素材宽度", example = "string")
+  private String customElementWidth;
+
+  @ApiModelProperty(value = "自定义素材高度", example = "string")
+  private String customElementHeight;
+
   @ApiModelProperty(value = "页面元素ID", example = "string")
   private String mapWebId;
 
