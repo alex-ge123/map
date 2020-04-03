@@ -43,7 +43,6 @@ pipeline {
                 withMaven(maven: 'maven', mavenSettingsConfig: 'e0af2237-7500-4e99-af21-60cc491267ec') {
                     sh 'mvn clean package -DskipTests'
                 }
-                archiveArtifacts artifacts: 'target/*.jar'
             }
         }
         stage('Deploy') {
@@ -71,9 +70,22 @@ pipeline {
                 sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
 
                 sh "cp sql/init.sql tmp_sql/${JOB_NAME}"
-                // sh "sed -i s@\\`virsical_map\\`@${GROUP_NAME}_map@g tmp_sql/${JOB_NAME}/*"
+
+                sh "wget https://gitlab.rd.virsical.cn/wafer_public/document/raw/master/pinpoint-agent-2.0.1.tar.gz -O pinpoint-agent-2.0.1.tar.gz"
+                sh "tar xzf pinpoint-agent-2.0.1.tar.gz"
+                sh "rm -f pinpoint-agent-2.0.1.tar.gz"
+                sh "mv pinpoint-agent-2.0.1 tmp/"
+                sh "sed -i s@127.0.0.1@pinpoint-collector.kube-public@g tmp/pinpoint-agent-2.0.1/profiles/release/pinpoint-env.config"
 
                 script {
+                    if (SERVICE_NAME.length() > 24) {
+                        APP_NAME = SERVICE_NAME.substring(0, 24)
+                    } else {
+                        APP_NAME = SERVICE_NAME
+                    }
+
+                    sh "sed -i s@__PINPOINT_APPNAME__@${APP_NAME}@g k8s.yml"
+
                     datas = readYaml file: 'src/main/resources/bootstrap.yml'
                     datas.eureka.client['service-url'].defaultZone = "http://wafer:wafer@${GROUP_NAME}-eureka:8080/eureka/"
                     datas.spring.cloud.config.uri = "http://wafer:wafer@${GROUP_NAME}-config:8080"
