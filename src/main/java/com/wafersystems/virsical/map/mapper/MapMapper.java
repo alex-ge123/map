@@ -1,5 +1,6 @@
 package com.wafersystems.virsical.map.mapper;
 
+import com.baomidou.mybatisplus.annotation.SqlParser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.map.entity.Map;
@@ -24,4 +25,13 @@ public interface MapMapper extends BaseMapper<Map> {
    * @return 地图分页列表
    */
   List<Map> selectMapPage(@Param("page") Page page, @Param("map") Map map);
+
+  /**
+   * 根据空间节点id查询地图
+   *
+   * @param ids 空间id集合
+   * @return mapList
+   */
+  @SqlParser(filter = true)
+  List<Map> selectMapListBySpaceId(@Param("ids") List<Integer> ids);
 }
