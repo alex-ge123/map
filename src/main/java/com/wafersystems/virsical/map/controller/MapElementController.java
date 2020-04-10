@@ -119,7 +119,7 @@ public class MapElementController extends BaseController {
    * @param mapElementObjectStateVoList 地图元素资源对象集合
    * @return R
    */
-//  @Inner
+  @Inner
   @ApiOperation(value = "更新地图元素资源状态", notes = "更新地图元素资源状态（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/update-object-state/{svgTypeCode}")
