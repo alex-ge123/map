@@ -65,11 +65,18 @@ public class MapController extends BaseController {
     return mapService.removeById(id) ? R.ok() : R.fail();
   }
 
-  @ApiOperation(value = "获取地图详情", notes = "根据地图id获取地图")
+  @ApiOperation(value = "根据地图id获取地图", notes = "根据地图id获取地图")
   @ApiImplicitParam(name = "id", value = "地图id", required = true, dataType = "Integer")
   @GetMapping("/{id}")
   public R<Map> get(@PathVariable Integer id) {
     return R.ok(mapService.getById(id));
+  }
+
+  @ApiOperation(value = "根据空间id获取地图", notes = "根据空间id获取地图")
+  @ApiImplicitParam(name = "spaceId", value = "空间id", required = true, dataType = "Integer")
+  @GetMapping("/getBySpaceId/{spaceId}")
+  public R<Map> getBySpaceId(@PathVariable Integer spaceId) {
+    return R.ok(mapService.getOne(Wrappers.<Map>query().lambda().eq(Map::getFloorId, spaceId)));
   }
 
   @ApiOperation(value = "获取地图列表", notes = "根据地图对象条件获取地图列表")
