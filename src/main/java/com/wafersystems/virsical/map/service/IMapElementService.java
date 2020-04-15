@@ -1,8 +1,8 @@
 package com.wafersystems.virsical.map.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.map.entity.MapElement;
-import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
 
 import java.util.List;
 

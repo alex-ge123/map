@@ -6,24 +6,22 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wafersystems.virsical.common.core.constant.MapMqConstants;
 import com.wafersystems.virsical.common.core.constant.SecurityConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.constant.enums.ProductCodeEnum;
+import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.feign.RemotePushService;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
 import com.wafersystems.virsical.map.model.dto.MessageDTO;
-import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,9 +93,6 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
     if (b) {
-      //发送删除通知
-      MessageDTO messageDTO = new MessageDTO(MsgTypeEnum.ONE.name(), MsgActionEnum.DELETE.name(), delIds);
-      amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG, "", JSON.toJSONString(messageDTO));
       //推送地图更新消息
       push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId + "");
     }

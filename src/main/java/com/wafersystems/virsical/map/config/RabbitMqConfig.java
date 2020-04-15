@@ -26,15 +26,4 @@ public class RabbitMqConfig {
   public MessageConverter messageConverter() {
     return new Jackson2JsonMessageConverter();
   }
-
-  /**
-   * 地图素材广播交换机
-   *
-   * @return FanoutExchange
-   */
-  @Bean
-  public FanoutExchange svgFanoutExchange() {
-    return new FanoutExchange(MapMqConstants.EXCHANGE_FANOUT_MAP_SVG);
-  }
-
 }
