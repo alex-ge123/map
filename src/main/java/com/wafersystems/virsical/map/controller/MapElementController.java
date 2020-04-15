@@ -1,12 +1,12 @@
 package com.wafersystems.virsical.map.controller;
 
+import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
-import com.wafersystems.virsical.map.model.vo.MapElementObjectStateVO;
 import com.wafersystems.virsical.map.model.vo.MapElementRouteVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
 import io.swagger.annotations.Api;
