@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
+import com.wafersystems.virsical.common.core.dto.MapElementUpdateDTO;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
@@ -38,7 +39,7 @@ public class MapElementController extends BaseController {
   /**
    * 添加地图元素
    *
-   * @param mapId             地图id
+   * @param mapId          地图id
    * @param mapElementList 地图元素对象集合
    * @return R
    */
@@ -130,6 +131,22 @@ public class MapElementController extends BaseController {
     }
     return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList)
       ? R.ok() : R.fail();
+  }
+
+  /**
+   * 更新地图元素资源状态
+   *
+   * @param mapElementUpdateDTO 地图元素资源对象集合
+   * @return R
+   */
+  @Inner
+  @PostMapping("/update-object-state")
+  public R updateObjectState(@RequestBody MapElementUpdateDTO mapElementUpdateDTO) {
+    if (mapElementUpdateDTO.getMapElementObjectStateVoList().isEmpty()) {
+      return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
+    }
+    return mapElementService.batchUpdateMapElementObjectState(mapElementUpdateDTO.getSvgTypeCode(),
+      mapElementUpdateDTO.getMapElementObjectStateVoList()) ? R.ok() : R.fail();
   }
 
 }
