@@ -1,19 +1,16 @@
 package com.wafersystems.virsical.map.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wafersystems.virsical.common.core.constant.SecurityConstants;
+import com.wafersystems.virsical.common.core.constant.PushMqConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.constant.enums.ProductCodeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
-import com.wafersystems.virsical.common.core.util.R;
-import com.wafersystems.virsical.common.feign.RemotePushService;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
 import com.wafersystems.virsical.map.model.dto.MessageDTO;
@@ -27,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,9 +46,6 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   private Boolean pushServiceEnable;
 
   @Autowired
-  private RemotePushService remotePushService;
-
-  @Autowired
   private AmqpTemplate amqpTemplate;
 
   /**
@@ -69,7 +62,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   /**
    * 批量保存地图元素（先删再存）
    *
-   * @param mapId 地图Id
+   * @param mapId          地图Id
    * @param mapElementList 地图元素集合
    * @return Boolean
    */
@@ -171,11 +164,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     MessageDTO messageDTO = new MessageDTO(null, null, ProductCodeEnum.COMMON.name(), msgType, msgAction, data);
     if (pushServiceEnable) {
       try {
-        R r = remotePushService.sendTopic(ProductCodeEnum.COMMON.name(), JSONUtil.toJsonStr(messageDTO),
-          SecurityConstants.FROM_IN);
-        log.info("调用推送服务推送结果：{}，[{}] | [{}] | [{}]", r, msgType, msgAction, data);
+        amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", JSON.toJSONString(messageDTO));
+        log.info("调用推送服务推送完成：[{}] | [{}] | [{}]", msgType, msgAction, data);
       } catch (Exception e) {
-        log.error("调用推送服务推送失败：{}", e);
+        log.error("调用推送服务推送失败", e);
         throw new BusinessException("调用推送服务推送失败");
       }
     }
