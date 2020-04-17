@@ -81,7 +81,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       }
     }
 
-    super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId).ne(MapElement::getObjectId, null));
+    super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
     if (b) {
