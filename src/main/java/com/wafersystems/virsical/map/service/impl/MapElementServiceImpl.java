@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.common.core.constant.PushMqConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
-import com.wafersystems.virsical.common.core.constant.enums.ProductCodeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
+import com.wafersystems.virsical.map.config.PushProperties;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
 import com.wafersystems.virsical.map.model.dto.MessageDTO;
@@ -18,14 +18,11 @@ import com.wafersystems.virsical.map.service.IMapElementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -42,8 +39,8 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Autowired
   private MapElementMapper mapElementMapper;
 
-  @Value("${push.service.enable}")
-  private Boolean pushServiceEnable;
+  @Autowired
+  private PushProperties pushProperties;
 
   @Autowired
   private AmqpTemplate amqpTemplate;
@@ -61,6 +58,8 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
 
   /**
    * 批量保存地图元素（先删再存）
+   * 已绑定的地图元素不能删除
+   * 更新已绑定的地图元素，绑定信息不能清空
    *
    * @param mapId          地图Id
    * @param mapElementList 地图元素集合
@@ -69,20 +68,20 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
-    List<MapElement> mapElements = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
+    List<MapElement> oldMapElementList = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
       mapId));
-    //查询老的地图元素id列表
-    Set<String> oldIds = mapElements.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
-    ArrayList<String> delIds = new ArrayList<>(oldIds.size());
-    //获取新的地图元素id列表
-    Set<String> newIds = mapElementList.stream().map(MapElement::getMapElementId).collect(Collectors.toSet());
-    //查询出删除掉的地图元素id
-    oldIds.forEach(i -> {
-      if (!newIds.contains(i)) {
-        delIds.add(i);
+    for (MapElement oldMe : oldMapElementList) {
+      for (MapElement newMe : mapElementList) {
+        if (oldMe.getMapId().equals(newMe.getMapId()) && StrUtil.isNotBlank(oldMe.getObjectId())) {
+          newMe.setObjectId(oldMe.getObjectId());
+          newMe.setObjectName(oldMe.getObjectName());
+          newMe.setObjectColor(oldMe.getObjectColor());
+          newMe.setObjectSvgStateCode(oldMe.getObjectSvgStateCode());
+        }
       }
-    });
-    super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
+    }
+
+    super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId).ne(MapElement::getObjectId, null));
     // 批量保存新地图元素
     boolean b = super.saveBatch(mapElementList);
     if (b) {
@@ -161,13 +160,13 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param data      内容
    */
   private void push(String msgType, String msgAction, String data) {
-    MessageDTO messageDTO = new MessageDTO(null, null, ProductCodeEnum.COMMON.name(), msgType, msgAction, data);
-    if (pushServiceEnable) {
+    MessageDTO messageDTO = new MessageDTO(null, null, pushProperties.getDestination(), msgType, msgAction, data);
+    if (pushProperties.isEnable()) {
       try {
         amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", JSON.toJSONString(messageDTO));
-        log.info("调用推送服务推送完成：[{}] | [{}] | [{}]", msgType, msgAction, data);
+        log.info("推送完成：[{}] | [{}] | [{}]", msgType, msgAction, data);
       } catch (Exception e) {
-        log.error("调用推送服务推送失败", e);
+        log.error("推送失败", e);
         throw new BusinessException("调用推送服务推送失败");
       }
     }
