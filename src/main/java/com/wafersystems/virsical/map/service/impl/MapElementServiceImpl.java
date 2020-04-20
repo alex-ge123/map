@@ -71,12 +71,14 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     List<MapElement> oldMapElementList = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
       mapId));
     for (MapElement oldMe : oldMapElementList) {
-      for (MapElement newMe : mapElementList) {
-        if (oldMe.getMapId().equals(newMe.getMapId()) && StrUtil.isNotBlank(oldMe.getObjectId())) {
-          newMe.setObjectId(oldMe.getObjectId());
-          newMe.setObjectName(oldMe.getObjectName());
-          newMe.setObjectColor(oldMe.getObjectColor());
-          newMe.setObjectSvgStateCode(oldMe.getObjectSvgStateCode());
+      if (StrUtil.isNotBlank(oldMe.getObjectId())) {
+        for (MapElement newMe : mapElementList) {
+          if (oldMe.getMapElementId().equals(newMe.getMapElementId())) {
+            newMe.setObjectId(oldMe.getObjectId());
+            newMe.setObjectName(oldMe.getObjectName());
+            newMe.setObjectColor(oldMe.getObjectColor());
+            newMe.setObjectSvgStateCode(oldMe.getObjectSvgStateCode());
+          }
         }
       }
     }
