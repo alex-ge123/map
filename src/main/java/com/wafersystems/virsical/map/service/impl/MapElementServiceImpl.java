@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = super.saveBatch(mapElementList);
     if (b) {
       //推送地图更新消息
-      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId + "");
+      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId);
     }
     return b;
   }
@@ -107,7 +108,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       if (me != null) {
         mapElementList.forEach(mapElement -> mapElement.setMapId(me.getMapId()));
         // 消息推送
-        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
+        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), (ArrayList)mapElementList);
       }
     }
     return b;
@@ -149,7 +150,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = this.updateBatchById(mapElementList);
     if (b) {
       // 消息推送
-      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), JSON.toJSONString(mapElementList));
+      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), (ArrayList)mapElementList);
     }
     return Boolean.TRUE;
   }
@@ -161,7 +162,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param msgAction 消息动作
    * @param data      内容
    */
-  private void push(String msgType, String msgAction, String data) {
+  private void push(String msgType, String msgAction, Serializable data) {
     MessageDTO messageDTO = new MessageDTO(null, null, pushProperties.getDestination(), msgType, msgAction, data);
     if (pushProperties.isEnable()) {
       try {
