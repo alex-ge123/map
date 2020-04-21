@@ -87,12 +87,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
 
     super.remove(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId, mapId));
     // 批量保存新地图元素
-    boolean b = super.saveBatch(mapElementList);
-    if (b) {
-      //推送地图更新消息
-      push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_RELOAD, mapId.toString(), mapId);
-    }
-    return b;
+    return super.saveBatch(mapElementList);
   }
 
   /**
@@ -129,7 +124,6 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @return Boolean
    */
   @Override
-  @Transactional(rollbackFor = Exception.class)
   public Boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                                   List<MapElementObjectStateVO> voList) {
     LambdaQueryWrapper<MapElement> wrapper = Wrappers.lambdaQuery();
@@ -171,7 +165,8 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * @param businessId 业务id
    * @param data       内容
    */
-  private void push(String msgType, String msgAction, String businessId, Serializable data) {
+  @Override
+  public void push(String msgType, String msgAction, String businessId, Serializable data) {
     MessageDTO messageDTO = new MessageDTO(null, null,
       businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN",data);
     if (pushProperties.isEnable()) {

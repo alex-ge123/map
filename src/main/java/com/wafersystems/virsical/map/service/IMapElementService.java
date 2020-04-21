@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.map.entity.MapElement;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -50,4 +51,13 @@ public interface IMapElementService extends IService<MapElement> {
   Boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                            List<MapElementObjectStateVO> list);
 
+  /**
+   * 消息推送
+   *
+   * @param msgType    消息类型
+   * @param msgAction  消息动作
+   * @param businessId 业务id
+   * @param data       内容
+   */
+  void push(String msgType, String msgAction, String businessId, Serializable data);
 }
