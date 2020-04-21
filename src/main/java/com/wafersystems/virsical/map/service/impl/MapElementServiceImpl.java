@@ -173,7 +173,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    */
   private void push(String msgType, String msgAction, String businessId, Serializable data) {
     MessageDTO messageDTO = new MessageDTO(null, null,
-      businessId, pushProperties.getDestination(), msgType, msgAction, data);
+      businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN",data);
     if (pushProperties.isEnable()) {
       try {
         String body = JSON.toJSONString(messageDTO);
