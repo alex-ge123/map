@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.common.core.constant.PushMqConstants;
-import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
+import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.config.PushProperties;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.mapper.MapElementMapper;
@@ -90,7 +90,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = super.saveBatch(mapElementList);
     if (b) {
       //推送地图更新消息
-      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId.toString(), mapId);
+      push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_RELOAD, mapId.toString(), mapId);
     }
     return b;
   }
@@ -109,8 +109,13 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       if (me != null) {
         mapElementList.forEach(mapElement -> mapElement.setMapId(me.getMapId()));
         // 消息推送
-        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(),
-          me.getMapId().toString(), (ArrayList) mapElementList);
+        if (StrUtil.isNotBlank(mapElementList.get(0).getLineStart())) {
+          push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_GUIDE_LINE,
+            me.getMapId().toString(), (ArrayList) mapElementList);
+        } else if (StrUtil.isNotBlank(mapElementList.get(0).getObjectId())) {
+          push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_UPDATE,
+            me.getMapId().toString(), (ArrayList) mapElementList);
+        }
       }
     }
     return b;
@@ -152,7 +157,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = this.updateBatchById(mapElementList);
     if (b) {
       // 消息推送
-      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(),
+      push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_UPDATE,
         mapElementList.get(0).getMapId().toString(), (ArrayList) mapElementList);
     }
     return Boolean.TRUE;
