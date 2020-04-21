@@ -176,8 +176,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       businessId, pushProperties.getDestination(), msgType, msgAction, data);
     if (pushProperties.isEnable()) {
       try {
-        amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", JSON.toJSONString(messageDTO));
-        log.info("推送完成：[{}] | [{}] | [{}]", msgType, msgAction, data);
+        String body = JSON.toJSONString(messageDTO);
+        amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", body);
+        log.info("推送完成：[{}] | [{}]", PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, body);
       } catch (Exception e) {
         log.error("推送失败", e);
         throw new BusinessException("调用推送服务推送失败");
