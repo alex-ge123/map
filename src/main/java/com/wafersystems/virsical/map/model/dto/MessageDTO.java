@@ -57,6 +57,11 @@ public class MessageDTO {
   private String clientId;
 
   /**
+   * 业务信息
+   */
+  private String business;
+
+  /**
    * 消息体
    */
   private Serializable data;
@@ -69,17 +74,19 @@ public class MessageDTO {
    *
    * @param userId    userId
    * @param clientId  clientId
+   * @param business  业务信息
    * @param product   消息所属产品（会议-smt，工位-smw，地图-map）
    * @param msgType   消息类型（ONE单条(点对点)|BATCH批量|ALL(广播)）
    * @param msgAction 消息动作（ADD|DELETE|UPDATE|NONE: 增|删|改|无）
    * @param data      消息体
    */
-  public MessageDTO(Integer userId, String clientId, String product, String msgType, String msgAction,
+  public MessageDTO(Integer userId, String clientId, String business, String product, String msgType, String msgAction,
                     Serializable data) {
     this.msgId = UUID.randomUUID().toString();
     this.msgTime = System.currentTimeMillis();
     this.userId = userId;
     this.clientId = clientId;
+    this.business = business;
     this.product = product;
     this.msgType = msgType;
     this.msgAction = msgAction;

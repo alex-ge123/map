@@ -69,8 +69,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Override
   @Transactional(rollbackFor = Exception.class)
   public Boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
-    List<MapElement> oldMapElementList = baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
-      mapId));
+    List<MapElement> oldMapElementList =
+      baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
+        mapId));
     for (MapElement oldMe : oldMapElementList) {
       if (StrUtil.isNotBlank(oldMe.getObjectId())) {
         for (MapElement newMe : mapElementList) {
@@ -89,7 +90,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     boolean b = super.saveBatch(mapElementList);
     if (b) {
       //推送地图更新消息
-      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId);
+      push(MsgTypeEnum.ALL.name(), MsgActionEnum.UPDATE.name(), mapId.toString(), mapId);
     }
     return b;
   }
@@ -108,7 +109,8 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       if (me != null) {
         mapElementList.forEach(mapElement -> mapElement.setMapId(me.getMapId()));
         // 消息推送
-        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), (ArrayList)mapElementList);
+        push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(),
+          me.getMapId().toString(), (ArrayList) mapElementList);
       }
     }
     return b;
@@ -135,6 +137,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     wrapper.in(MapElement::getObjectId, objectIdList);
     // 查询对应地图id与元素id集合
     List<MapElement> mapElementList = mapElementMapper.selectList(wrapper);
+    if (mapElementList.isEmpty()) {
+      return Boolean.FALSE;
+    }
     // 组装待更新对象集合
     mapElementList.forEach(me -> voList.forEach(vo -> {
       if (vo.getObjectId().equals(me.getObjectId())) {
@@ -143,14 +148,12 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
         me.setObjectSvgStateCode(vo.getObjectSvgStateCode());
       }
     }));
-    if (mapElementList.isEmpty()) {
-      return Boolean.FALSE;
-    }
     // 批量更新地图元素
     boolean b = this.updateBatchById(mapElementList);
     if (b) {
       // 消息推送
-      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(), (ArrayList)mapElementList);
+      push(MsgTypeEnum.BATCH.name(), MsgActionEnum.UPDATE.name(),
+        mapElementList.get(0).getMapId().toString(), (ArrayList) mapElementList);
     }
     return Boolean.TRUE;
   }
@@ -158,12 +161,14 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   /**
    * 消息推送
    *
-   * @param msgType   消息类型
-   * @param msgAction 消息动作
-   * @param data      内容
+   * @param msgType    消息类型
+   * @param msgAction  消息动作
+   * @param businessId 业务id
+   * @param data       内容
    */
-  private void push(String msgType, String msgAction, Serializable data) {
-    MessageDTO messageDTO = new MessageDTO(null, null, pushProperties.getDestination(), msgType, msgAction, data);
+  private void push(String msgType, String msgAction, String businessId, Serializable data) {
+    MessageDTO messageDTO = new MessageDTO(null, null,
+      businessId, pushProperties.getDestination(), msgType, msgAction, data);
     if (pushProperties.isEnable()) {
       try {
         amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", JSON.toJSONString(messageDTO));
