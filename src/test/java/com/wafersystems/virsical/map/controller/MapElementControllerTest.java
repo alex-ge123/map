@@ -131,7 +131,7 @@ public class MapElementControllerTest extends BaseTest {
     me2.setObjectSvgStateCode("c2");
     list.add(me2);
     String content = JSON.toJSONString(list);
-    JSONObject jsonObject = doPost(url, content, null);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
