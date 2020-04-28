@@ -107,7 +107,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
         if (StrUtil.isNotBlank(mapElementList.get(0).getLineStart())) {
           push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_GUIDE_LINE,
             me.getMapId().toString(), (ArrayList) mapElementList);
-        } else if (StrUtil.isNotBlank(mapElementList.get(0).getObjectId())) {
+        } else {
           push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_UPDATE,
             me.getMapId().toString(), (ArrayList) mapElementList);
         }
