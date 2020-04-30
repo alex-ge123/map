@@ -29,4 +29,19 @@ public final class MapConstants {
    * 关闭
    */
   public static final Integer CLOSE_STATE = 1;
+
+  /**
+   * 重新加载消息动作
+   */
+  public static final String ACTION_STATE_RELOAD = "reload";
+
+  /**
+   * 状态更新消息动作
+   */
+  public static final String ACTION_STATE_UPDATE = "state-update";
+
+  /**
+   * 引导线消息动作
+   */
+  public static final String ACTION_GUIDE_LINE = "guide-line";
 }

@@ -1,10 +1,12 @@
 package com.wafersystems.virsical.map.controller;
 
+import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.dto.MapElementUpdateDTO;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
@@ -47,7 +49,12 @@ public class MapElementController extends BaseController {
   @ApiImplicitParam(name = "mapElementList", value = "地图元素对象集合", required = true, dataType = "MapElement")
   @PostMapping("/add/{mapId}")
   public R add(@PathVariable Integer mapId, @RequestBody List<MapElement> mapElementList) {
-    return mapElementService.batchSaveMapElement(mapId, mapElementList) ? R.ok() : R.fail();
+    boolean b = mapElementService.batchSaveMapElement(mapId, mapElementList);
+    if (b) {
+      //推送地图更新消息
+      mapElementService.push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_RELOAD, mapId.toString(), mapId);
+    }
+    return b ? R.ok() : R.fail();
   }
 
   @ApiOperation(value = "批量删除地图元素", notes = "批量根据地图id删除地图元素")
