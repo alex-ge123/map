@@ -138,7 +138,7 @@ public class MapControllerTest extends BaseTest {
     String url = "/map/getEditPermission";
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("mapId", "1");
-    params.add("key", "1234568");
+    params.add("key", "123456");
     JSONObject jsonObject = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
@@ -148,7 +148,7 @@ public class MapControllerTest extends BaseTest {
     String url = "/map/getEditPermission";
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("mapId", "1");
-    params.add("key", "12345689");
+    params.add("key", "1234567");
     JSONObject jsonObject = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
