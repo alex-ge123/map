@@ -115,7 +115,8 @@ public class MapElementController extends BaseController {
       BeanUtils.copyProperties(mapElementRouteVO, mapElement);
       mapElementList.add(mapElement);
     });
-    return mapElementService.batchUpdateMapElement(mapElementList) ? R.ok() : R.fail();
+    boolean b = mapElementService.batchUpdateMapElement(mapElementList);
+    return b ? R.ok() : R.fail();
   }
 
   /**
@@ -138,7 +139,8 @@ public class MapElementController extends BaseController {
       BeanUtils.copyProperties(mapElementRouteVO, mapElement);
       mapElementList.add(mapElement);
     });
-    return mapElementService.batchUpdateMapElement(mapElementList) ? R.ok() : R.fail();
+    boolean b = mapElementService.batchUpdateMapElement(mapElementList);
+    return b ? R.ok() : R.fail();
   }
 
   /**
@@ -157,8 +159,8 @@ public class MapElementController extends BaseController {
     if (mapElementObjectStateVoList.isEmpty()) {
       return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
-    return mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList)
-      ? R.ok() : R.fail();
+    boolean b = mapElementService.batchUpdateMapElementObjectState(svgTypeCode, mapElementObjectStateVoList);
+    return b ? R.ok() : R.fail();
   }
 
   /**
@@ -173,8 +175,9 @@ public class MapElementController extends BaseController {
     if (mapElementUpdateDTO.getMapElementObjectStateVoList().isEmpty()) {
       return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
     }
-    return mapElementService.batchUpdateMapElementObjectState(mapElementUpdateDTO.getSvgTypeCode(),
-      mapElementUpdateDTO.getMapElementObjectStateVoList()) ? R.ok() : R.fail();
+    boolean b = mapElementService.batchUpdateMapElementObjectState(mapElementUpdateDTO.getSvgTypeCode(),
+      mapElementUpdateDTO.getMapElementObjectStateVoList());
+    return b ? R.ok() : R.fail();
   }
 
 }

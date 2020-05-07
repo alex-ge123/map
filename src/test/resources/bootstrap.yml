@@ -67,9 +67,10 @@ logging:
 
 # 推送服务地址
 push:
-  service:
-    enable: false
-    url: http://localhost:8009/send/
+  # 推送开关
+  enable: true
+  # 通道名称
+  destination: map
 
 ## spring security 配置
 security:

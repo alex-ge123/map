@@ -64,11 +64,11 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    *
    * @param mapId          地图Id
    * @param mapElementList 地图元素集合
-   * @return Boolean
+   * @return boolean
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public Boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
+  public boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList) {
     List<MapElement> oldMapElementList =
       baseMapper.selectList(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getMapId,
         mapId));
@@ -94,10 +94,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    * 批量更新地图元素（资源绑定、路径保存）
    *
    * @param mapElementList 地图元素集合
-   * @return Boolean
+   * @return boolean
    */
   @Override
-  public Boolean batchUpdateMapElement(List<MapElement> mapElementList) {
+  public boolean batchUpdateMapElement(List<MapElement> mapElementList) {
     boolean b = super.updateBatchById(mapElementList);
     if (b) {
       MapElement me = mapElementMapper.selectById(mapElementList.get(0).getMapElementId());
@@ -121,10 +121,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    *
    * @param svgTypeCode 地图元素类型
    * @param voList      地图元素资源状态集合
-   * @return Boolean
+   * @return boolean
    */
   @Override
-  public Boolean batchUpdateMapElementObjectState(String svgTypeCode,
+  public boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                                   List<MapElementObjectStateVO> voList) {
     LambdaQueryWrapper<MapElement> wrapper = Wrappers.lambdaQuery();
     wrapper.select(MapElement::getMapId, MapElement::getMapElementId, MapElement::getObjectId);
@@ -137,7 +137,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     // 查询对应地图id与元素id集合
     List<MapElement> mapElementList = mapElementMapper.selectList(wrapper);
     if (mapElementList.isEmpty()) {
-      return Boolean.FALSE;
+      return false;
     }
     // 组装待更新对象集合
     mapElementList.forEach(me -> voList.forEach(vo -> {
@@ -154,7 +154,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_UPDATE,
         mapElementList.get(0).getMapId().toString(), (ArrayList) mapElementList);
     }
-    return Boolean.TRUE;
+    return true;
   }
 
   /**

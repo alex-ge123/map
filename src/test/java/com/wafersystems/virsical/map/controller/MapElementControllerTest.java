@@ -26,17 +26,21 @@ public class MapElementControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
-    String url = "/map-element/add/7/11111111";
+    String url = "/map-element/add/1/11111111";
     List<MapElement> list = new ArrayList<>();
     MapElement me = new MapElement();
     me.setMapId(1);
     me.setSvgId(1);
     me.setMapWebId("web001");
+    me.setObjectId("1");
+    me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
     list.add(me);
     MapElement me2 = new MapElement();
-    me2.setMapId(1);
+    me2.setMapId(2);
     me2.setSvgId(1);
     me2.setMapWebId("web002");
+    me2.setObjectId("2");
+    me2.setMapElementId("03740626bab2ea5f01106456dafc957e");
     list.add(me2);
     String content = JSON.toJSONString(list);
     JSONObject jsonObject = doPost(url, content, null);
@@ -139,7 +143,7 @@ public class MapElementControllerTest extends BaseTest {
   public void updateObjectStateForParamErrorFail() throws Exception {
     String url = "/map-element/update-object-state/meeting-room";
     String content = JSON.toJSONString(new ArrayList<>());
-    JSONObject jsonObject = doPost(url, content, null);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 

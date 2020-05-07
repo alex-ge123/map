@@ -29,26 +29,26 @@ public interface IMapElementService extends IService<MapElement> {
    *
    * @param mapId 地图id
    * @param mapElementList 地图元素集合
-   * @return Boolean
+   * @return boolean
    */
-  Boolean batchSaveMapElement(Integer mapId ,List<MapElement> mapElementList);
+  boolean batchSaveMapElement(Integer mapId ,List<MapElement> mapElementList);
 
   /**
    * 批量更新地图元素
    *
    * @param mapElementList 地图元素集合
-   * @return Boolean
+   * @return boolean
    */
-  Boolean batchUpdateMapElement(List<MapElement> mapElementList);
+  boolean batchUpdateMapElement(List<MapElement> mapElementList);
 
   /**
    * 批量更新地图元素资源状态
    *
    * @param svgTypeCode 地图元素类型
    * @param list        地图元素资源状态集合
-   * @return Boolean
+   * @return boolean
    */
-  Boolean batchUpdateMapElementObjectState(String svgTypeCode,
+  boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                            List<MapElementObjectStateVO> list);
 
   /**
