@@ -10,6 +10,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -34,6 +35,11 @@ public class SvgUtils {
   public static Map<String, String> analyzeSvgFile(InputStream in) throws DocumentException {
     // 创建SAXReader对象
     SAXReader reader = new SAXReader();
+    try {
+      reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    } catch (SAXException e) {
+      log.error("解析SVG文件异常", e.getCause());
+    }
     reader.setEntityResolver(new IgnoreDtdEntityResolver());
     reader.setStringInternEnabled(false);
     // 读取文件 转换成Document
