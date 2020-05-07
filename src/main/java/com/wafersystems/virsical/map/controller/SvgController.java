@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +53,7 @@ public class SvgController extends BaseController {
    */
   @ApiOperation(value = "解析SVG文件", notes = "解析SVG文件")
   @PostMapping("/parse")
+  @PreAuthorize("@pms.hasPermission('')")
   public R parse(@RequestParam MultipartFile svgFile) {
     java.util.Map<String, String> svgMap;
     try {
@@ -65,6 +67,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "添加素材", notes = "添加素材")
   @ApiImplicitParam(name = "svg", value = "素材对象", required = true, dataType = "Svg")
   @PostMapping("/add")
+  @PreAuthorize("@pms.hasPermission('')")
   public R add(@RequestBody Svg svg) {
     return svgService.save(svg) ? R.ok() : R.fail();
   }
@@ -72,6 +75,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "修改素材", notes = "根据素材id修改素材")
   @ApiImplicitParam(name = "svg", value = "素材对象", required = true, dataType = "Svg")
   @PostMapping("/update")
+  @PreAuthorize("@pms.hasPermission('')")
   public R update(@RequestBody Svg svg) {
     return svgService.updateById(svg) ? R.ok() : R.fail();
   }
@@ -79,6 +83,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "删除素材", notes = "根据素材id删除素材")
   @ApiImplicitParam(name = "id", value = "素材id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
+  @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable Integer id) {
     List<MapElement> list = mapElementService.list(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getSvgId, id));
     if (!list.isEmpty()) {

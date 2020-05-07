@@ -101,4 +101,9 @@ public final class MapMsgConstants {
    * 素材类型标识不能重复
    */
   public static final String MATERIAL_TYPE_REPETITION = "104015";
+
+  /**
+   * 此地图当前正在编辑，请{}秒后重试
+   */
+  public static final String MAP_EDIT_PERMISSION = "104016";
 }

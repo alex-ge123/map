@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
@@ -8,6 +9,7 @@ import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
 import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.model.dto.SpaceMapDTO;
@@ -17,10 +19,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -40,9 +45,12 @@ public class MapController extends BaseController {
 
   private final RemoteSpaceService remoteSpaceService;
 
+  private final StringRedisTemplate stringRedisTemplate;
+
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/add")
+  @PreAuthorize("@pms.hasPermission('')")
   public R add(@RequestBody Map map) {
     List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, map.getFloorId()));
     if (list != null && !list.isEmpty()) {
@@ -54,6 +62,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "修改地图", notes = "根据地图id修改地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/update")
+  @PreAuthorize("@pms.hasPermission('')")
   public R update(@RequestBody Map map) {
     return mapService.updateById(map) ? R.ok() : R.fail();
   }
@@ -61,6 +70,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "删除地图", notes = "根据地图id删除地图")
   @ApiImplicitParam(name = "id", value = "地图id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
+  @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable Integer id) {
     return mapService.removeById(id) ? R.ok() : R.fail();
   }
@@ -129,5 +139,25 @@ public class MapController extends BaseController {
   @GetMapping("/listBySpaceIds")
   public R<List<Map>> listBySpaceIds(Integer[] spaceIds) {
     return R.ok(mapService.selectMapListBySpaceId(spaceIds));
+  }
+
+  /**
+   * 根据地图id获取编辑权限
+   *
+   * @param mapId 地图id
+   * @param key   权限key（前端生成uuid）
+   * @return R
+   */
+  @GetMapping("/getEditPermission")
+  @PreAuthorize("@pms.hasPermission('')")
+  public R getEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
+    String str = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
+    if (StrUtil.isNotBlank(str) && !key.equals(str)) {
+      Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
+      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
+    }
+    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
+      key, 90, TimeUnit.SECONDS);
+    return R.ok();
   }
 }

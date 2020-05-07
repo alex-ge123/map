@@ -44,4 +44,9 @@ public final class MapConstants {
    * 引导线消息动作
    */
   public static final String ACTION_GUIDE_LINE = "guide-line";
+
+  /**
+   * 地图编辑权限缓存key
+   */
+  public static final String MAP_EDIT_PERMISSION = "base:map_edit_permission:";
 }
