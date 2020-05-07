@@ -2,6 +2,7 @@ package com.wafersystems.virsical.map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.fppt.jedismock.RedisServer;
 import com.wafersystems.virsical.common.core.constant.SecurityConstants;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 
+import java.io.IOException;
+
 /**
  * 接口测试基类
  *
@@ -39,11 +42,14 @@ import org.testng.annotations.BeforeSuite;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners(listeners = {WithSecurityContextTestExecutionListener.class
   , MockitoTestExecutionListener.class})
+@WithMockUser(authorities = {"asd"})
 public class BaseTest extends AbstractTransactionalTestNGSpringContextTests {
   @Autowired
   private WebApplicationContext wac;
 
   private MockMvc mockMvc;
+
+  private static RedisServer redisServer = null;
 
   /**
    * 在所有方法运行之前运行
@@ -51,6 +57,14 @@ public class BaseTest extends AbstractTransactionalTestNGSpringContextTests {
    */
   @BeforeSuite
   public void init() {
+    // Redis Mock
+    try {
+      // 默认地址 0.0.0.0
+      redisServer = RedisServer.newRedisServer(7008);
+      redisServer.start();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     MockitoAnnotations.initMocks(this);
   }
 

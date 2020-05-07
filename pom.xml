@@ -170,6 +170,13 @@
       <version>1.4.199</version>
       <scope>test</scope>
     </dependency>
+    <!-- 执行TestCase内部启动redis -->
+    <dependency>
+      <groupId>com.github.fppt</groupId>
+      <artifactId>jedis-mock</artifactId>
+      <version>0.1.13</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-test</artifactId>

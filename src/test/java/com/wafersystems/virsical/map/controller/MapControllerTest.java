@@ -13,8 +13,9 @@ import com.wafersystems.virsical.map.entity.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -30,7 +31,6 @@ import java.util.Arrays;
  */
 @Slf4j
 @Rollback
-@WithMockUser(authorities = {"admin@common@xx"})
 public class MapControllerTest extends BaseTest {
 
   @MockBean
@@ -130,6 +130,26 @@ public class MapControllerTest extends BaseTest {
   public void deleteForFail() throws Exception {
     String url = "/map/delete/0";
     JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
+  public void getEditPermission() throws Exception {
+    String url = "/map/getEditPermission";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("mapId", "1");
+    params.add("key", "1234568");
+    JSONObject jsonObject = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void getEditPermissionForFail() throws Exception {
+    String url = "/map/getEditPermission";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("mapId", "1");
+    params.add("key", "12345689");
+    JSONObject jsonObject = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 

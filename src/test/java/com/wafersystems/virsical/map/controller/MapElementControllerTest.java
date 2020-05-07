@@ -26,7 +26,7 @@ public class MapElementControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
-    String url = "/map-element/add/7";
+    String url = "/map-element/add/7/11111111";
     List<MapElement> list = new ArrayList<>();
     MapElement me = new MapElement();
     me.setMapId(1);
