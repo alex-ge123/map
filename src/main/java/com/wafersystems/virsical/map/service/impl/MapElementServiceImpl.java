@@ -142,9 +142,17 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
     // 组装待更新对象集合
     mapElementList.forEach(me -> voList.forEach(vo -> {
       if (vo.getObjectId().equals(me.getObjectId())) {
-        me.setObjectName(vo.getObjectName());
         me.setObjectColor(vo.getObjectColor());
         me.setObjectSvgStateCode(vo.getObjectSvgStateCode());
+        // 当是文字素材时，需要修改custom_element中文字内容，object_name置为空
+        String text = "text";
+        if (me.getMapWebId().startsWith(text)) {
+          me.setCustomElement(me.getCustomElement()
+            .replaceFirst(">.*</text>", ">" + vo.getObjectName() + "</text>"));
+          me.setObjectName("");
+        } else {
+          me.setObjectName(vo.getObjectName());
+        }
       }
     }));
     // 批量更新地图元素
@@ -168,7 +176,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   @Override
   public void push(String msgType, String msgAction, String businessId, Serializable data) {
     MessageDTO messageDTO = new MessageDTO(null, null,
-      businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN",data);
+      businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN", data);
     if (pushProperties.isEnable()) {
       try {
         String body = JSON.toJSONString(messageDTO);
