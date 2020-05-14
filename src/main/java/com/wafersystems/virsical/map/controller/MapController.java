@@ -1,17 +1,17 @@
 package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
 import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
-import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.manager.MapCacheManager;
 import com.wafersystems.virsical.map.model.dto.SpaceMapDTO;
 import com.wafersystems.virsical.map.service.IMapService;
 import io.swagger.annotations.Api;
@@ -19,13 +19,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -45,7 +43,7 @@ public class MapController extends BaseController {
 
   private final RemoteSpaceService remoteSpaceService;
 
-  private final StringRedisTemplate stringRedisTemplate;
+  private final MapCacheManager cacheManager;
 
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
@@ -151,13 +149,10 @@ public class MapController extends BaseController {
   @GetMapping("/getEditPermission")
   @PreAuthorize("@pms.hasPermission('')")
   public R getEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
-    String str = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
-    if (StrUtil.isNotBlank(str) && !key.equals(str)) {
-      Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
-      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
+    R r = cacheManager.checkMapEditPermission(mapId, key);
+    if (r.getCode() == CommonConstants.FAIL) {
+      return r;
     }
-    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
     return R.ok();
   }
 
@@ -171,8 +166,8 @@ public class MapController extends BaseController {
   @GetMapping("/forceGetEditPermission")
   @PreAuthorize("@pms.hasPermission('')")
   public R forceGetEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
-    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
+    key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
+    cacheManager.cacheMapEditPermission(mapId, key);
     return R.ok();
   }
 }

@@ -1,6 +1,5 @@
 package com.wafersystems.virsical.map.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
@@ -11,6 +10,7 @@ import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.MapElement;
+import com.wafersystems.virsical.map.manager.MapCacheManager;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementRouteVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
@@ -19,13 +19,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -43,7 +41,7 @@ public class MapElementController extends BaseController {
 
   private final IMapElementService mapElementService;
 
-  private final StringRedisTemplate stringRedisTemplate;
+  private final MapCacheManager cacheManager;
 
   /**
    * 添加地图元素
@@ -58,9 +56,9 @@ public class MapElementController extends BaseController {
   @PostMapping("/add/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
   public R add(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<MapElement> mapElementList) {
-    long expire = checkMapEditPermission(mapId, key);
-    if (expire != -1) {
-      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
+    R r = cacheManager.checkMapEditPermission(mapId, key);
+    if (r.getCode() == CommonConstants.FAIL) {
+      return r;
     }
     boolean b = mapElementService.batchSaveMapElement(mapId, mapElementList);
     if (b) {
@@ -75,29 +73,11 @@ public class MapElementController extends BaseController {
   @PostMapping("/delete/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<String> ids) {
-    long expire = checkMapEditPermission(mapId, key);
-    if (expire != -1) {
-      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
+    R r = cacheManager.checkMapEditPermission(mapId, key);
+    if (r.getCode() == CommonConstants.FAIL) {
+      return r;
     }
     return mapElementService.removeByIds(ids) ? R.ok() : R.fail();
-  }
-
-  /**
-   * 校验地图编辑权限
-   *
-   * @param mapId 地图id
-   * @param key   权限key
-   * @return 编辑权限过期时间
-   */
-  private long checkMapEditPermission(Integer mapId, String key) {
-    Boolean b = stringRedisTemplate.hasKey(MapConstants.MAP_EDIT_PERMISSION + mapId);
-    if (b != null && b) {
-      Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
-      return expire == null ? -1 : expire;
-    }
-    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
-    return -1;
   }
 
   /**
