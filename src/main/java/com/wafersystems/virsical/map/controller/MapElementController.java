@@ -77,9 +77,18 @@ public class MapElementController extends BaseController {
 
   @ApiOperation(value = "批量删除地图元素", notes = "批量根据地图id删除地图元素")
   @ApiImplicitParam(name = "ids", value = "地图元素id集合", required = true, dataType = "Integer")
-  @PostMapping("/delete")
+  @PostMapping("/delete/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
-  public R delete(@RequestBody List<String> ids) {
+  public R delete(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<String> ids) {
+    if (StrUtil.isNotBlank(key)) {
+      String str = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
+      if (StrUtil.isNotBlank(str) && !key.equals(str)) {
+        Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
+        return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
+      }
+      stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
+        key, 90, TimeUnit.SECONDS);
+    }
     return mapElementService.removeByIds(ids) ? R.ok() : R.fail();
   }
 
