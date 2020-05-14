@@ -58,14 +58,9 @@ public class MapElementController extends BaseController {
   @PostMapping("/add/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
   public R add(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<MapElement> mapElementList) {
-    if (StrUtil.isNotBlank(key)) {
-      String str = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
-      if (StrUtil.isNotBlank(str) && !key.equals(str)) {
-        Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
-        return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
-      }
-      stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-        key, 90, TimeUnit.SECONDS);
+    long expire = checkMapEditPermission(mapId, key);
+    if (expire != -1) {
+      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
     }
     boolean b = mapElementService.batchSaveMapElement(mapId, mapElementList);
     if (b) {
@@ -80,16 +75,29 @@ public class MapElementController extends BaseController {
   @PostMapping("/delete/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<String> ids) {
-    if (StrUtil.isNotBlank(key)) {
-      String str = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
-      if (StrUtil.isNotBlank(str) && !key.equals(str)) {
-        Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
-        return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
-      }
-      stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-        key, 90, TimeUnit.SECONDS);
+    long expire = checkMapEditPermission(mapId, key);
+    if (expire != -1) {
+      return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
     }
     return mapElementService.removeByIds(ids) ? R.ok() : R.fail();
+  }
+
+  /**
+   * 校验地图编辑权限
+   *
+   * @param mapId 地图id
+   * @param key   权限key
+   * @return 编辑权限过期时间
+   */
+  private long checkMapEditPermission(Integer mapId, String key) {
+    Boolean b = stringRedisTemplate.hasKey(MapConstants.MAP_EDIT_PERMISSION + mapId);
+    if (b != null && b) {
+      Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
+      return expire == null ? -1 : expire;
+    }
+    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
+      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
+    return -1;
   }
 
   /**

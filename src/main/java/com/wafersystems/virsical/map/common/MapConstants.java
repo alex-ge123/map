@@ -49,4 +49,9 @@ public final class MapConstants {
    * 地图编辑权限缓存key
    */
   public static final String MAP_EDIT_PERMISSION = "base:map_edit_permission:";
+
+  /**
+   * 地图编辑权限缓存过期时间，单位秒
+   */
+  public static final int MAP_EDIT_PERMISSION_TIMEOUT = 90;
 }

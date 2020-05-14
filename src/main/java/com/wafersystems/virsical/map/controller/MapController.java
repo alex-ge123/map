@@ -157,7 +157,22 @@ public class MapController extends BaseController {
       return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(expire).build();
     }
     stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
-      key, 90, TimeUnit.SECONDS);
+      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
+    return R.ok();
+  }
+
+  /**
+   * 强制获取地图编辑权限
+   *
+   * @param mapId 地图id
+   * @param key   权限key（前端生成uuid）
+   * @return R
+   */
+  @GetMapping("/forceGetEditPermission")
+  @PreAuthorize("@pms.hasPermission('')")
+  public R forceGetEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
+    stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
+      key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
     return R.ok();
   }
 }
