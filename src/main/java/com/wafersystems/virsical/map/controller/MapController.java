@@ -170,4 +170,19 @@ public class MapController extends BaseController {
     cacheManager.cacheMapEditPermission(mapId, key);
     return R.ok();
   }
+
+  /**
+   * 释放地图编辑权限
+   *
+   * @param mapId 地图id
+   * @param key   权限key（前端生成uuid）
+   * @return R
+   */
+  @GetMapping("/releaseEditPermission")
+  @PreAuthorize("@pms.hasPermission('')")
+  public R releaseEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
+    key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
+    cacheManager.releaseEditPermission(mapId, key);
+    return R.ok();
+  }
 }

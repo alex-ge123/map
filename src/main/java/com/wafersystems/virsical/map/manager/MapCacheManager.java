@@ -56,4 +56,17 @@ public class MapCacheManager {
     stringRedisTemplate.opsForValue().set(MapConstants.MAP_EDIT_PERMISSION + mapId,
       key, MapConstants.MAP_EDIT_PERMISSION_TIMEOUT, TimeUnit.SECONDS);
   }
+
+  /**
+   * 释放地图编辑权限
+   *
+   * @param mapId 地图id
+   * @param key   权限key
+   */
+  public void releaseEditPermission(Integer mapId, String key) {
+    String cacheValue = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
+    if (key.equals(cacheValue)) {
+      stringRedisTemplate.delete(MapConstants.MAP_EDIT_PERMISSION + mapId);
+    }
+  }
 }
