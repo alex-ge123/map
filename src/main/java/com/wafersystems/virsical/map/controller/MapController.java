@@ -65,7 +65,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "修改地图", notes = "根据地图id修改地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/update")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_upload')")
   public R update(@RequestBody Map map) {
     return mapService.updateById(map) ? R.ok() : R.fail();
   }
@@ -187,7 +187,7 @@ public class MapController extends BaseController {
    * @return R
    */
   @GetMapping("/releaseEditPermission")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_release')")
   public R releaseEditPermission(@RequestParam Integer mapId) {
     cacheManager.releaseEditPermission(mapId);
     return R.ok();

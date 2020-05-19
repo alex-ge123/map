@@ -67,7 +67,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "添加素材", notes = "添加素材")
   @ApiImplicitParam(name = "svg", value = "素材对象", required = true, dataType = "Svg")
   @PostMapping("/add")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_add')")
   public R add(@RequestBody Svg svg) {
     return svgService.save(svg) ? R.ok() : R.fail();
   }
@@ -75,7 +75,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "修改素材", notes = "根据素材id修改素材")
   @ApiImplicitParam(name = "svg", value = "素材对象", required = true, dataType = "Svg")
   @PostMapping("/update")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_edit')")
   public R update(@RequestBody Svg svg) {
     return svgService.updateById(svg) ? R.ok() : R.fail();
   }
@@ -83,7 +83,7 @@ public class SvgController extends BaseController {
   @ApiOperation(value = "删除素材", notes = "根据素材id删除素材")
   @ApiImplicitParam(name = "id", value = "素材id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_del')")
   public R delete(@PathVariable Integer id) {
     List<MapElement> list = mapElementService.list(Wrappers.<MapElement>lambdaQuery().eq(MapElement::getSvgId, id));
     if (!list.isEmpty()) {

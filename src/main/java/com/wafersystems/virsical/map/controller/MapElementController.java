@@ -54,7 +54,7 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "添加地图元素", notes = "添加地图元素（支持批量）")
   @ApiImplicitParam(name = "mapElementList", value = "地图元素对象集合", required = true, dataType = "MapElement")
   @PostMapping("/add/{mapId}/{key}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_edit')")
   public R add(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<MapElement> mapElementList) {
     R r = cacheManager.checkMapEditPermission(mapId, key);
     if (r.getCode() == CommonConstants.FAIL) {
@@ -125,7 +125,7 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "地图元素绘制路径", notes = "地图元素绘制路径（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素路径对象集合", required = true, dataType = "MapElement")
   @PostMapping("/route")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_path')")
   public R route(@RequestBody List<MapElementRouteVO> mapElementRouteVoList) {
     if (mapElementRouteVoList.isEmpty()) {
       return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
