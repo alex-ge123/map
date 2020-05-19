@@ -61,11 +61,10 @@ public class MapCacheManager {
    * 释放地图编辑权限
    *
    * @param mapId 地图id
-   * @param key   权限key
    */
-  public void releaseEditPermission(Integer mapId, String key) {
-    String cacheValue = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
-    if (key.equals(cacheValue)) {
+  public void releaseEditPermission(Integer mapId) {
+    Boolean b = stringRedisTemplate.hasKey(MapConstants.MAP_EDIT_PERMISSION + mapId);
+    if (b != null && b) {
       stringRedisTemplate.delete(MapConstants.MAP_EDIT_PERMISSION + mapId);
     }
   }

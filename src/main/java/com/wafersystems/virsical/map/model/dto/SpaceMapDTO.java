@@ -36,4 +36,9 @@ public class SpaceMapDTO {
    * 地图对象
    */
   private Map map;
+
+  /**
+   * 权限有效期
+   */
+  private Long expire;
 }

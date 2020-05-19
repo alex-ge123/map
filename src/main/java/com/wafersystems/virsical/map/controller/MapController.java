@@ -9,6 +9,7 @@ import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
 import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
+import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.manager.MapCacheManager;
@@ -19,11 +20,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -44,6 +47,8 @@ public class MapController extends BaseController {
   private final RemoteSpaceService remoteSpaceService;
 
   private final MapCacheManager cacheManager;
+
+  private final StringRedisTemplate stringRedisTemplate;
 
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
@@ -126,6 +131,10 @@ public class MapController extends BaseController {
       for (Map m : mapList) {
         if (dto.getSpaceId().equals(m.getFloorId())) {
           dto.setMap(m);
+          Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + m.getMapId(), TimeUnit.SECONDS);
+          if (expire != null && expire > 0) {
+            dto.setExpire(expire);
+          }
         }
       }
     }
@@ -175,14 +184,12 @@ public class MapController extends BaseController {
    * 释放地图编辑权限
    *
    * @param mapId 地图id
-   * @param key   权限key（前端生成uuid）
    * @return R
    */
   @GetMapping("/releaseEditPermission")
   @PreAuthorize("@pms.hasPermission('')")
-  public R releaseEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
-    key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
-    cacheManager.releaseEditPermission(mapId, key);
+  public R releaseEditPermission(@RequestParam Integer mapId) {
+    cacheManager.releaseEditPermission(mapId);
     return R.ok();
   }
 }
