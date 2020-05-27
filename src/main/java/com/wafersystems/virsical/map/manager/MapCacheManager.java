@@ -29,7 +29,7 @@ public class MapCacheManager {
    * @param key   权限key
    * @return 编辑权限过期时间
    */
-  public R checkMapEditPermission(Integer mapId, String key) {
+  public R checkMapEditPermission(Integer mapId, String key, boolean isCache) {
     String cacheValue = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + mapId);
     // username,key
     key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
@@ -42,7 +42,9 @@ public class MapCacheManager {
         return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.MAP_EDIT_PERMISSION).data(map).build();
       }
     }
-    cacheMapEditPermission(mapId, key);
+    if (isCache) {
+      cacheMapEditPermission(mapId, key);
+    }
     return R.ok();
   }
 

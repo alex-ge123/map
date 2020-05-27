@@ -68,7 +68,7 @@ public class MapController extends BaseController {
   @PreAuthorize("@pms.hasPermission('admin@common@map_manage_upload')")
   public R update(@RequestBody Map map, @PathVariable String key) {
     // 验证操作权限
-    R r = cacheManager.checkMapEditPermission(map.getMapId(), key);
+    R r = cacheManager.checkMapEditPermission(map.getMapId(), key, false);
     if (r.getCode() == CommonConstants.FAIL) {
       return r;
     }
@@ -169,7 +169,7 @@ public class MapController extends BaseController {
   @GetMapping("/getEditPermission")
   @PreAuthorize("@pms.hasPermission('')")
   public R getEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
-    R r = cacheManager.checkMapEditPermission(mapId, key);
+    R r = cacheManager.checkMapEditPermission(mapId, key, true);
     if (r.getCode() == CommonConstants.FAIL) {
       return r;
     }

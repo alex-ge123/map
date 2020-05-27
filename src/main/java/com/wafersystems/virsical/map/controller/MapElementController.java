@@ -56,7 +56,7 @@ public class MapElementController extends BaseController {
   @PostMapping("/add/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('admin@common@map_manage_edit')")
   public R add(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<MapElement> mapElementList) {
-    R r = cacheManager.checkMapEditPermission(mapId, key);
+    R r = cacheManager.checkMapEditPermission(mapId, key, true);
     if (r.getCode() == CommonConstants.FAIL) {
       return r;
     }
@@ -73,7 +73,7 @@ public class MapElementController extends BaseController {
   @PostMapping("/delete/{mapId}/{key}")
   @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<String> ids) {
-    R r = cacheManager.checkMapEditPermission(mapId, key);
+    R r = cacheManager.checkMapEditPermission(mapId, key, true);
     if (r.getCode() == CommonConstants.FAIL) {
       return r;
     }
