@@ -41,4 +41,9 @@ public class SpaceMapDTO {
    * 权限有效期
    */
   private Long expire;
+
+  /**
+   * 操作人
+   */
+  private String username;
 }

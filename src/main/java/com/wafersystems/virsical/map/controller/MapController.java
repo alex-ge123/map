@@ -52,21 +52,26 @@ public class MapController extends BaseController {
 
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
-  @PostMapping("/add")
+  @PostMapping("/add/{key}")
   @PreAuthorize("@pms.hasPermission('')")
-  public R add(@RequestBody Map map) {
+  public R add(@RequestBody Map map, @PathVariable String key) {
     List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, map.getFloorId()));
     if (list != null && !list.isEmpty()) {
-      return update(map);
+      return update(map, key);
     }
     return mapService.save(map) ? R.ok() : R.fail();
   }
 
   @ApiOperation(value = "修改地图", notes = "根据地图id修改地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
-  @PostMapping("/update")
+  @PostMapping("/update/{key}")
   @PreAuthorize("@pms.hasPermission('admin@common@map_manage_upload')")
-  public R update(@RequestBody Map map) {
+  public R update(@RequestBody Map map, @PathVariable String key) {
+    // 验证操作权限
+    R r = cacheManager.checkMapEditPermission(map.getMapId(), key);
+    if (r.getCode() == CommonConstants.FAIL) {
+      return r;
+    }
     return mapService.updateById(map) ? R.ok() : R.fail();
   }
 
@@ -134,6 +139,12 @@ public class MapController extends BaseController {
           Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + m.getMapId(), TimeUnit.SECONDS);
           if (expire != null && expire > 0) {
             dto.setExpire(expire);
+          } else {
+            break;
+          }
+          String cacheValue = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + m.getMapId());
+          if (cacheValue != null && cacheValue.contains(CommonConstants.COMMA)) {
+            dto.setUsername(cacheValue.split(CommonConstants.COMMA)[0]);
           }
         }
       }
