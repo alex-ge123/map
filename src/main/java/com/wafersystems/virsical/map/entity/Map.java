@@ -64,29 +64,26 @@ public class Map extends Model<Map> {
   @ApiModelProperty(value = "地图状态：0=正常，1=停用", example = "0")
   private Integer mapState;
 
-  @ApiModelProperty(value = "地图类型：默认0=wafer2D，1=蜂鸟map", example = "0")
+  @ApiModelProperty(value = "地图类型：0=基础版，1=专业版", example = "0")
   private Integer mapType;
 
-  @ApiModelProperty(value = "蜂鸟mapKey", example = "string")
-  private String fmapKey;
+  @ApiModelProperty(value = "创互地图项目ID", example = "string")
+  private String cmapProjectId;
 
-  @ApiModelProperty(value = "蜂鸟fmapID 即上传的文件名", example = "string")
-  private String fmapId;
+  @ApiModelProperty(value = "创互地图建筑ID", example = "string")
+  private String cmapBuildingId;
 
-  @ApiModelProperty(value = "蜂鸟appName", example = "string")
-  private String fmapAppName;
+  @ApiModelProperty(value = "创互地图云ID", example = "string")
+  private String cmapCloudId;
 
-  @ApiModelProperty(value = "蜂鸟地图路径 无文件类型后缀", example = "string")
-  private String fmapServerUrl;
+  @ApiModelProperty(value = "创互地图提供的验证key", example = "string")
+  private String cmapAccesstoken;
 
-  @ApiModelProperty(value = "蜂鸟地图路径起点", example = "string")
-  private String fmapStartPoint;
+  @ApiModelProperty(value = "创互地图接口服务地址", example = "string")
+  private String cmapServer;
 
-  @ApiModelProperty(value = "蜂鸟地图名称", example = "string")
-  private String fmapName;
-
-  @ApiModelProperty(value = "蜂鸟地图上传后地址", example = "string")
-  private String fmapUploadUrl;
+  @ApiModelProperty(value = "创互地图配置参数", example = "string")
+  private String cmapConfigParam;
 
   @ApiModelProperty(value = "逻辑删除：0-正常，1-删除", example = "0")
   @JsonIgnore
@@ -105,28 +102,4 @@ public class Map extends Model<Map> {
     return this.mapId;
   }
 
-  /**
-   * 园区id
-   */
-  private transient Integer parkId;
-
-  /**
-   * 园区名称
-   */
-  private transient String parkName;
-
-  /**
-   * 楼宇id
-   */
-  private transient Integer buildingId;
-
-  /**
-   * 楼宇名称
-   */
-  private transient String buildingName;
-
-  /**
-   * 楼层号
-   */
-  private transient String floorNum;
 }

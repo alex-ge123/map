@@ -132,16 +132,19 @@ public class MapController extends BaseController {
     // 根据空间节点查询地图
     List<Map> mapList = mapService.list(Wrappers.<Map>query().lambda().in(Map::getFloorId,
       spaceIds.toArray()));
+    // 组装地图返回对象，包含地图详情
     for (SpaceMapDTO dto : spaceMapList) {
       for (Map m : mapList) {
         if (dto.getSpaceId().equals(m.getFloorId())) {
           dto.setMap(m);
+          // 判断当前地图是否编辑中，获取剩余编辑时间
           Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + m.getMapId(), TimeUnit.SECONDS);
           if (expire != null && expire > 0) {
             dto.setExpire(expire);
           } else {
             break;
           }
+          // 获取对应编辑人
           String cacheValue = stringRedisTemplate.opsForValue().get(MapConstants.MAP_EDIT_PERMISSION + m.getMapId());
           if (cacheValue != null && cacheValue.contains(CommonConstants.COMMA)) {
             dto.setUsername(cacheValue.split(CommonConstants.COMMA)[0]);

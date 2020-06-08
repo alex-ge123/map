@@ -175,9 +175,9 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    */
   @Override
   public void push(String msgType, String msgAction, String businessId, Serializable data) {
-    MessageDTO messageDTO = new MessageDTO(null, null,
-      businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN", data);
     if (pushProperties.isEnable()) {
+      MessageDTO messageDTO = new MessageDTO(null, null,
+        businessId, pushProperties.getDestination(), msgType, msgAction, "zh_CN", data);
       try {
         String body = JSON.toJSONString(messageDTO);
         amqpTemplate.convertAndSend(PushMqConstants.EXCHANGE_FANOUT_PUSH_MESSAGE, "", body);
