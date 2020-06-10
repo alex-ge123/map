@@ -6,7 +6,7 @@
 
   <groupId>com.wafersystems</groupId>
   <artifactId>virsical-map</artifactId>
-  <version>5.1.6.100</version>
+  <version>5.1.7.100</version>
   <packaging>jar</packaging>
 
   <name>map</name>
