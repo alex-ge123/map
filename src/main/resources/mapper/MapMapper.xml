@@ -16,20 +16,21 @@
     <result column="width" property="width"/>
     <result column="map_state" property="mapState"/>
     <result column="map_type" property="mapType"/>
-    <result column="fmap_key" property="fmapKey"/>
-    <result column="fmap_id" property="fmapId"/>
-    <result column="fmap_app_name" property="fmapAppName"/>
-    <result column="fmap_server_url" property="fmapServerUrl"/>
-    <result column="fmap_start_point" property="fmapStartPoint"/>
-    <result column="fmap_name" property="fmapName"/>
-    <result column="fmap_upload_url" property="fmapUploadUrl"/>
+    <result column="cmap_project_id" property="cmapProjectId"/>
+    <result column="cmap_building_id" property="cmapBuildingId"/>
+    <result column="cmap_floor_id" property="cmapFloorId"/>
+    <result column="cmap_cloud_id" property="cmapCloudId"/>
+    <result column="cmap_accesstoken" property="cmapAccesstoken"/>
+    <result column="cmap_server" property="cmapServer"/>
+    <result column="cmap_config_param" property="cmapConfigParam"/>
     <result column="del_flag" property="delFlag"/>
     <result column="create_time" property="createTime"/>
     <result column="update_time" property="updateTime"/>
   </resultMap>
 
   <sql id="Base_Column_List">
-        map_id, tenant_id, floor_id, base_map_url, base_map_element, view_box, zoom_image_url, area_age, height, width, map_state, map_type, fmap_key, fmap_id, fmap_app_name, fmap_server_url, fmap_start_point, fmap_name, fmap_upload_url, del_flag, create_time, update_time
+        map_id, tenant_id, floor_id, base_map_url, base_map_element, view_box, zoom_image_url, area_age, height, width, map_state, map_type,
+        cmap_project_id, cmap_building_id, cmap_floor_id, cmap_cloud_id, cmap_accesstoken, cmap_server, cmap_config_param, del_flag, create_time, update_time
   </sql>
 
   <!-- 通用查询映射结果 -->

@@ -73,6 +73,9 @@ public class Map extends Model<Map> {
   @ApiModelProperty(value = "创互地图建筑ID", example = "string")
   private String cmapBuildingId;
 
+  @ApiModelProperty(value = "创互地图楼层ID", example = "string")
+  private String cmapFloorId;
+
   @ApiModelProperty(value = "创互地图云ID", example = "string")
   private String cmapCloudId;
 
