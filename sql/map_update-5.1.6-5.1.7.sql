@@ -21,3 +21,8 @@ ALTER TABLE `map` ADD `cmap_cloud_id` varchar(100) CHARACTER SET utf8mb4 COLLATE
 ALTER TABLE `map` ADD `cmap_accesstoken` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图提供的验证key';
 ALTER TABLE `map` ADD `cmap_server` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图接口服务地址';
 ALTER TABLE `map` ADD `cmap_config_param` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图配置参数';
+
+-- ----------------------------
+-- 新增通用素材类型
+-- ----------------------------
+INSERT INTO `svg_type` VALUES ('common', '通用', 0, '2019-05-08 00:00:00', NULL);

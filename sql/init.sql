@@ -126,5 +126,6 @@ CREATE TABLE `svg_type`  (
 INSERT INTO `svg_type` VALUES ('meeting-room', '会议室', 0, '2019-05-08 00:00:00', NULL);
 INSERT INTO `svg_type` VALUES ('workspace', '工位', 0, '2019-05-08 00:00:00', NULL);
 INSERT INTO `svg_type` VALUES ('locker', '储物柜', 0, '2019-05-08 00:00:00', NULL);
+INSERT INTO `svg_type` VALUES ('common', '通用', 0, '2019-05-08 00:00:00', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
