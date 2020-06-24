@@ -3,6 +3,7 @@ pipeline {
 
     parameters {
         choice(name: 'reserveDBData', choices: 'Yes\nNo', description: '是否需要保留之前部署的数据库数据？')
+        choice(name: 'replicasNum', choices: ['1', '2', '3', '4', '5'], description: '集群数量')
     }
 
     environment {
@@ -12,11 +13,13 @@ pipeline {
         PVC_WORK = ''
         DEPLOY_PATH = 'map'
         K8S_CLUSTER_NAME = 'kubernetes'
+        REPLICAS_NUM = "${params.replicasNum}"
     }
 
     stages {
         stage('Clean') {
             steps {
+            echo "集群数量为 : ${REPLICAS_NUM}"
                 script {
                     GROUP_NAME = JOB_NAME.split("/")[0]
                     SERVICE_NAME = GROUP_NAME + SERVICE_NAME
@@ -60,7 +63,7 @@ pipeline {
 
                 sh "cp target/*.jar tmp"
 
-                sh "cp k8s/backend.yml k8s.yml"
+                sh "cp k8s/backend-k8s.yml k8s.yml"
                 sh "cp k8s/backend-service.yml k8s-service.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s.yml"
                 sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g k8s-service.yml"
@@ -68,6 +71,7 @@ pipeline {
                 sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g k8s.yml"
                 sh "sed -i s@__ARTIFACT_ID__@${readMavenPom().getArtifactId()}@g k8s.yml"
                 sh "sed -i s@__VERSION__@${readMavenPom().getVersion()}@g k8s.yml"
+                sh "sed -i s@__REPLICAS_NUM__@${REPLICAS_NUM}@g k8s.yml"
 
                 sh "cp sql/init.sql tmp_sql/${JOB_NAME}"
 

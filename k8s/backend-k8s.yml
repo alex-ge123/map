@@ -23,12 +23,13 @@ spec:
       - name: __PROJECT__
         image: openjdk:8-jre
         command:
-        - sh
-        - '-c'
+            - sh
+            - '-c'
         args:
-        - >-
-          cd /work && java
-          -jar __ARTIFACT_ID__.jar
+          - >-
+            cd /work && java
+            -jar __ARTIFACT_ID__.jar
+            --spring.profiles.active=k8s
         ports:
         - containerPort: 8080
           name: http
