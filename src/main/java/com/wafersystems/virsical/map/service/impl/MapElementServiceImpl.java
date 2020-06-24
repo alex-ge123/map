@@ -98,7 +98,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    */
   @Override
   public boolean batchUpdateMapElement(List<MapElement> mapElementList) {
-    boolean b = super.updateBatchById(mapElementList);
+    boolean b = super.saveOrUpdateBatch(mapElementList);
     if (b) {
       MapElement me = mapElementMapper.selectById(mapElementList.get(0).getMapElementId());
       if (me != null) {
@@ -156,7 +156,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       }
     }));
     // 批量更新地图元素
-    boolean b = this.updateBatchById(mapElementList);
+    boolean b = this.saveOrUpdateBatch(mapElementList);
     if (b) {
       // 消息推送
       push(MsgTypeEnum.BATCH.name(), MapConstants.ACTION_STATE_UPDATE,
