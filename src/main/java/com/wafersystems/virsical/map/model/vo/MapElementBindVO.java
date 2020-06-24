@@ -25,7 +25,7 @@ public class MapElementBindVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @ApiModelProperty(value = "地图主键", example = "0")
-  private String mapId;
+  private Integer mapId;
 
   @ApiModelProperty(value = "地图元素主键", example = "0")
   private String mapElementId;
