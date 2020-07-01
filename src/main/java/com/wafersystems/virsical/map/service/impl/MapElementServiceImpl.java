@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -99,13 +98,7 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
    */
   @Override
   public boolean batchUpdateMapElement(List<MapElement> mapElementList) {
-    boolean b;
-    if (StrUtil.isEmpty(mapElementList.get(0).getObjectId())) {
-      List<String> ids = mapElementList.stream().map(MapElement::getMapElementId).collect(Collectors.toList());
-      b = super.removeByIds(ids);
-    } else {
-      b = super.saveOrUpdateBatch(mapElementList);
-    }
+    boolean b = super.saveOrUpdateBatch(mapElementList);
     if (b) {
       MapElement me = mapElementMapper.selectById(mapElementList.get(0).getMapElementId());
       if (me != null) {
