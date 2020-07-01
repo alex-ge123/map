@@ -16,7 +16,7 @@ ALTER TABLE `map` DROP COLUMN `fmap_upload_url`;
 -- ----------------------------
 alter table `map_element` modify COLUMN `map_id` int(11) NULL DEFAULT NULL COMMENT '地图id';
 alter table `map_element` modify COLUMN `svg_type_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '素材类型标识';
-alter table `map_element` modify COLUMN `svg_id` int(11) NULL DEFAULT NULL COMMENT '素材id';
+alter table `map_element` modify COLUMN `svg_id` int(11) NULL DEFAULT 0 COMMENT '素材id';
 alter table `map_element` modify COLUMN `custom_element` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材';
 alter table `map_element` modify COLUMN `custom_element_width` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材宽度';
 alter table `map_element` modify COLUMN `custom_element_height` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材高度';

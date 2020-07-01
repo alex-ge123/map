@@ -44,7 +44,7 @@ CREATE TABLE `map_element`  (
   `map_element_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '地图元素主键',
   `map_id` int(11) NULL DEFAULT NULL COMMENT '地图id',
   `svg_type_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '素材类型标识',
-  `svg_id` int(11) NULL DEFAULT NULL COMMENT '素材id',
+  `svg_id` int(11) NULL DEFAULT 0 COMMENT '素材id',
   `custom_element` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材',
   `custom_element_width` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材宽度',
   `custom_element_height` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义素材高度',
