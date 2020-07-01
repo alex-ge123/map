@@ -42,4 +42,7 @@ public class MapElementBindVO implements Serializable {
   @ApiModelProperty(value = "绑定对象svg状态标识", example = "string")
   private String objectSvgStateCode;
 
+  @ApiModelProperty(value = "素材类型标识", example = "string")
+  private String svgTypeCode;
+
 }
