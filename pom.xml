@@ -6,7 +6,7 @@
 
   <groupId>com.wafersystems</groupId>
   <artifactId>virsical-map</artifactId>
-  <version>5.1.7.100</version>
+  <version>5.1.8.100</version>
   <packaging>jar</packaging>
 
   <name>map</name>
@@ -27,7 +27,7 @@
     <mysql.connector.version>8.0.13</mysql.connector.version>
     <ttl.version>2.10.2</ttl.version>
     <fastjson.version>1.2.70</fastjson.version>
-    <virsical-common-security.version>5.1.7.102</virsical-common-security.version>
+    <virsical-common-security.version>5.1.8.103</virsical-common-security.version>
     <spring-boot-admin.version>2.0.4</spring-boot-admin.version>
     <swagger.version>2.9.2</swagger.version>
     <hutool.version>5.1.4</hutool.version>
