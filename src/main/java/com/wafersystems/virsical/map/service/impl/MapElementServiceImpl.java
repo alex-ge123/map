@@ -127,7 +127,6 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   public boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                                   List<MapElementObjectStateVO> voList) {
     LambdaQueryWrapper<MapElement> wrapper = Wrappers.lambdaQuery();
-    wrapper.select(MapElement::getMapId, MapElement::getMapElementId, MapElement::getObjectId);
     if (StrUtil.isNotBlank(svgTypeCode)) {
       wrapper.eq(MapElement::getSvgTypeCode, svgTypeCode);
     }

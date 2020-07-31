@@ -156,6 +156,9 @@ public class MapController extends BaseController {
   @ApiOperation(value = "根据空间节点id查询地图", notes = "根据空间节点id查询地图")
   @GetMapping("/listBySpaceIds")
   public R<List<Map>> listBySpaceIds(Integer[] spaceIds) {
+    if (spaceIds == null || spaceIds.length == 0) {
+      return R.ok(new ArrayList<>());
+    }
     return R.ok(mapService.selectMapListBySpaceId(spaceIds));
   }
 
