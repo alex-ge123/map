@@ -37,3 +37,8 @@ ALTER TABLE `map` ADD `cmap_config_param` varchar(200) CHARACTER SET utf8mb4 COL
 -- 新增通用素材类型
 -- ----------------------------
 INSERT INTO `svg_type` VALUES ('common', '其它', 0, '2019-05-08 00:00:00', NULL);
+
+-- ----------------------------
+-- 新增地图表楼层id唯一索引
+-- ----------------------------
+ALTER TABLE `map` ADD UNIQUE INDEX `map_idx_floor_id`(`floor_id`) USING BTREE;
