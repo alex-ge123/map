@@ -33,7 +33,8 @@ CREATE TABLE `map`  (
   `cmap_accesstoken` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图提供的验证key',
   `cmap_server` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图接口服务地址',
   `cmap_config_param` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创互地图配置参数',
-  PRIMARY KEY (`map_id`) USING BTREE
+  PRIMARY KEY (`map_id`) USING BTREE,
+  UNIQUE INDEX `map_idx_floor_id`(`floor_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '地图' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
