@@ -106,4 +106,9 @@ public final class MapMsgConstants {
    * 此地图当前正在编辑，请{}秒后重试
    */
   public static final String MAP_EDIT_PERMISSION = "104016";
+
+  /**
+   * 地图素材上传数量已达到限制
+   */
+  public static final String MAP_SVG_UPLOAD_LIMIT_TIP = "104017";
 }
