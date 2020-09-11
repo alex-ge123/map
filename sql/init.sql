@@ -61,6 +61,7 @@ CREATE TABLE `map_element`  (
   `line_mid` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '引导线主体',
   `line_end` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '引导线终点',
   `extend` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '扩展字段',
+  `sort` int(11) NULL DEFAULT 0 COMMENT '序号',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`map_element_id`) USING BTREE

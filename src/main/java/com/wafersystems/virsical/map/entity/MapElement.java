@@ -86,6 +86,9 @@ public class MapElement extends Model<MapElement> {
   @ApiModelProperty(value = "扩展字段", example = "string")
   private String extend;
 
+  @ApiModelProperty(value = "序号", example = "0")
+  private Integer sort;
+
   @ApiModelProperty(value = "创建时间")
   private LocalDateTime createTime;
 

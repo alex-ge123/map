@@ -62,7 +62,7 @@ public class MapElementController extends BaseController {
     }
     int i = 0;
     for (MapElement mapElement : mapElementList) {
-      mapElement.setExtend(String.valueOf(i++));
+      mapElement.setSort(i++);
     }
     boolean b = mapElementService.batchSaveMapElement(mapId, mapElementList);
     if (b) {

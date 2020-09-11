@@ -23,13 +23,14 @@
     <result column="line_mid" property="lineMid"/>
     <result column="line_end" property="lineEnd"/>
     <result column="extend" property="extend"/>
+    <result column="sort" property="sort"/>
     <result column="create_time" property="createTime"/>
     <result column="update_time" property="updateTime"/>
   </resultMap>
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        map_element_id, map_id, svg_id, custom_element, custom_element_width, custom_element_height, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, line_start, line_mid, line_end, extend, create_time, update_time
+        map_element_id, map_id, svg_id, custom_element, custom_element_width, custom_element_height, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, line_start, line_mid, line_end, extend, sort, create_time, update_time
   </sql>
 
   <select id="selectListByMapId" resultType="com.wafersystems.virsical.map.entity.MapElement">
@@ -43,7 +44,7 @@
     AND me.object_svg_state_code = ss.svg_state_code
     where
     me.map_id = #{mapId}
-    order by me.extend
+    order by me.sort
   </select>
 
   <!-- 使用CASE WHEN批量更新 -->
