@@ -3,12 +3,15 @@ package com.wafersystems.virsical.map.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wafersystems.virsical.common.core.config.SystemProperties;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.common.SvgUtils;
+import com.wafersystems.virsical.map.config.MapProperties;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.entity.Svg;
 import com.wafersystems.virsical.map.entity.SvgState;
@@ -46,6 +49,8 @@ public class SvgController extends BaseController {
   private final ISvgService svgService;
   private final ISvgStateService svgStateService;
   private final IMapElementService mapElementService;
+  private final SystemProperties systemProperties;
+  private final MapProperties mapProperties;
 
   /**
    * 解析SVG文件
@@ -72,6 +77,15 @@ public class SvgController extends BaseController {
   @PostMapping("/add")
   @PreAuthorize("@pms.hasPermission('admin@common@map_material_add')")
   public R add(@RequestBody Svg svg) {
+    // 判断是否云服务环境
+    if (systemProperties.isCloudService()) {
+      List<Svg> list = svgService.list();
+      // 素材上传限制数量
+      if (list.size() >= mapProperties.getSvgUploadLimitAmount()) {
+        return R.builder().code(CommonConstants.FAIL)
+          .msg(MapMsgConstants.MAP_SVG_UPLOAD_LIMIT_TIP).data(mapProperties.getSvgUploadLimitAmount()).build();
+      }
+    }
     return svgService.save(svg) ? R.ok() : R.fail();
   }
 
