@@ -43,6 +43,7 @@
     AND me.object_svg_state_code = ss.svg_state_code
     where
     me.map_id = #{mapId}
+    order by me.extend
   </select>
 
   <!-- 使用CASE WHEN批量更新 -->

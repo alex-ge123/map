@@ -60,6 +60,10 @@ public class MapElementController extends BaseController {
     if (r.getCode() == CommonConstants.FAIL) {
       return r;
     }
+    int i = 0;
+    for (MapElement mapElement : mapElementList) {
+      mapElement.setExtend(String.valueOf(i++));
+    }
     boolean b = mapElementService.batchSaveMapElement(mapId, mapElementList);
     if (b) {
       //推送地图更新消息
