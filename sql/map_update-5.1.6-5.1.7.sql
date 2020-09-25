@@ -42,3 +42,8 @@ INSERT INTO `svg_type` VALUES ('common', '其它', 0, '2019-05-08 00:00:00', NUL
 -- 新增地图表楼层id唯一索引
 -- ----------------------------
 ALTER TABLE `map` ADD UNIQUE INDEX `map_idx_floor_id`(`floor_id`) USING BTREE;
+
+-- ----------------------------
+-- 修改所有地图类型为基础版（0=基础版，1=专业版）
+-- ----------------------------
+update map set map_type = 0 where map_type != 0;
