@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.config.SystemProperties;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.exception.BusinessException;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
@@ -77,6 +79,26 @@ public class SvgController extends BaseController {
   @PostMapping("/add")
   @PreAuthorize("@pms.hasPermission('admin@common@map_material_add')")
   public R add(@RequestBody Svg svg) {
+    // 判断是否云服务环境
+    return addSvg(svg);
+  }
+
+  @ApiOperation(value = "添加素材", notes = "添加素材")
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "tenantId", value = "租户id", required = true, dataType = "String"),
+    @ApiImplicitParam(name = "svgs", value = "素材对象", required = true, dataType = "List")
+  })
+  @Inner
+  @PostMapping("/addToTenant/{tenantId}")
+  public R add(@PathVariable("tenantId") Integer tenantId, @RequestBody List<Svg> svgs) {
+    TenantContextHolder.setTenantId(tenantId);
+    for (Svg svg : svgs) {
+      addSvg(svg);
+    }
+    return R.ok();
+  }
+
+  private R addSvg(@RequestBody Svg svg) {
     // 判断是否云服务环境
     if (systemProperties.isCloudService()) {
       List<Svg> list = svgService.list();
