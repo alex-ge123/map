@@ -3,8 +3,10 @@ package com.wafersystems.virsical.map.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.mapper.MapMapper;
+import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 import com.wafersystems.virsical.map.service.IMapService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,16 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
   @Override
   public List<Map> selectMapListBySpaceId(Integer[] spaceIds) {
     return mapMapper.selectMapListBySpaceId(Arrays.asList(spaceIds));
+  }
+
+  /**
+   * 模糊搜索地图元素
+   *
+   * @param key 关键字
+   * @return List
+   */
+  @Override
+  public List<MapSearchResultVO> search(String key) {
+    return mapMapper.search(TenantContextHolder.getTenantId(), key);
   }
 }

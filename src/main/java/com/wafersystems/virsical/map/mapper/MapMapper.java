@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.SqlParser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -34,4 +36,17 @@ public interface MapMapper extends BaseMapper<Map> {
    */
   @SqlParser(filter = true)
   List<Map> selectMapListBySpaceId(@Param("ids") List<Integer> ids);
+
+  /**
+   * 模糊搜索地图元素
+   *
+   * @param tenantId 租户id
+   * @param key      关键字
+   * @return List
+   */
+  @Select("select m.map_id, m.floor_id, me.map_element_id, me.object_id, me.object_name," +
+    " me.object_color, me.object_svg_state_code, me.svg_type_code from map m, map_element me" +
+    " where m.map_id = me.map_id and m.tenant_id = #{tenantId}" +
+    " and (me.object_id like '%#{key}%' or me.object_name like '%#{key}%')")
+  List<MapSearchResultVO> search(@Param("tenantId") Integer tenantId, @Param("key") String key);
 }

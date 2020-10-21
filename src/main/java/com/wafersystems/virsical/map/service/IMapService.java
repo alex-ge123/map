@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 
 import java.util.List;
 
@@ -32,4 +33,12 @@ public interface IMapService extends IService<Map> {
    * @return mapList
    */
   List<Map> selectMapListBySpaceId(Integer[] spaceIds);
+
+  /**
+   * 模糊搜索地图元素
+   *
+   * @param key 关键字
+   * @return List
+   */
+  List<MapSearchResultVO> search(String key);
 }

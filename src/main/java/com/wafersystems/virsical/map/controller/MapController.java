@@ -209,4 +209,15 @@ public class MapController extends BaseController {
     cacheManager.releaseEditPermission(mapId);
     return R.ok();
   }
+
+  /**
+   * 模糊搜索地图元素
+   *
+   * @param key 关键字
+   * @return R
+   */
+  @GetMapping("/search")
+  public R search(@RequestParam String key) {
+    return R.ok(mapService.search(key));
+  }
 }
