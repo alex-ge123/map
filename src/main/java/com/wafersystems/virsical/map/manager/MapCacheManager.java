@@ -80,6 +80,6 @@ public class MapCacheManager {
    */
   public UserVO getUserFromRedis() {
     return (UserVO) stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
-      TenantContextHolder.getUserId());
+      TenantContextHolder.getUserId() + "");
   }
 }
