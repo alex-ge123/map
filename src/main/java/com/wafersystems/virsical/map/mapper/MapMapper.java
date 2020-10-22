@@ -44,9 +44,5 @@ public interface MapMapper extends BaseMapper<Map> {
    * @param key      关键字
    * @return List
    */
-  @Select("select m.map_id, m.floor_id, me.map_element_id, me.object_id, me.object_name," +
-    " me.object_color, me.object_svg_state_code, me.svg_type_code from map m, map_element me" +
-    " where m.map_id = me.map_id and m.tenant_id = #{tenantId}" +
-    " and (me.object_id like '%#{key}%' or me.object_name like '%#{key}%')")
   List<MapSearchResultVO> search(@Param("tenantId") Integer tenantId, @Param("key") String key);
 }

@@ -28,6 +28,17 @@
     <result column="update_time" property="updateTime"/>
   </resultMap>
 
+  <resultMap id="SearchResultMap" type="com.wafersystems.virsical.map.model.vo.MapSearchResultVO">
+    <id column="map_id" property="mapId"/>
+    <result column="floor_id" property="floorId"/>
+    <result column="map_elementId" property="mapElementId"/>
+    <result column="object_id" property="objectId"/>
+    <result column="object_name" property="objectName"/>
+    <result column="object_color" property="objectColor"/>
+    <result column="object_svg_stateCode" property="objectSvgStateCode"/>
+    <result column="svg_type_code" property="svgTypeCode"/>
+  </resultMap>
+
   <sql id="Base_Column_List">
         map_id, tenant_id, floor_id, base_map_url, base_map_element, view_box, zoom_image_url, area_age, height, width, map_state, map_type,
         cmap_project_id, cmap_building_id, cmap_floor_id, cmap_cloud_id, cmap_accesstoken, cmap_server, cmap_config_param, del_flag, create_time, update_time
@@ -82,5 +93,12 @@
       #{item}
     </foreach>
     and m.del_flag=0
+  </select>
+
+  <select id="search" resultMap="SearchResultMap">
+    select m.map_id, m.floor_id, me.map_element_id, me.object_id, me.object_name,
+     me.object_color, me.object_svg_state_code, me.svg_type_code from map m, map_element me
+     where m.map_id = me.map_id
+     and (me.object_id like %#{key}% or me.object_name like %#{key}%)
   </select>
 </mapper>
