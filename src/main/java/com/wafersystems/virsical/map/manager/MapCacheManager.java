@@ -1,8 +1,10 @@
 package com.wafersystems.virsical.map.manager;
 
+import com.wafersystems.virsical.common.core.constant.CommonCacheConstants;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.entity.UserVO;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
 import lombok.AllArgsConstructor;
@@ -69,5 +71,15 @@ public class MapCacheManager {
     if (b != null && b) {
       stringRedisTemplate.delete(MapConstants.MAP_EDIT_PERMISSION + mapId);
     }
+  }
+
+  /**
+   * 查询用户信息
+   *
+   * @return SysUser
+   */
+  public UserVO getUserFromRedis() {
+    return (UserVO) stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
+      TenantContextHolder.getUserId());
   }
 }

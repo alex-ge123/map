@@ -7,6 +7,7 @@ import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
+import com.wafersystems.virsical.common.entity.UserVO;
 import com.wafersystems.virsical.common.feign.RemoteSpaceService;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
@@ -138,7 +139,8 @@ public class MapController extends BaseController {
         if (dto.getSpaceId().equals(m.getFloorId())) {
           dto.setMap(m);
           // 判断当前地图是否编辑中，获取剩余编辑时间
-          Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + m.getMapId(), TimeUnit.SECONDS);
+          Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + m.getMapId(),
+            TimeUnit.SECONDS);
           if (expire != null && expire > 0) {
             dto.setExpire(expire);
           } else {
@@ -208,6 +210,28 @@ public class MapController extends BaseController {
   public R releaseEditPermission(@RequestParam Integer mapId) {
     cacheManager.releaseEditPermission(mapId);
     return R.ok();
+  }
+
+  /**
+   * 查询首页地图，先取用户默认区域地图，不存在则取第一张地图
+   *
+   * @return R
+   */
+  @GetMapping("/index")
+  public R index() {
+    List<Map> list = mapService.list(Wrappers.<Map>query().lambda().orderByAsc(Map::getFloorId));
+    if (list.isEmpty()) {
+      return R.ok();
+    }
+    final UserVO userVO = cacheManager.getUserFromRedis();
+    if (userVO.getDefaultZone() != null && userVO.getDefaultZone() > 0) {
+      for (Map m : list) {
+        if (userVO.getDefaultZone().equals(m.getFloorId())) {
+          return R.ok(m);
+        }
+      }
+    }
+    return R.ok(list.get(0));
   }
 
   /**
