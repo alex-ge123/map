@@ -1,5 +1,6 @@
 package com.wafersystems.virsical.map.manager;
 
+import com.alibaba.fastjson.JSON;
 import com.wafersystems.virsical.common.core.constant.CommonCacheConstants;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
@@ -79,7 +80,9 @@ public class MapCacheManager {
    * @return SysUser
    */
   public UserVO getUserFromRedis() {
-    return (UserVO) stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
-      TenantContextHolder.getUserId() + "");
+    String json =
+      (String) stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
+        TenantContextHolder.getUserId() + "");
+    return JSON.parseObject(json, UserVO.class);
   }
 }
