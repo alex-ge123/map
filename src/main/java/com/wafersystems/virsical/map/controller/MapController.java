@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
@@ -244,6 +245,9 @@ public class MapController extends BaseController {
    */
   @GetMapping("/search")
   public R search(String key, Integer spaceId, String svgTypeCode) {
+    if (StrUtil.isAllEmpty(key, svgTypeCode) && spaceId == null) {
+      return R.ok();
+    }
     return R.ok(mapService.search(key, spaceId, svgTypeCode));
   }
 }
