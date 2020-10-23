@@ -37,8 +37,9 @@ public interface IMapService extends IService<Map> {
   /**
    * 模糊搜索地图元素
    *
-   * @param key 关键字
+   * @param key     关键字
+   * @param spaceId 空间id
    * @return List
    */
-  List<MapSearchResultVO> search(String key);
+  List<MapSearchResultVO> search(String key, Integer spaceId);
 }

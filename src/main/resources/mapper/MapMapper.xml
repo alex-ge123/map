@@ -99,6 +99,9 @@
     select m.map_id, m.floor_id, me.map_element_id, me.object_id, me.object_name,
      me.object_color, me.object_svg_state_code, me.svg_type_code from map m, map_element me
      where m.map_id = me.map_id
+    <if test="spaceId != null">
+      and m.floor_id = #{spaceId}
+    </if>
      and (me.object_id like CONCAT('%',#{key},'%') or me.object_name like CONCAT('%',#{key},'%'))
   </select>
 </mapper>

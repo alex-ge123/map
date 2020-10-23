@@ -241,7 +241,7 @@ public class MapController extends BaseController {
    * @return R
    */
   @GetMapping("/search")
-  public R search(@RequestParam String key) {
-    return R.ok(mapService.search(key));
+  public R search(@RequestParam String key, Integer spaceId) {
+    return R.ok(mapService.search(key, spaceId));
   }
 }

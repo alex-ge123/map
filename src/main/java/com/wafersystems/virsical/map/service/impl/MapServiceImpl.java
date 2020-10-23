@@ -11,7 +11,6 @@ import com.wafersystems.virsical.map.service.IMapService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,11 +53,12 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
   /**
    * 模糊搜索地图元素
    *
-   * @param key 关键字
+   * @param key     关键字
+   * @param spaceId 空间id
    * @return List
    */
   @Override
-  public List<MapSearchResultVO> search(String key) {
-    return mapMapper.search(TenantContextHolder.getTenantId(), key);
+  public List<MapSearchResultVO> search(String key, Integer spaceId) {
+    return mapMapper.search(TenantContextHolder.getTenantId(), key, spaceId);
   }
 }

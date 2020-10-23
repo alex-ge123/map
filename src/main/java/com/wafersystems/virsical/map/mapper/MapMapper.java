@@ -42,7 +42,9 @@ public interface MapMapper extends BaseMapper<Map> {
    *
    * @param tenantId 租户id
    * @param key      关键字
+   * @param spaceId  空间id
    * @return List
    */
-  List<MapSearchResultVO> search(@Param("tenantId") Integer tenantId, @Param("key") String key);
+  List<MapSearchResultVO> search(@Param("tenantId") Integer tenantId, @Param("key") String key,
+                                 @Param("spaceId") Integer spaceId);
 }
