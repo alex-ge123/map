@@ -31,7 +31,7 @@
   <resultMap id="SearchResultMap" type="com.wafersystems.virsical.map.model.vo.MapSearchResultVO">
     <id column="map_id" property="mapId"/>
     <result column="floor_id" property="floorId"/>
-    <result column="map_elementId" property="mapElementId"/>
+    <result column="map_element_id" property="mapElementId"/>
     <result column="object_id" property="objectId"/>
     <result column="object_name" property="objectName"/>
     <result column="object_color" property="objectColor"/>
