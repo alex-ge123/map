@@ -30,6 +30,7 @@
 
   <resultMap id="SearchResultMap" type="com.wafersystems.virsical.map.model.vo.MapSearchResultVO">
     <id column="map_id" property="mapId"/>
+    <result column="map_type" property="mapType"/>
     <result column="floor_id" property="floorId"/>
     <result column="map_element_id" property="mapElementId"/>
     <result column="object_id" property="objectId"/>
@@ -96,7 +97,7 @@
   </select>
 
   <select id="search" resultMap="SearchResultMap">
-    select m.map_id, m.floor_id, me.map_element_id, me.object_id, me.object_name,
+    select m.map_id, m.map_type, m.floor_id, me.map_element_id, me.object_id, me.object_name,
      me.object_color, me.object_svg_state_code, me.svg_type_code from map m, map_element me
      where m.map_id = me.map_id
     <if test="spaceId != null">

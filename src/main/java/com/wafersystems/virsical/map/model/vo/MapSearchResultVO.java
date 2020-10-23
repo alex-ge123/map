@@ -27,6 +27,9 @@ public class MapSearchResultVO implements Serializable {
   @ApiModelProperty(value = "地图id", example = "0")
   private Integer mapId;
 
+  @ApiModelProperty(value = "地图类型", example = "0")
+  private Integer mapType;
+
   @ApiModelProperty(value = "区域id", example = "0")
   private Integer floorId;
 
