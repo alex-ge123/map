@@ -37,9 +37,10 @@ public interface IMapService extends IService<Map> {
   /**
    * 模糊搜索地图元素
    *
-   * @param key     关键字
-   * @param spaceId 空间id
+   * @param key         关键字
+   * @param spaceId     区域id
+   * @param svgTypeCode 素材类型标识
    * @return List
    */
-  List<MapSearchResultVO> search(String key, Integer spaceId);
+  List<MapSearchResultVO> search(String key, Integer spaceId, String svgTypeCode);
 }

@@ -103,6 +103,11 @@
     <if test="spaceId != null">
       and m.floor_id = #{spaceId}
     </if>
+    <if test="svgTypeCode != null">
+      and me.svg_type_code = #{svgTypeCode}
+    </if>
+    <if test="key != null">
      and (me.object_id like CONCAT('%',#{key},'%') or me.object_name like CONCAT('%',#{key},'%'))
+    </if>
   </select>
 </mapper>

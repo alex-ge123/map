@@ -237,11 +237,13 @@ public class MapController extends BaseController {
   /**
    * 模糊搜索地图元素
    *
-   * @param key 关键字
+   * @param key         关键字
+   * @param spaceId     区域id
+   * @param svgTypeCode 素材类型标识
    * @return R
    */
   @GetMapping("/search")
-  public R search(@RequestParam String key, Integer spaceId) {
-    return R.ok(mapService.search(key, spaceId));
+  public R search(String key, Integer spaceId, String svgTypeCode) {
+    return R.ok(mapService.search(key, spaceId, svgTypeCode));
   }
 }
