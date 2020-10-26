@@ -21,12 +21,12 @@ import java.util.List;
  * @author tandk
  * @date 2019/5/15 15:54
  */
-@Rollback
 public class MapElementControllerTest extends BaseTest {
 
   @Test
+  @Rollback(false)
   public void add() throws Exception {
-    String url = "/map-element/add/1/111111111";
+    String url = "/map-element/add/1/123456";
     List<MapElement> list = new ArrayList<>();
     MapElement me = new MapElement();
     me.setMapId(1);

@@ -129,7 +129,7 @@ public class SvgControllerTest extends BaseTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/svg/delete/1";
+    String url = "/svg/delete/2";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
