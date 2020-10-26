@@ -129,9 +129,30 @@ public class SvgControllerTest extends BaseTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/svg/delete/2";
-    JSONObject jsonObject = doPost(url, null, null);
+    String url = "/svg/add";
+    Svg svg = new Svg();
+    svg.setSvgTypeCode("meeting-room");
+    svg.setSvgName("素材2");
+    svg.setSvgWidth("100");
+    svg.setSvgHeight("100");
+    svg.setSvgElement("test-eee");
+    svg.setDirection(888);
+    svg.setState(0);
+    svg.setFontSize(12);
+    String content = JSON.toJSONString(svg);
+    JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+
+    String url2 = "/svg/delete/2";
+    JSONObject jsonObject2 = doPost(url2, null, null);
+    Assert.assertEquals(jsonObject2.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteForUsed() throws Exception {
+    String url = "/svg/delete/1";
+    JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
   @Test

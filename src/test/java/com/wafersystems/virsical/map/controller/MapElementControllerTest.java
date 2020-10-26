@@ -31,6 +31,7 @@ public class MapElementControllerTest extends BaseTest {
     MapElement me = new MapElement();
     me.setMapId(1);
     me.setSvgId(1);
+    me.setSvgTypeCode("meeting-room");
     me.setMapWebId("web001");
     me.setObjectId("1");
     me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
@@ -38,6 +39,7 @@ public class MapElementControllerTest extends BaseTest {
     MapElement me2 = new MapElement();
     me2.setMapId(2);
     me2.setSvgId(1);
+    me2.setSvgTypeCode("meeting-room");
     me2.setMapWebId("web002");
     me2.setObjectId("2");
     me2.setMapElementId("03740626bab2ea5f01106456dafc957e");
