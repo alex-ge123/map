@@ -13,6 +13,8 @@ import org.testng.annotations.Test;
 
 import java.nio.charset.StandardCharsets;
 
+
+
 /**
  * 素材测试类
  *
@@ -20,10 +22,10 @@ import java.nio.charset.StandardCharsets;
  * @date 2019/5/15 15:54
  */
 @Slf4j
-@Rollback
 public class SvgControllerTest extends BaseTest {
 
   @Test
+  @Rollback(false)
   public void add() throws Exception {
     String url = "/svg/add";
     Svg svg = new Svg();
@@ -127,7 +129,7 @@ public class SvgControllerTest extends BaseTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/svg/delete/3";
+    String url = "/svg/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
