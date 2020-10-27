@@ -21,16 +21,17 @@ import java.util.List;
  * @author tandk
  * @date 2019/5/15 15:54
  */
-@Rollback
 public class MapElementControllerTest extends BaseTest {
 
   @Test
+  @Rollback(false)
   public void add() throws Exception {
-    String url = "/map-element/add/1/111111111";
+    String url = "/map-element/add/1/123456";
     List<MapElement> list = new ArrayList<>();
     MapElement me = new MapElement();
     me.setMapId(1);
     me.setSvgId(1);
+    me.setSvgTypeCode("meeting-room");
     me.setMapWebId("web001");
     me.setObjectId("1");
     me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
@@ -38,6 +39,7 @@ public class MapElementControllerTest extends BaseTest {
     MapElement me2 = new MapElement();
     me2.setMapId(2);
     me2.setSvgId(1);
+    me2.setSvgTypeCode("meeting-room");
     me2.setMapWebId("web002");
     me2.setObjectId("2");
     me2.setMapElementId("03740626bab2ea5f01106456dafc957e");

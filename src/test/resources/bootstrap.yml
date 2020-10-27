@@ -5,12 +5,33 @@ spring:
     name: virsical-map
   profiles:
     active: testcase
-  jackson:
-    default-property-inclusion: non_null
+  flyway:
+    # 是否启用flyway
+    enabled: true
+    # 升级脚本位置，可以配置多个，英文逗号分隔
+    locations: classpath:db/migration
+    # 检测迁移脚本的路径是否存在，如不存在，则抛出异常
+    check-location: true
+    # 在迁移时，是否校验已迁移过的脚本，是否有改动
+    validate-on-migrate: true
+    # 新的环境中数据库中有数据，且没有flyway_schema_history表时，是否执行迁移操作（默认为false）
+    # false:在启动时会报错，并停止迁移; true:则生成history表并完成所有的迁移，要根据实际情况设置;
+    # 如果数据库是新部署，请配置false
+    baseline-on-migrate: false
+    # 升级脚本基础版本，与 baseline-on-migrate: true 搭配使用（默认为1）
+    baseline-version: 1
+    # 基础版本执行时描述， 默认为<<Flyway Baseline>>
+    baseline-description: <<Flyway Baseline>>
+    # 占位符是否要被替换，默认true.
+    placeholder-replacementplaceholders: false
+    # 设置每个占位符的前缀，默认${.
+    placeholder-prefix: '#{{'
+    # 设置每个占位符的后缀，默认}.
+    placeholder-suffix: '}}'
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.203.20:20000/virsical_map_testcase?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://192.168.203.20:20000/virsical_map?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: wafer
     password: wafer
   redis:
@@ -71,22 +92,6 @@ push:
   enable: true
   # 通道名称
   destination: map
-
-## spring security 配置
-security:
-  oauth2:
-    client:
-      client-id: ENC(KmOp5EIyjX0n6hoYE0jMSIDq12xwlmcs)
-      client-secret: ENC(KmOp5EIyjX0n6hoYE0jMSIDq12xwlmcs)
-      scope: server
-      ignore-urls:
-      - '/actuator/**'
-      - '/map-element/bind'
-      - '/map-element/update-object-state/*'
-    resource:
-      loadBalanced: true
-      # token解码的URI
-      token-info-uri: http://virsical-auth/oauth/check_token
 
 # 加解密根密码
 jasypt:

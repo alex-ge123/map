@@ -54,7 +54,7 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void add() throws Exception {
-    String url = "/map/add";
+    String url = "/map/add/123456";
     Map map = new Map();
     map.setFloorId(100);
     map.setBaseMapElement("test-eee");
@@ -99,7 +99,7 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void update() throws Exception {
-    String url = "/map/update";
+    String url = "/map/update/123456";
     Map map = new Map();
     map.setMapId(this.map.getMapId());
     map.setBaseMapElement("test-eee-update");
