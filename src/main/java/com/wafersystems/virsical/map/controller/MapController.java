@@ -2,6 +2,7 @@ package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
@@ -216,19 +217,30 @@ public class MapController extends BaseController {
   /**
    * 查询首页地图，先取用户默认区域地图，不存在则取第一张地图
    *
+   * @param spaceId 指定区域id
    * @return R
    */
   @GetMapping("/index")
-  public R index() {
-    List<Map> list = mapService.list(Wrappers.<Map>query().lambda().orderByAsc(Map::getFloorId));
+  public R index(Integer spaceId) {
+    LambdaQueryWrapper<Map> wrapper = Wrappers.<Map>query().lambda();
+    if (spaceId != null) {
+      // 查询指定区域地图
+      wrapper.eq(Map::getFloorId, spaceId);
+    } else {
+      wrapper.orderByAsc(Map::getFloorId);
+    }
+    List<Map> list = mapService.list(wrapper);
     if (list.isEmpty()) {
       return R.ok();
     }
-    final UserVO userVO = cacheManager.getUserFromRedis();
-    if (userVO.getDefaultZone() != null && userVO.getDefaultZone() > 0) {
-      for (Map m : list) {
-        if (userVO.getDefaultZone().equals(m.getFloorId())) {
-          return R.ok(m);
+    if (spaceId == null) {
+      // 获取用户默认区域地图
+      final UserVO userVO = cacheManager.getUserFromRedis();
+      if (userVO.getDefaultZone() != null && userVO.getDefaultZone() > 0) {
+        for (Map m : list) {
+          if (userVO.getDefaultZone().equals(m.getFloorId())) {
+            return R.ok(m);
+          }
         }
       }
     }
