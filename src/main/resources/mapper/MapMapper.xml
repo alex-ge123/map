@@ -110,4 +110,18 @@
      and (me.object_id like CONCAT('%',#{key},'%') or me.object_name like CONCAT('%',#{key},'%'))
     </if>
   </select>
+
+  <!-- 地图上线 -->
+  <update id="online">
+    UPDATE
+    map
+    SET
+    del_flag = '0'
+    WHERE
+    floor_id in
+    <foreach item="item" index="index" collection="ids"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
 </mapper>
