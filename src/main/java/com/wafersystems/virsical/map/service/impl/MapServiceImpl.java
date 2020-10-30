@@ -28,6 +28,16 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
   private final MapMapper mapMapper;
 
   /**
+   * 地图上线
+   *
+   * @param spaceIds 区域id集合
+   */
+  @Override
+  public void online(List<Integer> spaceIds) {
+    mapMapper.online(spaceIds);
+  }
+
+  /**
    * 查询地图分页
    *
    * @param page 分页对象

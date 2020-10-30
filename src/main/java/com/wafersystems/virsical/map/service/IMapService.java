@@ -17,6 +17,13 @@ import java.util.List;
  * @since 2019-05-07
  */
 public interface IMapService extends IService<Map> {
+
+  /**
+   * 地图上线
+   * @param spaceIds 区域id集合
+   */
+  void online(List<Integer> spaceIds);
+
   /**
    * 查询地图分页
    *
