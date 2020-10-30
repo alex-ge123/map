@@ -18,6 +18,13 @@ import java.util.List;
  */
 public interface MapMapper extends BaseMapper<Map> {
   /**
+   * 地图上线
+   *
+   * @param ids 区域id集合
+   */
+  void online(@Param("ids") List<Integer> ids);
+
+  /**
    * 查询地图分页
    *
    * @param page 分页对象
