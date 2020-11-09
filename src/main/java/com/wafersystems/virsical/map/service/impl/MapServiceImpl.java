@@ -70,6 +70,6 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
    */
   @Override
   public List<MapSearchResultVO> search(String key, Integer spaceId, String svgTypeCode) {
-    return mapMapper.search(TenantContextHolder.getTenantId(), key, spaceId, svgTypeCode);
+    return mapMapper.search(key, spaceId, svgTypeCode);
   }
 }
