@@ -109,6 +109,9 @@
     <if test="key != null and key != ''">
      and (me.object_id like CONCAT('%',#{key},'%') or me.object_name like CONCAT('%',#{key},'%'))
     </if>
+    <if test="key == null or key == ''">
+      and (me.object_id is not null and me.object_id != '')
+    </if>
   </select>
 
   <!-- 地图上线 -->
