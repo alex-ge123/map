@@ -112,6 +112,7 @@
     <if test="key == null or key == ''">
       and (me.object_id is not null and me.object_id != '')
     </if>
+    order by m.floor_id
   </select>
 
   <!-- 地图上线 -->

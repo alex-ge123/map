@@ -48,6 +48,11 @@ public class SvgType extends Model<SvgType> {
   @ApiModelProperty(value = "序号", example = "0")
   private Integer sort;
 
+  @ApiModelProperty(value = "素材类型英文名称", example = "string")
+  private String svgTypeNameEn;
+
+  @ApiModelProperty(value = "素材类型繁体名称", example = "string")
+  private String svgTypeNameTw;
 
   @Override
   protected Serializable pkVal() {
