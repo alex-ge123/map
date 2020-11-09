@@ -45,6 +45,9 @@ public class SvgType extends Model<SvgType> {
   @ApiModelProperty(value = "修改时间")
   private LocalDateTime updateTime;
 
+  @ApiModelProperty(value = "序号", example = "0")
+  private Integer sort;
+
 
   @Override
   protected Serializable pkVal() {
