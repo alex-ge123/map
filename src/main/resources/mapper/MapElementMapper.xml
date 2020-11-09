@@ -19,6 +19,7 @@
     <result column="object_name" property="objectName"/>
     <result column="object_color" property="objectColor"/>
     <result column="object_svg_state_code" property="objectSvgStateCode"/>
+    <result column="object_business" property="objectBusiness"/>
     <result column="line_start" property="lineStart"/>
     <result column="line_mid" property="lineMid"/>
     <result column="line_end" property="lineEnd"/>
@@ -30,7 +31,7 @@
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        map_element_id, map_id, svg_id, custom_element, custom_element_width, custom_element_height, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, line_start, line_mid, line_end, extend, sort, create_time, update_time
+        map_element_id, map_id, svg_id, custom_element, custom_element_width, custom_element_height, map_web_id, cycle_value, stationx, stationy, object_id, object_name, object_color, object_svg_state_code, object_business, line_start, line_mid, line_end, extend, sort, create_time, update_time, sort
   </sql>
 
   <select id="selectListByMapId" resultType="com.wafersystems.virsical.map.entity.MapElement">

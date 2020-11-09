@@ -9,11 +9,14 @@
         <result column="svg_type_state" property="svgTypeState" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="sort" property="sort" />
+        <result column="svg_type_name_en" property="svgTypeNameEn" />
+        <result column="svg_type_name_tw" property="svgTypeNameTw" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        svg_type_code, svg_type_name, svg_type_state, create_time, update_time
+        svg_type_code, svg_type_name, svg_type_state, create_time, update_time, sort, svg_type_name_en, svg_type_name_tw
     </sql>
 
 </mapper>
