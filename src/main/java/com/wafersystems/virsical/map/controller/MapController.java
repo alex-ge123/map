@@ -114,7 +114,7 @@ public class MapController extends BaseController {
   @GetMapping("/page")
   public R page(Page page, Integer spaceId) {
     // 从用户服务查询空间叶子节点分页
-    R<Page<SysSpace>> r = remoteSpaceService.getLeafNodePage(page.getSize(), page.getCurrent(), spaceId);
+    R<Page<SysSpace>> r = remoteSpaceService.getNodePage(page.getSize(), page.getCurrent(), spaceId);
     if (CommonConstants.SUCCESS != r.getCode()) {
       return R.fail(MapMsgConstants.QUERY_MAP_FAILED);
     }

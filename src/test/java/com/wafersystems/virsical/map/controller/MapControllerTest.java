@@ -89,7 +89,7 @@ public class MapControllerTest extends BaseTest {
     space.setParentId(0);
     page.setRecords(Arrays.asList(space));
     page.setTotal(1);
-    Mockito.when(remoteSpaceServiceFallback.getLeafNodePage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
+    Mockito.when(remoteSpaceServiceFallback.getNodePage(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
       .thenReturn(R.ok(page));
 
     String url = "/map/page";

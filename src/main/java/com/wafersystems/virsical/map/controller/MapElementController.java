@@ -1,5 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
@@ -117,6 +119,23 @@ public class MapElementController extends BaseController {
       mapElementList.add(mapElement);
     });
     boolean b = mapElementService.batchUpdateMapElement(mapElementList);
+    return b ? R.ok() : R.fail();
+  }
+
+  /**
+   * 地图元素区域绑定
+   *
+   * @param mapElementId 地图元素id
+   * @param spaceId      区域id
+   * @return R
+   */
+  @PostMapping("/bind-redirect")
+  @PreAuthorize("@pms.hasPermission('')")
+  public R bindRedirect(int mapElementId, int spaceId) {
+    MapElement mapElement = mapElementService.getById(mapElementId);
+    Assert.notNull(mapElement, MapMsgConstants.PARAM_ERROR);
+    mapElement.setExtend(String.valueOf(spaceId));
+    boolean b = mapElementService.batchUpdateMapElement(CollUtil.newArrayList(mapElement));
     return b ? R.ok() : R.fail();
   }
 

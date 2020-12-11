@@ -28,9 +28,14 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class MapMsgConstants {
   /**
-   * 同一楼下楼层号不能重复
+   * 非法操作
    */
-  public static final String FLOOR_NUM_NO_REPEAT = "104001";
+  public static final String ILLEGAL_OPT = "104000";
+
+  /**
+   * 参数不正确
+   */
+  public static final String PARAM_ERROR = "104001";
 
   /**
    * 同一素材下素材状态标识不能重复
