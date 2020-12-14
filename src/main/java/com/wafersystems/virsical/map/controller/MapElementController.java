@@ -131,7 +131,7 @@ public class MapElementController extends BaseController {
    */
   @GetMapping("/bind-redirect")
   @PreAuthorize("@pms.hasPermission('')")
-  public R bindRedirect(int mapElementId, int spaceId) {
+  public R bindRedirect(String mapElementId, int spaceId) {
     MapElement mapElement = mapElementService.getById(mapElementId);
     Assert.notNull(mapElement, MapMsgConstants.PARAM_ERROR);
     mapElement.setExtend(String.valueOf(spaceId));
