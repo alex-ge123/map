@@ -1,7 +1,11 @@
 package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
@@ -27,6 +31,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -261,5 +266,41 @@ public class MapController extends BaseController {
       return R.ok();
     }
     return R.ok(mapService.search(key, spaceId, svgTypeCode));
+  }
+
+  /**
+   * 查询树形菜单集合
+   */
+  @GetMapping(value = "/space-tree")
+  @PreAuthorize("@pms.hasPermission('')")
+  public R getTree() {
+    List<Map> list = mapService.list();
+    String json = stringRedisTemplate.opsForValue().get(
+      CommonConstants.SPACE_TREE_KEY + TenantContextHolder.getTenantId());
+    JSONArray jsonArray = JSON.parseArray(json);
+    Assert.notNull(jsonArray, MapMsgConstants.PARAM_ERROR);
+    setMapId(jsonArray, list);
+    return R.ok(jsonArray);
+  }
+
+  /**
+   * 区域树设置地图id
+   *
+   * @param jsonArray jsonArray
+   * @param list      地图列表
+   */
+  private void setMapId(JSONArray jsonArray, List<Map> list) {
+    for (Object o : jsonArray) {
+      JSONObject jsonObject = (JSONObject) o;
+      Integer id = jsonObject.getInteger("id");
+      for (Map map : list) {
+        if (map.getFloorId().equals(id)) {
+          jsonObject.put("mapId", map.getMapId());
+          break;
+        }
+      }
+      JSONArray children = jsonObject.getJSONArray("children");
+      setMapId(children, list);
+    }
   }
 }

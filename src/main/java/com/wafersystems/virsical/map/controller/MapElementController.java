@@ -123,18 +123,18 @@ public class MapElementController extends BaseController {
   }
 
   /**
-   * 地图元素区域绑定
+   * 地图元素区域地图绑定
    *
    * @param mapElementId 地图元素id
-   * @param spaceId      区域id
+   * @param mapId        区域地图id
    * @return R
    */
   @GetMapping("/bind-redirect")
   @PreAuthorize("@pms.hasPermission('')")
-  public R bindRedirect(String mapElementId, int spaceId) {
+  public R bindRedirect(String mapElementId, int mapId) {
     MapElement mapElement = mapElementService.getById(mapElementId);
     Assert.notNull(mapElement, MapMsgConstants.PARAM_ERROR);
-    mapElement.setExtend(String.valueOf(spaceId));
+    mapElement.setExtend(String.valueOf(mapId));
     boolean b = mapElementService.batchUpdateMapElement(CollUtil.newArrayList(mapElement));
     return b ? R.ok() : R.fail();
   }
