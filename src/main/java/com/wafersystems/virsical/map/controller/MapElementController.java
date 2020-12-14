@@ -129,7 +129,7 @@ public class MapElementController extends BaseController {
    * @param spaceId      区域id
    * @return R
    */
-  @PostMapping("/bind-redirect")
+  @GetMapping("/bind-redirect")
   @PreAuthorize("@pms.hasPermission('')")
   public R bindRedirect(int mapElementId, int spaceId) {
     MapElement mapElement = mapElementService.getById(mapElementId);
