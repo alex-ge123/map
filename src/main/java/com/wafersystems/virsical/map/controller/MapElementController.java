@@ -2,6 +2,7 @@ package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
@@ -11,11 +12,13 @@ import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
+import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.manager.MapCacheManager;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementRouteVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
+import com.wafersystems.virsical.map.service.IMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +45,8 @@ import java.util.List;
 public class MapElementController extends BaseController {
 
   private final IMapElementService mapElementService;
+
+  private final IMapService mapService;
 
   private final MapCacheManager cacheManager;
 
@@ -94,7 +99,16 @@ public class MapElementController extends BaseController {
    */
   @ApiOperation(value = "获取地图元素列表", notes = "根据地图元素对象条件获取地图元素列表")
   @GetMapping("/list")
-  public R list(@RequestParam Integer mapId) {
+  public R list(@RequestParam(required = false) Integer mapId, @RequestParam(required = false) Integer spaceId) {
+    if (mapId == null && spaceId == null) {
+      return R.fail(MapMsgConstants.PARAM_ERROR);
+    }
+    if (mapId == null) {
+      List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, spaceId));
+      if (list.size() == 1) {
+        mapId = list.get(0).getMapId();
+      }
+    }
     return R.ok(mapElementService.selectListByMapId(mapId));
   }
 

@@ -31,7 +31,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -96,6 +95,19 @@ public class MapController extends BaseController {
   @GetMapping("/{id}")
   public R<Map> get(@PathVariable Integer id) {
     return R.ok(mapService.getById(id));
+  }
+
+  @ApiOperation(value = "根据地图id或区域id获取地图", notes = "根据地图id或区域id获取地图")
+  @GetMapping("/getByMapIdOrSpaceId")
+  public R getByMapIdOrSpaceId(@RequestParam(required = false) Integer mapId,
+                               @RequestParam(required = false) Integer spaceId) {
+    if (mapId == null && spaceId == null) {
+      return R.fail(MapMsgConstants.PARAM_ERROR);
+    }
+    if (mapId == null) {
+      return R.ok(mapService.getOne(Wrappers.<Map>query().lambda().eq(Map::getFloorId, spaceId)));
+    }
+    return R.ok(mapService.getById(mapId));
   }
 
   @ApiOperation(value = "根据空间id获取地图", notes = "根据空间id获取地图")
