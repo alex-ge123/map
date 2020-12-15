@@ -15,6 +15,7 @@ import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.manager.MapCacheManager;
+import com.wafersystems.virsical.map.model.vo.MapElementBindRedirectVO;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementRouteVO;
 import com.wafersystems.virsical.map.service.IMapElementService;
@@ -139,16 +140,15 @@ public class MapElementController extends BaseController {
   /**
    * 地图元素区域地图绑定
    *
-   * @param mapElementId 地图元素id
-   * @param mapId        区域地图id
+   * @param mapElementBindRedirectVO 地图元素区域跳转绑定对象
    * @return R
    */
-  @GetMapping("/bind-redirect")
+  @PostMapping("/bind-redirect")
   @PreAuthorize("@pms.hasPermission('')")
-  public R bindRedirect(String mapElementId, int mapId) {
-    MapElement mapElement = mapElementService.getById(mapElementId);
+  public R bindRedirect(MapElementBindRedirectVO mapElementBindRedirectVO) {
+    MapElement mapElement = mapElementService.getById(mapElementBindRedirectVO.getMapElementId());
     Assert.notNull(mapElement, MapMsgConstants.PARAM_ERROR);
-    mapElement.setExtend(String.valueOf(mapId));
+    mapElement.setExtend(mapElementBindRedirectVO.getExtend());
     boolean b = mapElementService.batchUpdateMapElement(CollUtil.newArrayList(mapElement));
     return b ? R.ok() : R.fail();
   }
