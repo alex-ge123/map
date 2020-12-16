@@ -48,4 +48,6 @@ public class MapElementBindVO implements Serializable {
   @ApiModelProperty(value = "素材类型标识", example = "string")
   private String svgTypeCode;
 
+  @ApiModelProperty(value = "扩展字段,用于区域跳转：extend={\"spaceId\":\"1\",\"mapId\":\"2\"}", example = "0")
+  private String extend;
 }
