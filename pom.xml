@@ -112,12 +112,6 @@
       <artifactId>transmittable-thread-local</artifactId>
       <version>${ttl.version}</version>
     </dependency>
-    <!--监控客户端-->
-    <dependency>
-      <groupId>de.codecentric</groupId>
-      <artifactId>spring-boot-admin-starter-client</artifactId>
-      <version>${spring-boot-admin.version}</version>
-    </dependency>
     <!--微服务公共依赖包-->
     <dependency>
       <groupId>com.wafersystems</groupId>
