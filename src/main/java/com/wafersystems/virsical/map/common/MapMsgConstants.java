@@ -116,4 +116,9 @@ public final class MapMsgConstants {
    * 地图素材上传数量已达到限制
    */
   public static final String MAP_SVG_UPLOAD_LIMIT_TIP = "104017";
+
+  /**
+   * 目标区域已下线，无法进行跳转
+   */
+  public static final String SPACE_OFFLINE_DO_NOT_JUMP = "104018";
 }
