@@ -247,7 +247,10 @@ public class MapController extends BaseController {
       wrapper.orderByAsc(Map::getFloorId);
     }
     List<Map> list = mapService.list(wrapper);
-    if (list.isEmpty()) {
+    if (list == null || list.isEmpty()) {
+      if (spaceId != null) {
+        return R.builder().code(CommonConstants.FAIL).msg(MapMsgConstants.SPACE_OFFLINE_DO_NOT_JUMP).build();
+      }
       return R.ok();
     }
     if (spaceId == null) {
