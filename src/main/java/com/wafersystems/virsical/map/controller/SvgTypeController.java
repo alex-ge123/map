@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.common.core.util.R;
+import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
@@ -52,6 +53,23 @@ public class SvgTypeController extends BaseController {
     return svgTypeService.save(svgType) ? R.ok() : R.fail();
   }
 
+  /**
+   * 添加素材类型
+   *
+   * @param svgType 素材类型对象
+   * @return R
+   */
+  @ApiOperation(value = "添加素材类型", notes = "添加素材类型")
+  @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
+  @PostMapping("/inner/add")
+  @Inner
+  public R addInner(@RequestBody SvgType svgType) {
+    if (svgTypeService.getById(svgType.getSvgTypeCode()) != null) {
+      return R.fail(MapMsgConstants.MATERIAL_TYPE_REPETITION);
+    }
+    return svgTypeService.save(svgType) ? R.ok() : R.fail();
+  }
+
   @ApiOperation(value = "修改素材类型", notes = "根据素材类型id修改素材类型")
   @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
   @PostMapping("/update")
@@ -60,11 +78,27 @@ public class SvgTypeController extends BaseController {
     return svgTypeService.updateById(svgType) ? R.ok() : R.fail();
   }
 
+  @ApiOperation(value = "修改素材类型", notes = "根据素材类型id修改素材类型")
+  @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
+  @PostMapping("/inner/update")
+  @Inner
+  public R updateInner(@RequestBody SvgType svgType) {
+    return svgTypeService.updateById(svgType) ? R.ok() : R.fail();
+  }
+
   @ApiOperation(value = "删除素材类型", notes = "根据素材类型标识删除素材类型")
   @ApiImplicitParam(name = "code", value = "素材类型标识", required = true, dataType = "String")
   @PostMapping("/delete/{code}")
   @PreAuthorize("@pms.hasPermission('')")
   public R delete(@PathVariable String code) {
+    return svgTypeService.removeById(code) ? R.ok() : R.fail();
+  }
+
+  @ApiOperation(value = "删除素材类型", notes = "根据素材类型标识删除素材类型")
+  @ApiImplicitParam(name = "code", value = "素材类型标识", required = true, dataType = "String")
+  @PostMapping("/inner/delete/{code}")
+  @Inner
+  public R deleteInner(@PathVariable String code) {
     return svgTypeService.removeById(code) ? R.ok() : R.fail();
   }
 
