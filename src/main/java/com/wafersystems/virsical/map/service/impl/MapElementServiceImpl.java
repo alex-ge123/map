@@ -165,6 +165,41 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
   }
 
   /**
+   * 批量解绑
+   *
+   * @param svgTypeCode 地图元素类型
+   * @param voList      地图元素资源状态集合
+   * @return boolean
+   */
+  @Override
+  public boolean batchUnbind(String svgTypeCode, List<MapElementObjectStateVO> voList) {
+    LambdaQueryWrapper<MapElement> wrapper = Wrappers.lambdaQuery();
+    if (StrUtil.isNotBlank(svgTypeCode)) {
+      wrapper.eq(MapElement::getSvgTypeCode, svgTypeCode);
+    }
+    List<String> objectIdList = new ArrayList<>();
+    voList.forEach(vo -> objectIdList.add(vo.getObjectId()));
+    wrapper.in(MapElement::getObjectId, objectIdList);
+    // 查询对应地图id与元素id集合
+    List<MapElement> mapElementList = mapElementMapper.selectList(wrapper);
+    if (mapElementList.isEmpty()) {
+      return false;
+    }
+    // 解绑
+    mapElementList.forEach(me -> {
+      me.setObjectBusiness(null);
+      me.setObjectColor(null);
+      me.setObjectId(null);
+      me.setObjectName(null);
+      me.setObjectSvgStateCode(null);
+    });
+    // 批量更新地图元素
+    this.saveOrUpdateBatch(mapElementList);
+    return true;
+  }
+
+
+  /**
    * 消息推送
    *
    * @param msgType    消息类型

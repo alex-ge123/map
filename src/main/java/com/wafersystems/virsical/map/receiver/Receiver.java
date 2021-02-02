@@ -68,9 +68,14 @@ public class Receiver {
       MessageDTO messageDTO = JSON.parseObject(message, MessageDTO.class);
       if (MsgTypeEnum.ONE.name().equals(messageDTO.getMsgType())) {
         final MapElementUpdateDTO dto = JSON.parseObject(messageDTO.getData().toString(), MapElementUpdateDTO.class);
-        if (!dto.getMapElementObjectStateVoList().isEmpty()) {
-          mapElementService.batchUpdateMapElementObjectState(dto.getSvgTypeCode(),
-            dto.getMapElementObjectStateVoList());
+        if (MsgActionEnum.DELETE.name().equals(messageDTO.getMsgAction())) {
+          //解绑
+          mapElementService.batchUnbind(dto.getSvgTypeCode(), dto.getMapElementObjectStateVoList());
+        } else {
+          if (!dto.getMapElementObjectStateVoList().isEmpty()) {
+            mapElementService.batchUpdateMapElementObjectState(dto.getSvgTypeCode(),
+              dto.getMapElementObjectStateVoList());
+          }
         }
       } else {
         log.info("地图元素更新消息类型未识别，无法处理消息");
