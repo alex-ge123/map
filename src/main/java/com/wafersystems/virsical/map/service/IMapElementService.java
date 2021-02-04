@@ -50,6 +50,15 @@ public interface IMapElementService extends IService<MapElement> {
    */
   boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                            List<MapElementObjectStateVO> list);
+  /**
+   * 批量解绑
+   *
+   * @param svgTypeCode 地图元素类型
+   * @param voList      地图元素资源状态集合
+   * @return boolean
+   */
+  boolean batchUnbind(String svgTypeCode,
+                      List<MapElementObjectStateVO> voList);
 
   /**
    * 消息推送
