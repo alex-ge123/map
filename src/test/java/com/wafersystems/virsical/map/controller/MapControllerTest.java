@@ -153,5 +153,83 @@ public class MapControllerTest extends BaseTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
   }
 
+  @Test
+  public void getByMapIdOrSpaceId() throws Exception {
+    String url = "/map/getByMapIdOrSpaceId/";
+    JSONObject jsonObjectFail = doGet(url, false, false);
+    Assert.assertEquals(jsonObjectFail.get("code"), CommonConstants.FAIL);
+    
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("mapId", "1");
+    JSONObject jsonObject = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+    
+    MultiValueMap<String, String> params1 = new LinkedMultiValueMap<>();
+    params1.add("spaceId", "1");
+    JSONObject jsonObject1 = doGet(url, false, false, params1);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
 
+  @Test
+  public void getBySpaceId() throws Exception {
+    String url = "/map/getBySpaceId/1";
+    JSONObject jsonObjectFail = doGet(url, false, false);
+    Assert.assertEquals(jsonObjectFail.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void listBySpaceIds() throws Exception {
+    String url = "/map/listBySpaceIds";
+    JSONObject jsonObject = doGet(url, false, false);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("spaceIds", "1");
+    JSONObject jsonObject1 = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void forceGetEditPermission() throws Exception {
+    String url = "/map/forceGetEditPermission";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("mapId", "1");
+    params.add("key", "1111");
+    JSONObject jsonObject1 = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void releaseEditPermission() throws Exception {
+    String url = "/map/releaseEditPermission";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("mapId", "1");
+    JSONObject jsonObject1 = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void index() throws Exception {
+    String url = "/map/index";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("spaceId", "1");
+    JSONObject jsonObject1 = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void search() throws Exception {
+    String url = "/map/search";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("spaceId", "1");
+    JSONObject jsonObject1 = doGet(url, false, false, params);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void getTree() throws Exception {
+    String url = "/map/space-tree";
+    JSONObject jsonObject1 = doGet(url, false, false);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
 }
