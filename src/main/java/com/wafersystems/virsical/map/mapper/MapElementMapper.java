@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wafersystems.virsical.map.entity.MapElement;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -39,4 +40,12 @@ public interface MapElementMapper extends BaseMapper<MapElement> {
                                       @Param("objectName") String objectName,
                                       @Param("objectColor") String objectColor,
                                       @Param("objectSvgStateCode") String objectSvgStateCode);
+
+  /**
+   * 解绑
+   *
+   * @param collect idList
+   */
+  @Update("UPDATE map_element SET object_id = NULL,object_name = NULL,object_color = NULL,object_svg_state_code = NULL,object_business = '' WHERE map_element_id IN (#{collect})")
+  void unBind(@Param("collect") List<String> collect);
 }
