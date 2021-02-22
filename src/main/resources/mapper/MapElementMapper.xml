@@ -92,4 +92,18 @@
       and e.svg_type_code = #{svgTypeCode}
     </if>
   </update>
+
+  <update id="unBind">
+    UPDATE map_element
+    SET object_id = NULL,
+    object_name = NULL,
+    object_color = NULL,
+    object_svg_state_code = NULL,
+    object_business = ''
+    WHERE
+	map_element_id IN
+    <foreach collection="collect" item="id" index="index" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
 </mapper>

@@ -46,6 +46,5 @@ public interface MapElementMapper extends BaseMapper<MapElement> {
    *
    * @param collect idList
    */
-  @Update("UPDATE map_element SET object_id = NULL,object_name = NULL,object_color = NULL,object_svg_state_code = NULL,object_business = '' WHERE map_element_id IN (#{collect})")
   void unBind(@Param("collect") List<String> collect);
 }
