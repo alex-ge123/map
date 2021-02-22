@@ -1,5 +1,6 @@
 package com.wafersystems.virsical.map.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -186,15 +188,11 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
       return false;
     }
     // 解绑
-    mapElementList.forEach(me -> {
-      me.setObjectBusiness(null);
-      me.setObjectColor(null);
-      me.setObjectId(null);
-      me.setObjectName(null);
-      me.setObjectSvgStateCode(null);
-    });
+    final List<String> collect = mapElementList.stream().map(MapElement::getMapElementId).collect(Collectors.toList());
     // 批量更新地图元素
-    this.saveOrUpdateBatch(mapElementList);
+    if (CollUtil.isNotEmpty(collect)) {
+      this.unBind(collect);
+    }
     return true;
   }
 
@@ -221,5 +219,10 @@ public class MapElementServiceImpl extends ServiceImpl<MapElementMapper, MapElem
         throw new BusinessException("调用推送服务推送失败");
       }
     }
+  }
+
+  @Override
+  public void unBind(List<String> collect) {
+    baseMapper.unBind(collect);
   }
 }

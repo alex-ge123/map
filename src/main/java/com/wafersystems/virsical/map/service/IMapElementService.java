@@ -27,11 +27,11 @@ public interface IMapElementService extends IService<MapElement> {
   /**
    * 批量保存地图元素
    *
-   * @param mapId 地图id
+   * @param mapId          地图id
    * @param mapElementList 地图元素集合
    * @return boolean
    */
-  boolean batchSaveMapElement(Integer mapId ,List<MapElement> mapElementList);
+  boolean batchSaveMapElement(Integer mapId, List<MapElement> mapElementList);
 
   /**
    * 批量更新地图元素
@@ -50,6 +50,7 @@ public interface IMapElementService extends IService<MapElement> {
    */
   boolean batchUpdateMapElementObjectState(String svgTypeCode,
                                            List<MapElementObjectStateVO> list);
+
   /**
    * 批量解绑
    *
@@ -69,4 +70,11 @@ public interface IMapElementService extends IService<MapElement> {
    * @param data       内容
    */
   void push(String msgType, String msgAction, String businessId, Serializable data);
+
+  /**
+   * 解绑
+   *
+   * @param collect id列表
+   */
+  void unBind(List<String> collect);
 }
