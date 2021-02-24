@@ -1,17 +1,31 @@
 package com.wafersystems.virsical.map.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.constant.MapMqConstants;
+import com.wafersystems.virsical.common.core.constant.UpmsMqConstants;
+import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
+import com.wafersystems.virsical.common.core.constant.enums.MsgTypeEnum;
+import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
+import com.wafersystems.virsical.common.core.dto.MapElementUpdateDTO;
+import com.wafersystems.virsical.common.core.dto.MessageDTO;
 import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
 import com.wafersystems.virsical.common.entity.SysSpace;
+import com.wafersystems.virsical.common.entity.UserVO;
 import com.wafersystems.virsical.common.feign.fallback.RemoteSpaceServiceFallbackImpl;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.manager.MapCacheManager;
+import com.wafersystems.virsical.map.service.IMapService;
+import com.wafersystems.virsical.map.service.impl.MapServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,7 +35,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 地图测试类
@@ -33,10 +49,18 @@ import java.util.Arrays;
 @Rollback
 public class MapControllerTest extends BaseTest {
 
+  @Autowired
+  AmqpTemplate amqpTemplate;
+
   @MockBean
   RemoteSpaceServiceFallbackImpl remoteSpaceServiceFallback;
 
+  @MockBean
+  MapCacheManager mapCacheManager;
+
   private Map map = new Map();
+  private Map map2 = new Map();
+  private Map map3 = new Map();
 
   @BeforeClass
   public void initData() {
@@ -44,6 +68,12 @@ public class MapControllerTest extends BaseTest {
     map.setFloorId(1);
     map.setDelFlag(0);
     map.insert();
+    map2.setFloorId(2);
+    map2.setDelFlag(0);
+    map2.insert();
+    map3.setFloorId(3);
+    map3.setDelFlag(0);
+    map3.insert();
   }
 
   @AfterClass
@@ -55,12 +85,21 @@ public class MapControllerTest extends BaseTest {
   @Test
   public void add() throws Exception {
     String url = "/map/add/123456";
-    Map map = new Map();
-    map.setFloorId(100);
-    map.setBaseMapElement("test-eee");
-    String content = JSON.toJSONString(map);
+    Map m = new Map();
+    m.setFloorId(100);
+    m.setBaseMapElement("test-eee");
+    String content = JSON.toJSONString(m);
     JSONObject jsonObject = doPost(url, content, null);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+
+    String urlUpdate = "/map/add/123456";
+    Map m1 = new Map();
+    m1.setMapId(1);
+    m1.setFloorId(1);
+    m1.setViewBox("aaa");
+    String contentUpdate = JSON.toJSONString(m1);
+    JSONObject jsonObjectUpdate = doPost(urlUpdate, contentUpdate, null);
+    Assert.assertEquals(jsonObjectUpdate.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
@@ -74,8 +113,6 @@ public class MapControllerTest extends BaseTest {
   public void get() throws Exception {
     String url = "/map/" + map.getMapId();
     JSONObject jsonObject = doGet(url);
-    Map map = JSON.parseObject(jsonObject.get("data").toString(), Map.class);
-    log.info(map.toString());
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
@@ -101,7 +138,7 @@ public class MapControllerTest extends BaseTest {
   public void update() throws Exception {
     String url = "/map/update/123456";
     Map map = new Map();
-    map.setMapId(this.map.getMapId());
+    map.setMapId(map2.getMapId());
     map.setBaseMapElement("test-eee-update");
     String content = JSON.toJSONString(map);
     JSONObject jsonObject = doPost(url, content, null);
@@ -121,7 +158,7 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void delete() throws Exception {
-    String url = "/map/delete/" + map.getMapId();
+    String url = "/map/delete/" + map3.getMapId();
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
@@ -141,16 +178,12 @@ public class MapControllerTest extends BaseTest {
     params.add("key", "123456");
     JSONObject jsonObject = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
-  }
 
-  @Test
-  public void getEditPermissionForFail() throws Exception {
-    String url = "/map/getEditPermission";
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("mapId", "1");
-    params.add("key", "1234567");
-    JSONObject jsonObject = doGet(url, false, false, params);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    MultiValueMap<String, String> paramsFail = new LinkedMultiValueMap<>();
+    paramsFail.add("mapId", "1");
+    paramsFail.add("key", "111111");
+    JSONObject jsonObjectFail = doGet(url, false, false, paramsFail);
+    Assert.assertEquals(jsonObjectFail.get("code"), CommonConstants.FAIL);
   }
 
   @Test
@@ -194,7 +227,7 @@ public class MapControllerTest extends BaseTest {
     String url = "/map/forceGetEditPermission";
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("mapId", "1");
-    params.add("key", "1111");
+    params.add("key", "123456");
     JSONObject jsonObject1 = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
@@ -210,26 +243,95 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void index() throws Exception {
+    UserVO userVO = new UserVO();
+    Mockito.when(mapCacheManager.getUserFromRedis()).thenReturn(userVO);
+
     String url = "/map/index";
+    JSONObject jsonObject = doGet(url, false, false);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("spaceId", "1");
+    params.add("spaceId", "2");
     JSONObject jsonObject1 = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+
+    MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
+    params2.add("spaceId", "11");
+    JSONObject jsonObject2 = doGet(url, false, false, params2);
+    Assert.assertEquals(jsonObject2.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
   public void search() throws Exception {
     String url = "/map/search";
+    JSONObject jsonObjectFail = doGet(url, false, false);
+    Assert.assertEquals(jsonObjectFail.get("code"), CommonConstants.SUCCESS);
+
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("spaceId", "1");
+    params.add("key", "会议室");
     JSONObject jsonObject1 = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
   public void getTree() throws Exception {
+    String json = "[{\"children\":[],\"delFlag\":\"0\",\"holidayCode\":\"\",\"id\":1,\"location\":\"\"," +
+      "\"name\":\"区域\",\"nameEn\":\"\",\"parentId\":0,\"parentName\":\"\",\"path\":\"-1-\",\"pathName\":\"区域\"," +
+      "\"sort\":1,\"structure\":0,\"timeZone\":\"\"}]";
+    Mockito.when(mapCacheManager.getSpaceTreeFromRedis()).thenReturn(json);
     String url = "/map/space-tree";
     JSONObject jsonObject1 = doGet(url, false, false);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void testUpdateElementMq() {
+    MapElementObjectStateVO vo = new MapElementObjectStateVO();
+    vo.setObjectId("M001");
+    vo.setObjectName("华山");
+    vo.setObjectColor("#123456");
+    vo.setObjectBusiness("1");
+
+    List<MapElementObjectStateVO> mapElementObjectStateVoList = new ArrayList<>();
+    mapElementObjectStateVoList.add(vo);
+
+    MapElementUpdateDTO mapElementUpdateDTO = new MapElementUpdateDTO();
+    mapElementUpdateDTO.setSvgTypeCode("meeting-room");
+    mapElementUpdateDTO.setMapElementObjectStateVoList(mapElementObjectStateVoList);
+
+    MessageDTO messageDTO = new MessageDTO();
+    messageDTO.setMsgType(MsgTypeEnum.ONE.name());
+    messageDTO.setMsgAction(MsgActionEnum.ADD.name());
+    messageDTO.setData(JSONUtil.toJsonStr(mapElementUpdateDTO));
+
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+
+    messageDTO.setMsgType(MsgTypeEnum.BATCH.name());
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+
+    messageDTO.setMsgAction(MsgActionEnum.DELETE.name());
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+  }
+
+  @Test
+  public void testSpaceOnlineOfflineMq() {
+    ArrayList<SysSpace> spaceList = new ArrayList<>();
+    SysSpace sysSpace = new SysSpace();
+    sysSpace.setSpaceId(1);
+    spaceList.add(sysSpace);
+
+    MessageDTO messageDTO = new MessageDTO();
+    messageDTO.setMsgType(MsgTypeEnum.BATCH.name());
+    messageDTO.setMsgAction(MsgActionEnum.OFFLINE.name());
+    messageDTO.setData(JSONUtil.toJsonStr(spaceList));
+
+    this.amqpTemplate.convertAndSend(UpmsMqConstants.EXCHANGE_FANOUT_UPMS_SPACE, "", JSON.toJSONString(messageDTO));
+
+    messageDTO.setMsgAction(MsgActionEnum.ONLINE.name());
+    this.amqpTemplate.convertAndSend(UpmsMqConstants.EXCHANGE_FANOUT_UPMS_SPACE, "", JSON.toJSONString(messageDTO));
+
+    messageDTO.setMsgAction(MsgActionEnum.ADD.name());
+    this.amqpTemplate.convertAndSend(UpmsMqConstants.EXCHANGE_FANOUT_UPMS_SPACE, "", JSON.toJSONString(messageDTO));
   }
 }

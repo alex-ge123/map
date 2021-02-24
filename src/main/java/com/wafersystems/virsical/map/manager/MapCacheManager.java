@@ -85,4 +85,14 @@ public class MapCacheManager {
         TenantContextHolder.getUserId() + "");
     return JSON.parseObject(json, UserVO.class);
   }
+
+  /**
+   * 从缓存获取空间树
+   *
+   * @return String
+   */
+  public String getSpaceTreeFromRedis() {
+    return stringRedisTemplate.opsForValue().get(
+      CommonConstants.SPACE_TREE_KEY + TenantContextHolder.getTenantId());
+  }
 }

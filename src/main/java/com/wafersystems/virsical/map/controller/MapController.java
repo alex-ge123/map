@@ -290,9 +290,7 @@ public class MapController extends BaseController {
   @PreAuthorize("@pms.hasPermission('')")
   public R getTree() {
     List<Map> list = mapService.list();
-    String json = stringRedisTemplate.opsForValue().get(
-      CommonConstants.SPACE_TREE_KEY + TenantContextHolder.getTenantId());
-    JSONArray jsonArray = JSON.parseArray(json);
+    JSONArray jsonArray = JSON.parseArray(cacheManager.getSpaceTreeFromRedis());
     Assert.notNull(jsonArray, MapMsgConstants.PARAM_ERROR);
     setMapId(jsonArray, list);
     return R.ok(jsonArray);

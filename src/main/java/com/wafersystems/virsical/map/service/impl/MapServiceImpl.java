@@ -1,9 +1,7 @@
 package com.wafersystems.virsical.map.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.entity.Map;
@@ -41,18 +39,6 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
   @Override
   public void online(List<Integer> spaceIds) {
     mapMapper.online(spaceIds);
-  }
-
-  /**
-   * 查询地图分页
-   *
-   * @param page 分页对象
-   * @param map  地图条件对象
-   * @return 地图分页列表
-   */
-  @Override
-  public IPage<Map> selectMapPage(Page<Map> page, Map map) {
-    return page.setRecords(mapMapper.selectMapPage(page, map));
   }
 
   /**
