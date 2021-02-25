@@ -2,17 +2,22 @@ package com.wafersystems.virsical.map.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wafersystems.virsical.common.core.config.SystemProperties;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.map.BaseTest;
+import com.wafersystems.virsical.map.config.MapProperties;
 import com.wafersystems.virsical.map.entity.Svg;
 import lombok.extern.slf4j.Slf4j;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.nio.charset.StandardCharsets;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,9 +29,17 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class SvgControllerTest extends BaseTest {
 
+  @MockBean
+  SystemProperties systemProperties;
+
+  @MockBean
+  MapProperties mapProperties;
+
   @Test
   @Rollback(false)
   public void add() throws Exception {
+    Mockito.when(systemProperties.isCloudService()).thenReturn(true);
+    Mockito.when(mapProperties.getSvgUploadLimitAmount()).thenReturn(20);
     String url = "/svg/add";
     Svg svg = new Svg();
     svg.setSvgTypeCode("meeting-room");
@@ -39,6 +52,26 @@ public class SvgControllerTest extends BaseTest {
     svg.setFontSize(12);
     String content = JSON.toJSONString(svg);
     JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void addInner() throws Exception {
+    Mockito.when(mapProperties.getSvgUploadLimitAmount()).thenReturn(20);
+    String url = "/svg/addToTenant/1";
+    List<Svg> svgs = new ArrayList<>();
+    Svg svg = new Svg();
+    svg.setSvgTypeCode("test");
+    svg.setSvgName("测试添加素材");
+    svg.setSvgWidth("100");
+    svg.setSvgHeight("100");
+    svg.setSvgElement("test-eee");
+    svg.setDirection(888);
+    svg.setState(0);
+    svg.setFontSize(12);
+    svgs.add(svg);
+    String content = JSON.toJSONString(svgs);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
@@ -65,6 +98,13 @@ public class SvgControllerTest extends BaseTest {
   @Test
   public void enableList() throws Exception {
     String url = "/svg/enable-list";
+    JSONObject jsonObject = doGet(url);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void enableListAndSvgState() throws Exception {
+    String url = "/svg/enable-list-and-svg-state";
     JSONObject jsonObject = doGet(url);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
@@ -142,10 +182,6 @@ public class SvgControllerTest extends BaseTest {
     String content = JSON.toJSONString(svg);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
-
-    String url2 = "/svg/delete/2";
-    JSONObject jsonObject2 = doPost(url2, null, null);
-    Assert.assertEquals(jsonObject2.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test

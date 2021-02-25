@@ -41,6 +41,33 @@ public class SvgTypeControllerTest extends BaseTest {
   }
 
   @Test
+  public void addInner() throws Exception {
+    String url = "/svg-type/inner/add";
+    SvgType svgType = new SvgType();
+    svgType.setSvgTypeCode("test-svg-type");
+    svgType.setSvgTypeName("测试添加素材分类");
+    String content = JSON.toJSONString(svgType);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+
+    svgType.setSvgTypeCode("meeting-room");
+    String content1 = JSON.toJSONString(svgType);
+    JSONObject jsonObject1 = doPost(url, content1, null, true, false);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
+  public void addInnerForFail() throws Exception {
+    String url = "/svg-type/add";
+    SvgType svgType = new SvgType();
+    svgType.setSvgTypeCode("meeting-room");
+    svgType.setSvgTypeName("测试添加素材分类");
+    String content = JSON.toJSONString(svgType);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
   public void list() throws Exception {
     String url = "/svg-type/list";
     JSONObject jsonObject = doGet(url);
@@ -73,9 +100,27 @@ public class SvgTypeControllerTest extends BaseTest {
   }
 
   @Test
+  public void updateInner() throws Exception {
+    String url = "/svg-type/inner/update";
+    SvgType svgType = new SvgType();
+    svgType.setSvgTypeCode("meeting-room");
+    svgType.setSvgTypeName("会议室");
+    String content = JSON.toJSONString(svgType);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
   public void delete() throws Exception {
     String url = "/svg-type/delete/meeting-room";
     JSONObject jsonObject = doPost(url, null, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void deleteInner() throws Exception {
+    String url = "/svg-type/inner/delete/meeting-room";
+    JSONObject jsonObject = doPost(url, null, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 

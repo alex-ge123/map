@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
+import com.wafersystems.virsical.common.core.dto.MapElementUpdateDTO;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
@@ -49,19 +50,25 @@ public class MapElementControllerTest extends BaseTest {
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
   }
 
-//  @Test
-//  public void addForParamErrorFail() throws Exception {
-//    String url = "/map-element/add/8";
-//    String content = JSON.toJSONString(new ArrayList<>());
-//    JSONObject jsonObject = doPost(url, content, null);
-//    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
-//  }
+  @Test
+  public void delete() throws Exception {
+    String url = "/map-element/delete/1/123456";
+    ArrayList<String> ids = new ArrayList<>();
+    ids.add("03740626bab2ea5f01106456dafc957e");
+    String content = JSON.toJSONString(ids);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
 
   @Test
   public void list() throws Exception {
-    String url = "/map-element/list?mapId=1";
+    String url = "/map-element/list";
     JSONObject jsonObject = doGet(url);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+
+    String url1 = "/map-element/list?spaceId=1";
+    JSONObject jsonObject1 = doGet(url1);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
 
   @Test
@@ -69,15 +76,10 @@ public class MapElementControllerTest extends BaseTest {
     String url = "/map-element/bind";
     List<MapElementBindVO> list = new ArrayList<>();
     MapElementBindVO me = new MapElementBindVO();
-    me.setMapElementId("1");
+    me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
     me.setObjectId("A001");
     me.setObjectColor("#111111");
     list.add(me);
-    MapElementBindVO me2 = new MapElementBindVO();
-    me2.setMapElementId("2");
-    me2.setObjectId("A002");
-    me2.setObjectColor("#222222");
-    list.add(me2);
     String content = JSON.toJSONString(list);
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
@@ -86,6 +88,28 @@ public class MapElementControllerTest extends BaseTest {
   @Test
   public void bindForParamErrorFail() throws Exception {
     String url = "/map-element/bind";
+    String content = JSON.toJSONString(new ArrayList<>());
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+
+  @Test
+  public void bindRedirect() throws Exception {
+    String url = "/map-element/bind-redirect";
+    MapElementBindVO me = new MapElementBindVO();
+    me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
+    me.setMapId(1);
+    me.setObjectId("A001");
+    me.setObjectColor("#111111");
+    String content = JSON.toJSONString(me);
+    JSONObject jsonObject = doPost(url, content, null);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
+  }
+
+  @Test
+  public void bindRedirectForParamErrorFail() throws Exception {
+    String url = "/map-element/bind-redirect";
     String content = JSON.toJSONString(new ArrayList<>());
     JSONObject jsonObject = doPost(url, content, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
@@ -147,6 +171,35 @@ public class MapElementControllerTest extends BaseTest {
     String content = JSON.toJSONString(new ArrayList<>());
     JSONObject jsonObject = doPost(url, content, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+  }
+
+  @Test
+  public void updateObjectStateInner() throws Exception {
+    String url = "/map-element/update-object-state";
+    MapElementUpdateDTO meu = new MapElementUpdateDTO();
+    String content = JSON.toJSONString(meu);
+    JSONObject jsonObject = doPost(url, content, null, true, false);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+
+    List<MapElementObjectStateVO> list = new ArrayList<>();
+    MapElementObjectStateVO me = new MapElementObjectStateVO();
+    me.setObjectId("1");
+    me.setObjectName("a1");
+    me.setObjectColor("#111111");
+    me.setObjectSvgStateCode("c1");
+    list.add(me);
+    MapElementObjectStateVO me2 = new MapElementObjectStateVO();
+    me2.setObjectId("2");
+    me2.setObjectName("a2");
+    me2.setObjectColor("#222222");
+    me2.setObjectSvgStateCode("c2");
+    list.add(me2);
+
+    meu.setSvgTypeCode("meeting-room");
+    meu.setMapElementObjectStateVoList(list);
+    String content1 = JSON.toJSONString(meu);
+    JSONObject jsonObject1 = doPost(url, content1, null, true, false);
+    Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
 
 
