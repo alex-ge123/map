@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wafersystems.virsical.common.core.constant.CommonCacheConstants;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.constant.MapMqConstants;
 import com.wafersystems.virsical.common.core.constant.UpmsMqConstants;
@@ -19,14 +20,12 @@ import com.wafersystems.virsical.common.entity.UserVO;
 import com.wafersystems.virsical.common.feign.fallback.RemoteSpaceServiceFallbackImpl;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Map;
-import com.wafersystems.virsical.map.manager.MapCacheManager;
-import com.wafersystems.virsical.map.service.IMapService;
-import com.wafersystems.virsical.map.service.impl.MapServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -48,15 +47,14 @@ import java.util.List;
 @Slf4j
 @Rollback
 public class MapControllerTest extends BaseTest {
+  @Autowired
+  StringRedisTemplate stringRedisTemplate;
 
   @Autowired
   AmqpTemplate amqpTemplate;
 
   @MockBean
   RemoteSpaceServiceFallbackImpl remoteSpaceServiceFallback;
-
-  @MockBean
-  MapCacheManager mapCacheManager;
 
   private Map map = new Map();
   private Map map2 = new Map();
@@ -90,7 +88,7 @@ public class MapControllerTest extends BaseTest {
     m.setBaseMapElement("test-eee");
     String content = JSON.toJSONString(m);
     JSONObject jsonObject = doPost(url, content, null);
-    Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
+    Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
 
     String urlUpdate = "/map/add/123456";
     Map m1 = new Map();
@@ -191,12 +189,12 @@ public class MapControllerTest extends BaseTest {
     String url = "/map/getByMapIdOrSpaceId/";
     JSONObject jsonObjectFail = doGet(url, false, false);
     Assert.assertEquals(jsonObjectFail.get("code"), CommonConstants.FAIL);
-    
+
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("mapId", "1");
     JSONObject jsonObject = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.SUCCESS);
-    
+
     MultiValueMap<String, String> params1 = new LinkedMultiValueMap<>();
     params1.add("spaceId", "1");
     JSONObject jsonObject1 = doGet(url, false, false, params1);
@@ -244,7 +242,10 @@ public class MapControllerTest extends BaseTest {
   @Test
   public void index() throws Exception {
     UserVO userVO = new UserVO();
-    Mockito.when(mapCacheManager.getUserFromRedis()).thenReturn(userVO);
+    userVO.setUserId(2);
+    userVO.setDefaultZone(2);
+    stringRedisTemplate.opsForHash().put(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
+      "2", JSONUtil.toJsonStr(userVO));
 
     String url = "/map/index";
     JSONObject jsonObject = doGet(url, false, false);
@@ -258,7 +259,7 @@ public class MapControllerTest extends BaseTest {
     MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
     params2.add("spaceId", "11");
     JSONObject jsonObject2 = doGet(url, false, false, params2);
-    Assert.assertEquals(jsonObject2.get("code"), CommonConstants.SUCCESS);
+    Assert.assertEquals(jsonObject2.get("code"), CommonConstants.FAIL);
   }
 
   @Test
@@ -279,7 +280,8 @@ public class MapControllerTest extends BaseTest {
     String json = "[{\"children\":[],\"delFlag\":\"0\",\"holidayCode\":\"\",\"id\":1,\"location\":\"\"," +
       "\"name\":\"区域\",\"nameEn\":\"\",\"parentId\":0,\"parentName\":\"\",\"path\":\"-1-\",\"pathName\":\"区域\"," +
       "\"sort\":1,\"structure\":0,\"timeZone\":\"\"}]";
-    Mockito.when(mapCacheManager.getSpaceTreeFromRedis()).thenReturn(json);
+    stringRedisTemplate.opsForValue().set(
+      CommonConstants.SPACE_TREE_KEY + TenantContextHolder.getTenantId(), json);
     String url = "/map/space-tree";
     JSONObject jsonObject1 = doGet(url, false, false);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
@@ -305,13 +307,16 @@ public class MapControllerTest extends BaseTest {
     messageDTO.setMsgAction(MsgActionEnum.ADD.name());
     messageDTO.setData(JSONUtil.toJsonStr(mapElementUpdateDTO));
 
-    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
+      JSON.toJSONString(messageDTO));
 
     messageDTO.setMsgType(MsgTypeEnum.BATCH.name());
-    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
+      JSON.toJSONString(messageDTO));
 
     messageDTO.setMsgAction(MsgActionEnum.DELETE.name());
-    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY, JSON.toJSONString(messageDTO));
+    this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
+      JSON.toJSONString(messageDTO));
   }
 
   @Test
