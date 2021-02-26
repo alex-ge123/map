@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.dto.MapElementObjectStateVO;
 import com.wafersystems.virsical.common.core.dto.MapElementUpdateDTO;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.model.vo.MapElementBindVO;
 import com.wafersystems.virsical.map.model.vo.MapElementRouteVO;
 import org.springframework.test.annotation.Rollback;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -23,6 +25,20 @@ import java.util.List;
  * @date 2019/5/15 15:54
  */
 public class MapElementControllerTest extends BaseTest {
+
+  private MapElement mapElement = new MapElement();
+
+  @BeforeClass
+  public void initData() {
+    TenantContextHolder.setTenantId(1);
+    mapElement.setMapId(1);
+    mapElement.setSvgId(1);
+    mapElement.setSvgTypeCode("meeting-room");
+    mapElement.setMapWebId("web111");
+    mapElement.setObjectId("111");
+    mapElement.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
+    mapElement.insert();
+  }
 
   @Test
   @Rollback(false)
