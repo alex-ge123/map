@@ -55,10 +55,10 @@ pipeline {
                 }
             }
             steps {
-                sh "rm -rf tmp"
-                sh "mkdir -p tmp/config"
+                sh "rm -rf work"
+                sh "mkdir -p work/config"
 
-                sh "cp target/*.jar tmp"
+                sh "cp target/*.jar work"
 
                 sh "cp k8s/backend-k8s.yml k8s.yml"
                 sh "cp k8s/backend-service.yml k8s-service.yml"
@@ -84,7 +84,7 @@ pipeline {
                     datas.spring.cloud.config.uri = "http://wafer:wafer@${GROUP_NAME}-config:8080"
                     datas.server.port = 8080
 
-                    writeYaml file: "tmp/config/bootstrap.yml", data: datas
+                    writeYaml file: "work/config/bootstrap.yml", data: datas
 
                     withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
                             credentialsId: "k8s-${RD_ENV}",
@@ -98,42 +98,39 @@ pipeline {
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'DROP DATABASE IF EXISTS virsical_map'"
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'CREATE DATABASE virsical_map'"
                         }
-                        RET = sh(
-                                script: "kubectl get pvc ${SERVICE_NAME}-work --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
-                                returnStdout: true
-                        ).trim()
-                        PVC_WORK = "${RD_ENV}-${SERVICE_NAME}-work-" + RET
 
-                        ftpPublisher failOnError: true,
-                                publishers: [
-                                        [configName: 'ftp_ds1819_dev', transfers: [
-                                                [cleanRemote    : true,
-                                                 remoteDirectory: "${PVC_WORK}",
-                                                 sourceFiles    : 'tmp/',
-                                                 removePrefix   : 'tmp']
-                                        ]]
-                                ]
+                        // 创建一个初始化Pod，临时用户数据复制
+                        INIT_POD_NAME = "${SERVICE_NAME}-init-${currentBuild.startTimeInMillis}"
+                        sh "cp k8s/initpod.yml initpod.yml"
+                        sh "sed -i s@__PROJECT__@${SERVICE_NAME}@g initpod.yml"
+                        sh "sed -i s@__GROUP_NAME__@${GROUP_NAME}@g initpod.yml"
+                        sh "sed -i s@__INIT_POD_NAME__@${INIT_POD_NAME}@g initpod.yml"
+                        sh "kubectl apply -f initpod.yml -n ${RD_ENV}"
+
+                        INIT_POD_STATUS = ''
+
+                        while (INIT_POD_STATUS != 'Running') {
+                            INIT_POD_STATUS = sh(
+                                    script: "kubectl get pod ${INIT_POD_NAME} --no-headers=true -o custom-columns=status:.status.phase -n ${RD_ENV}",
+                                    returnStdout: true
+                            ).trim()
+                            
+                            echo 'Waiting for init...'
+                            sleep 2
+                        }
+
+                        // 使用初始化Pod进行数据复制
+                        sh "kubectl cp ./work ${INIT_POD_NAME}:/ -n ${RD_ENV}"
+                        // 删除初始化Pod
+                        sh "kubectl delete pod ${INIT_POD_NAME} --force -n ${RD_ENV}"
 
                         sh "kubectl apply -f k8s-service.yml -n ${RD_ENV}"
                         sh "kubectl apply -f k8s.yml -n ${RD_ENV}"
-
-                        RET = sh(
-                                script: "kubectl get pvc ${GROUP_NAME}-nginx-conf --no-headers=true -o custom-columns=pv:.spec.volumeName -n ${RD_ENV}",
-                                returnStdout: true
-                        ).trim()
-
-                        PVC_NGCONF = "${RD_ENV}-${GROUP_NAME}-nginx-conf-" + RET
-
-                        NGINX_POD = sh(
-                                script: "kubectl get pod -l app=${GROUP_NAME},tier=nginx -n ${RD_ENV} --field-selector=status.phase=Running --ignore-not-found -o custom-columns=name:.metadata.name --no-headers=true | head -1",
-                                returnStdout: true
-                        ).trim()
-
                     }
                 }
-                sh "rm -rf ${SERVICE_NAME}.zip"
-                zip archive: true, dir: './tmp', glob: '', zipFile: "${SERVICE_NAME}.zip"
-                archiveArtifacts artifacts: "${SERVICE_NAME}.zip"
+                // sh "rm -rf ${SERVICE_NAME}.zip"
+                // zip archive: true, dir: './work', glob: '', zipFile: "${SERVICE_NAME}.zip"
+                // archiveArtifacts artifacts: "${SERVICE_NAME}.zip"
             }
         }
     }
