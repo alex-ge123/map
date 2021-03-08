@@ -33,7 +33,6 @@
     <sonar.exclusions>
       src/main/java/com/wafersystems/virsical/map/common/MapMsgConstants.java,
       src/main/java/com/wafersystems/virsical/map/model/dto/**,
-      src/main/java/com/wafersystems/virsical/map/entity/**,
       src/main/java/com/wafersystems/virsical/MapApplication.java,
     </sonar.exclusions>
   </properties>
