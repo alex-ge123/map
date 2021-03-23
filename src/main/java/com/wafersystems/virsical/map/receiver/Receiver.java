@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.receiver;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
 import com.wafersystems.virsical.common.core.constant.MapMqConstants;
 import com.wafersystems.virsical.common.core.constant.UpmsMqConstants;
 import com.wafersystems.virsical.common.core.constant.enums.MsgActionEnum;
@@ -15,6 +16,7 @@ import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.service.IMapElementService;
 import com.wafersystems.virsical.map.service.IMapService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +65,11 @@ public class Receiver {
     key = MapMqConstants.STATE_UPDATE_ROUTING_KEY
   ))
   public void updateElement(@Payload String message) {
-    log.info("【{}监听到更新元素消息】{}", QUEUE_MAP_UPDATE_ELEMENT, message);
     try {
       MessageDTO messageDTO = JSON.parseObject(message, MessageDTO.class);
+      // 业务追踪id
+      MDC.put(CommonConstants.LOG_BIZ_ID, messageDTO.getBizId());
+      log.info("【{}监听到更新元素消息】{}", QUEUE_MAP_UPDATE_ELEMENT, message);
       if (MsgTypeEnum.ONE.name().equals(messageDTO.getMsgType())) {
         final MapElementUpdateDTO dto = JSON.parseObject(messageDTO.getData().toString(), MapElementUpdateDTO.class);
         if (MsgActionEnum.DELETE.name().equals(messageDTO.getMsgAction())) {
@@ -96,9 +100,11 @@ public class Receiver {
     exchange = @Exchange(value = UpmsMqConstants.EXCHANGE_FANOUT_UPMS_SPACE, type = ExchangeTypes.FANOUT)
   ))
   public void spaceOnlineOffline(@Payload String message) {
-    log.info("【{}监听区域上下线消息】{}", QUEUE_UPMS_SPACE_ONLINE_OFFICE, message);
     try {
       MessageDTO messageDTO = JSON.parseObject(message, MessageDTO.class);
+      // 业务追踪id
+      MDC.put(CommonConstants.LOG_BIZ_ID, messageDTO.getBizId());
+      log.info("【{}监听区域上下线消息】{}", QUEUE_UPMS_SPACE_ONLINE_OFFICE, message);
       if (MsgTypeEnum.BATCH.name().equals(messageDTO.getMsgType())) {
         Type type = new TypeReference<ArrayList<SysSpace>>() {
         }.getType();
