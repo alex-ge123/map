@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -53,5 +54,8 @@ public class MapSearchResultVO implements Serializable {
 
   @ApiModelProperty(value = "素材类型标识", example = "string")
   private String svgTypeCode;
+
+  @ApiModelProperty(value = "搜索结果标签列表", example = "string")
+  private List<String> tags;
 
 }

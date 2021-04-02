@@ -3,6 +3,11 @@ package com.wafersystems.virsical.map.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wafersystems.virsical.common.core.constant.CommonCacheConstants;
+import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
+import com.wafersystems.virsical.common.core.vo.UserSimpleVO;
+import com.wafersystems.virsical.common.entity.SysDept;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.entity.SvgType;
@@ -11,9 +16,12 @@ import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 import com.wafersystems.virsical.map.service.IMapService;
 import com.wafersystems.virsical.map.service.ISvgTypeService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,6 +38,8 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
   private final MapMapper mapMapper;
 
   private final ISvgTypeService svgTypeService;
+
+  private final StringRedisTemplate stringRedisTemplate;
 
   /**
    * 地图上线
@@ -74,6 +84,30 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
         }
       }
     }
-    return mapMapper.search(key, spaceId, svgTypeCode);
+    // 搜素地图资源
+    List<MapSearchResultVO> list = mapMapper.search(key, spaceId, svgTypeCode);
+
+    // 根据userId（objectBusiness）获取全路径部门名称
+    HashMap<String, List<String>> userDeptPathList = new HashMap<>(list.size());
+    list.forEach(mapSearchResultVO -> {
+      if (userDeptPathList.containsKey(mapSearchResultVO.getObjectBusiness())) {
+        mapSearchResultVO.setTags(userDeptPathList.get(mapSearchResultVO.getObjectBusiness()));
+      } else {
+        Object userObject =
+          stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
+            mapSearchResultVO);
+        if (userObject != null) {
+          Object deptObject = stringRedisTemplate.opsForHash().get(
+            CommonConstants.DEPT_KEY + TenantContextHolder.getTenantId(), ((UserSimpleVO) userObject).getDeptId());
+          if (deptObject != null) {
+            List<String> tags = new ArrayList<>();
+            tags.add(((SysDept) deptObject).getPathName());
+            userDeptPathList.put(mapSearchResultVO.getObjectBusiness(), tags);
+            mapSearchResultVO.setTags(userDeptPathList.get(mapSearchResultVO.getObjectBusiness()));
+          }
+        }
+      }
+    });
+    return list;
   }
 }

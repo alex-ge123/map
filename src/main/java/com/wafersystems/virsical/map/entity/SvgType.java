@@ -63,4 +63,9 @@ public class SvgType extends Model<SvgType> {
    * 当前素材类型下的素材
    */
   private transient List<Svg> svgList;
+
+  /**
+   * 是否设为地图首页搜索类型
+   */
+  private transient boolean searchType;
 }

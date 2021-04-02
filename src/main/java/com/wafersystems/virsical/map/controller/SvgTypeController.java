@@ -8,6 +8,7 @@ import com.wafersystems.virsical.common.security.annotation.Inner;
 import com.wafersystems.virsical.map.common.BaseController;
 import com.wafersystems.virsical.map.common.MapConstants;
 import com.wafersystems.virsical.map.common.MapMsgConstants;
+import com.wafersystems.virsical.map.config.MapProperties;
 import com.wafersystems.virsical.map.entity.SvgType;
 import com.wafersystems.virsical.map.service.ISvgTypeService;
 import io.swagger.annotations.Api;
@@ -35,6 +36,8 @@ import java.util.List;
 public class SvgTypeController extends BaseController {
 
   private final ISvgTypeService svgTypeService;
+
+  private final MapProperties mapProperties;
 
   /**
    * 添加素材类型
@@ -111,9 +114,18 @@ public class SvgTypeController extends BaseController {
 
   @ApiOperation(value = "获取启用的素材类型列表", notes = "获取启用的素材类型列表")
   @GetMapping("/list")
-  public R<List<SvgType>> list() {
-    return R.ok(svgTypeService.list(
-      Wrappers.<SvgType>lambdaQuery().eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE).orderByAsc(SvgType::getSort)));
+  public R list() {
+    List<SvgType> list = svgTypeService.list(Wrappers.<SvgType>lambdaQuery()
+      .eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE)
+      .orderByAsc(SvgType::getSort));
+    list.forEach(svgType -> {
+      if (mapProperties.getIndexSearchSvgTypeCode().contains(svgType.getSvgTypeCode())) {
+        svgType.setSearchType(true);
+      } else {
+        svgType.setSearchType(false);
+      }
+    });
+    return R.ok(list);
   }
 
   @ApiOperation(value = "获取分页素材类型列表", notes = "根据分页条件、素材类型对象条件获取分页素材类型列表")
