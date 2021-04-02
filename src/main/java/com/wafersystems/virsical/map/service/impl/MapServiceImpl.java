@@ -95,7 +95,7 @@ public class MapServiceImpl extends ServiceImpl<MapMapper, Map> implements IMapS
       } else {
         Object userObject =
           stringRedisTemplate.opsForHash().get(CommonCacheConstants.USER_KEY + TenantContextHolder.getTenantId(),
-            mapSearchResultVO);
+            mapSearchResultVO.getObjectBusiness());
         if (userObject != null) {
           Object deptObject = stringRedisTemplate.opsForHash().get(
             CommonConstants.DEPT_KEY + TenantContextHolder.getTenantId(), ((UserSimpleVO) userObject).getDeptId());
