@@ -47,11 +47,12 @@ public interface MapMapper extends BaseMapper<Map> {
   /**
    * 模糊搜索地图元素
    *
+   * @param page        分页参数
    * @param key         关键字
    * @param spaceId     空间id
    * @param svgTypeCode 素材类型标识
    * @return List
    */
-  List<MapSearchResultVO> search(@Param("key") String key,
+  List<MapSearchResultVO> search(@Param("page") Page page, @Param("key") String key,
                                  @Param("spaceId") Integer spaceId, @Param("svgTypeCode") String svgTypeCode);
 }

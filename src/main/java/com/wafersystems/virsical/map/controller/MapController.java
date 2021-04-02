@@ -21,6 +21,7 @@ import com.wafersystems.virsical.map.common.MapMsgConstants;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.manager.MapCacheManager;
 import com.wafersystems.virsical.map.model.dto.SpaceMapDTO;
+import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 import com.wafersystems.virsical.map.service.IMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -270,17 +271,19 @@ public class MapController extends BaseController {
   /**
    * 模糊搜索地图元素
    *
+   * @param page        分页参数
    * @param key         关键字
    * @param spaceId     区域id
    * @param svgTypeCode 素材类型标识
    * @return R
    */
   @GetMapping("/search")
-  public R search(String key, Integer spaceId, String svgTypeCode) {
+  public R search(com.baomidou.mybatisplus.extension.plugins.pagination.Page<MapSearchResultVO> page,
+                  String key, Integer spaceId, String svgTypeCode) {
     if (StrUtil.isAllEmpty(key, svgTypeCode) && spaceId == null) {
       return R.ok();
     }
-    return R.ok(mapService.search(key, spaceId, svgTypeCode));
+    return R.ok(mapService.search(page, key, spaceId, svgTypeCode));
   }
 
   /**

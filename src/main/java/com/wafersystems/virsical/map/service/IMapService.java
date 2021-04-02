@@ -35,10 +35,11 @@ public interface IMapService extends IService<Map> {
   /**
    * 模糊搜索地图元素
    *
+   * @param page        分页参数
    * @param key         关键字
    * @param spaceId     区域id
    * @param svgTypeCode 素材类型标识
-   * @return List
+   * @return IPage
    */
-  List<MapSearchResultVO> search(String key, Integer spaceId, String svgTypeCode);
+  IPage<MapSearchResultVO> search(Page<MapSearchResultVO> page, String key, Integer spaceId, String svgTypeCode);
 }
