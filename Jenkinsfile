@@ -89,15 +89,15 @@ pipeline {
                     withKubeConfig(clusterName: "${K8S_CLUSTER_NAME}",
                             credentialsId: "k8s-${RD_ENV}",
                             serverUrl: "https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}") {
-                        if (params.reserveDBData == 'No') {
-                            MYSQL_POD = sh(
-                                    script: "kubectl get pod -n ${RD_ENV} --field-selector=status.phase=Running --ignore-not-found -o custom-columns=name:.metadata.name --no-headers=true | grep ^${GROUP_NAME}-mysql | head -1",
-                                    returnStdout: true
-                            ).trim()
+                        MYSQL_POD = sh(
+                                script: "kubectl get pod -n ${RD_ENV} --field-selector=status.phase=Running --ignore-not-found -o custom-columns=name:.metadata.name --no-headers=true | grep ^${GROUP_NAME}-mysql | head -1",
+                                returnStdout: true
+                        ).trim()
 
+                        if (params.reserveDBData == 'No') {
                             sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'DROP DATABASE IF EXISTS virsical_map'"
-                            sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'CREATE DATABASE virsical_map'"
                         }
+                        sh "kubectl exec ${MYSQL_POD} -n ${RD_ENV} -- mysql -uwafer -pwafer -e 'CREATE DATABASE IF NOT EXISTS virsical_map'"
 
                         // 创建一个初始化Pod，临时用户数据复制
                         INIT_POD_NAME = "${SERVICE_NAME}-init-${currentBuild.startTimeInMillis}"
