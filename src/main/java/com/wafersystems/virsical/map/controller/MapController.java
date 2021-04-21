@@ -60,7 +60,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "添加地图", notes = "添加地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/add/{key}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_upload')")
   public R add(@RequestBody Map map, @PathVariable String key) {
     List<Map> list = mapService.list(Wrappers.<Map>query().lambda().eq(Map::getFloorId, map.getFloorId()));
     if (list != null && !list.isEmpty()) {
@@ -72,7 +72,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "修改地图", notes = "根据地图id修改地图")
   @ApiImplicitParam(name = "map", value = "地图对象", required = true, dataType = "Map")
   @PostMapping("/update/{key}")
-  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_upload')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_edit')")
   public R update(@RequestBody Map map, @PathVariable String key) {
     // 验证操作权限
     R r = cacheManager.checkMapEditPermission(map.getMapId(), key, false);
@@ -85,7 +85,7 @@ public class MapController extends BaseController {
   @ApiOperation(value = "删除地图", notes = "根据地图id删除地图")
   @ApiImplicitParam(name = "id", value = "地图id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_del')")
   public R delete(@PathVariable Integer id) {
     return mapService.removeById(id) ? R.ok() : R.fail();
   }
@@ -194,7 +194,7 @@ public class MapController extends BaseController {
    * @return R
    */
   @GetMapping("/getEditPermission")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage')")
   public R getEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
     R r = cacheManager.checkMapEditPermission(mapId, key, true);
     if (r.getCode() == CommonConstants.FAIL) {
@@ -211,7 +211,7 @@ public class MapController extends BaseController {
    * @return R
    */
   @GetMapping("/forceGetEditPermission")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage')")
   public R forceGetEditPermission(@RequestParam Integer mapId, @RequestParam String key) {
     key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
     cacheManager.cacheMapEditPermission(mapId, key);
@@ -287,7 +287,6 @@ public class MapController extends BaseController {
    * 查询树形菜单集合
    */
   @GetMapping(value = "/space-tree")
-  @PreAuthorize("@pms.hasPermission('')")
   public R getTree() {
     List<Map> list = mapService.list();
     JSONArray jsonArray = JSON.parseArray(cacheManager.getSpaceTreeFromRedis());

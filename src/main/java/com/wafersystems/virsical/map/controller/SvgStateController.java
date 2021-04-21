@@ -43,7 +43,7 @@ public class SvgStateController extends BaseController {
   @ApiOperation(value = "添加素材状态", notes = "添加素材状态")
   @ApiImplicitParam(name = "svgState", value = "素材状态对象", required = true, dataType = "SvgState")
   @PostMapping("/add")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_edit')")
   public R add(@RequestBody SvgState svgState) {
     List<SvgState> list = svgStateService.list(Wrappers.<SvgState>lambdaQuery()
       .eq(SvgState::getSvgId, svgState.getSvgId())
@@ -63,7 +63,7 @@ public class SvgStateController extends BaseController {
   @ApiOperation(value = "修改素材状态", notes = "根据素材状态id修改素材状态")
   @ApiImplicitParam(name = "svgState", value = "素材状态对象", required = true, dataType = "SvgState")
   @PostMapping("/update")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_edit')")
   public R update(@RequestBody SvgState svgState) {
     List<SvgState> list = svgStateService.list(Wrappers.<SvgState>lambdaQuery()
       .eq(SvgState::getSvgId, svgState.getSvgId())
@@ -78,7 +78,7 @@ public class SvgStateController extends BaseController {
   @ApiOperation(value = "删除素材状态", notes = "根据素材状态id删除素材状态")
   @ApiImplicitParam(name = "id", value = "素材状态id", required = true, dataType = "Integer")
   @PostMapping("/delete/{id}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_edit')")
   public R delete(@PathVariable Integer id) {
     return svgStateService.removeById(id) ? R.ok() : R.fail();
   }

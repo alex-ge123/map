@@ -82,7 +82,7 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "批量删除地图元素", notes = "批量根据地图id删除地图元素")
   @ApiImplicitParam(name = "ids", value = "地图元素id集合", required = true, dataType = "Integer")
   @PostMapping("/delete/{mapId}/{key}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_del')")
   public R delete(@PathVariable Integer mapId, @PathVariable String key, @RequestBody List<String> ids) {
     R r = cacheManager.checkMapEditPermission(mapId, key, true);
     if (r.getCode() == CommonConstants.FAIL) {
@@ -121,7 +121,7 @@ public class MapElementController extends BaseController {
   @ApiOperation(value = "地图元素资源绑定", notes = "地图元素资源绑定（支持批量）")
   @ApiImplicitParam(name = "list", value = "地图元素资源对象集合", required = true, dataType = "MapElement")
   @PostMapping("/bind")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_bind')")
   public R bind(@RequestBody List<MapElementBindVO> mapElementBindVoList) {
     if (mapElementBindVoList.isEmpty()) {
       return R.fail(MapMsgConstants.MAP_ELEMENT_NO_NULL);
@@ -143,7 +143,7 @@ public class MapElementController extends BaseController {
    * @return R
    */
   @PostMapping("/bind-redirect")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_manage_bind')")
   public R bindRedirect(@RequestBody MapElementBindVO mapElementBindVO) {
     MapElement mapElement = mapElementService.getById(mapElementBindVO.getMapElementId());
     if (mapElement == null) {

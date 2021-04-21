@@ -45,7 +45,7 @@ public class SvgTypeController extends BaseController {
   @ApiOperation(value = "添加素材类型", notes = "添加素材类型")
   @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
   @PostMapping("/add")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_add')")
   public R add(@RequestBody SvgType svgType) {
     if (svgTypeService.getById(svgType.getSvgTypeCode()) != null) {
       return R.fail(MapMsgConstants.MATERIAL_TYPE_REPETITION);
@@ -73,7 +73,7 @@ public class SvgTypeController extends BaseController {
   @ApiOperation(value = "修改素材类型", notes = "根据素材类型id修改素材类型")
   @ApiImplicitParam(name = "svgType", value = "素材类型对象", required = true, dataType = "SvgType")
   @PostMapping("/update")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_edit')")
   public R update(@RequestBody SvgType svgType) {
     return svgTypeService.updateById(svgType) ? R.ok() : R.fail();
   }
@@ -89,7 +89,7 @@ public class SvgTypeController extends BaseController {
   @ApiOperation(value = "删除素材类型", notes = "根据素材类型标识删除素材类型")
   @ApiImplicitParam(name = "code", value = "素材类型标识", required = true, dataType = "String")
   @PostMapping("/delete/{code}")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material_del')")
   public R delete(@PathVariable String code) {
     return svgTypeService.removeById(code) ? R.ok() : R.fail();
   }

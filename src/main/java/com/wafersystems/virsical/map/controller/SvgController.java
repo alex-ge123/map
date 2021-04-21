@@ -62,7 +62,7 @@ public class SvgController extends BaseController {
    */
   @ApiOperation(value = "解析SVG文件", notes = "解析SVG文件")
   @PostMapping("/parse")
-  @PreAuthorize("@pms.hasPermission('')")
+  @PreAuthorize("@pms.hasPermission('admin@common@map_material')")
   public R parse(@RequestParam MultipartFile svgFile) {
     java.util.Map<String, String> svgMap;
     try {
