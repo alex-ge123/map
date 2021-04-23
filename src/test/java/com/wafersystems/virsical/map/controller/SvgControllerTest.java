@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wafersystems.virsical.common.core.config.SystemProperties;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.config.MapProperties;
+import com.wafersystems.virsical.map.entity.MapElement;
 import com.wafersystems.virsical.map.entity.Svg;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
@@ -186,6 +188,15 @@ public class SvgControllerTest extends BaseTest {
 
   @Test
   public void deleteForUsed() throws Exception {
+    TenantContextHolder.setTenantId(1);
+    MapElement mapElement = new MapElement();
+    mapElement.setMapId(1);
+    mapElement.setSvgId(1);
+    mapElement.setSvgTypeCode("meeting-room");
+    mapElement.setMapWebId("web111");
+    mapElement.setObjectId("111");
+    mapElement.setMapElementId("01ea73b494b75f59bcd91232ee6d6bf4");
+    mapElement.insert();
     String url = "/svg/delete/1";
     JSONObject jsonObject = doPost(url, null, null);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);

@@ -20,6 +20,7 @@ import com.wafersystems.virsical.common.entity.UserVO;
 import com.wafersystems.virsical.common.feign.fallback.RemoteSpaceServiceFallbackImpl;
 import com.wafersystems.virsical.map.BaseTest;
 import com.wafersystems.virsical.map.entity.Map;
+import com.wafersystems.virsical.map.entity.MapElement;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -289,6 +290,16 @@ public class MapControllerTest extends BaseTest {
 
   @Test
   public void testUpdateElementMq() {
+    TenantContextHolder.setTenantId(1);
+    MapElement mapElement = new MapElement();
+    mapElement.setMapId(1);
+    mapElement.setSvgId(1);
+    mapElement.setSvgTypeCode("meeting-room");
+    mapElement.setMapWebId("web001");
+    mapElement.setObjectId("M001");
+    mapElement.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6123");
+    mapElement.insert();
+
     MapElementObjectStateVO vo = new MapElementObjectStateVO();
     vo.setObjectId("M001");
     vo.setObjectName("华山");
@@ -310,11 +321,11 @@ public class MapControllerTest extends BaseTest {
     this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
       JSON.toJSONString(messageDTO));
 
-    messageDTO.setMsgType(MsgTypeEnum.BATCH.name());
+    messageDTO.setMsgAction(MsgActionEnum.DELETE.name());
     this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
       JSON.toJSONString(messageDTO));
 
-    messageDTO.setMsgAction(MsgActionEnum.DELETE.name());
+    messageDTO.setMsgType(MsgTypeEnum.BATCH.name());
     this.amqpTemplate.convertAndSend(MapMqConstants.EXCHANGE_DIRECT_MAP, MapMqConstants.STATE_UPDATE_ROUTING_KEY,
       JSON.toJSONString(messageDTO));
   }
