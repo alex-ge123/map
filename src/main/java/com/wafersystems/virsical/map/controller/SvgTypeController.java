@@ -118,13 +118,8 @@ public class SvgTypeController extends BaseController {
     List<SvgType> list = svgTypeService.list(Wrappers.<SvgType>lambdaQuery()
       .eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE)
       .orderByAsc(SvgType::getSort));
-    list.forEach(svgType -> {
-      if (mapProperties.getIndexSearchSvgTypeCode().contains(svgType.getSvgTypeCode())) {
-        svgType.setSearchType(true);
-      } else {
-        svgType.setSearchType(false);
-      }
-    });
+    list.forEach(svgType ->
+      svgType.setSearchType(mapProperties.getIndexSearchSvgTypeCode().contains(svgType.getSvgTypeCode())));
     return R.ok(list);
   }
 

@@ -69,6 +69,15 @@ tenant:
     - svg
     - svg_state
 
+map:
+  # svg上传数量限制
+  svg-upload-limit-amount: 20
+  # 地图首页根据类型查询项
+  index-search-svg-type-code:
+    - meeting-room
+    - workspace
+    - common
+
 # 暴露监控端点
 management:
   endpoints:

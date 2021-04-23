@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wafersystems.virsical.map.entity.Map;
 import com.wafersystems.virsical.map.model.vo.MapSearchResultVO;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
