@@ -184,7 +184,6 @@ public class SvgController extends BaseController {
   @GetMapping("/group")
   public R<List<SvgType>> group() {
     List<SvgType> svgTypeList = new SvgType().selectList(Wrappers.<SvgType>lambdaQuery()
-      .select(SvgType::getSvgTypeCode, SvgType::getSvgTypeName)
       .eq(SvgType::getSvgTypeState, MapConstants.OPEN_STATE));
     svgTypeList.forEach(svgType -> svgType.setSvgList(svgService.list(Wrappers.<Svg>lambdaQuery()
       .select(Svg::getSvgId, Svg::getSvgTypeCode, Svg::getSvgName, Svg::getSvgWidth,
