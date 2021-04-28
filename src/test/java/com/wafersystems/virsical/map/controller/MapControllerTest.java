@@ -1,5 +1,6 @@
 package com.wafersystems.virsical.map.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -270,12 +271,10 @@ public class MapControllerTest extends BaseTest {
     mapElement.setMapId(1);
     mapElement.setSvgId(1);
     mapElement.setSvgTypeCode("meeting-room");
-    mapElement.setMapWebId("web111");
-    mapElement.setObjectId("111");
+    mapElement.setMapWebId("aaa001");
+    mapElement.setObjectId("A001");
     mapElement.setObjectName("张三");
-    mapElement.setObjectColor("#123456");
-    mapElement.setObjectBusiness("1");
-    mapElement.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
+    mapElement.setMapElementId(RandomUtil.randomString(10));
     mapElement.insert();
 
     String url = "/map/search";
@@ -284,7 +283,7 @@ public class MapControllerTest extends BaseTest {
 
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("spaceId", "1");
-    params.add("key", "张三");
+    params.add("key", "common");
     JSONObject jsonObject1 = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
@@ -310,6 +309,7 @@ public class MapControllerTest extends BaseTest {
     mapElement.setSvgTypeCode("meeting-room");
     mapElement.setMapWebId("text001");
     mapElement.setObjectId("M001");
+    mapElement.setObjectName("张三");
     mapElement.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6123");
     mapElement.insert();
 
