@@ -49,17 +49,19 @@ public class MapElementControllerTest extends BaseTest {
     me.setMapId(1);
     me.setSvgId(1);
     me.setSvgTypeCode("meeting-room");
-    me.setMapWebId("web001");
+    me.setMapWebId("text001");
     me.setObjectId("1");
     me.setMapElementId("01ea73b494b75f59bcd90ba2ee6d6bf4");
+    me.setCustomElement("");
     list.add(me);
     MapElement me2 = new MapElement();
     me2.setMapId(2);
     me2.setSvgId(1);
     me2.setSvgTypeCode("meeting-room");
-    me2.setMapWebId("web002");
+    me2.setMapWebId("text002");
     me2.setObjectId("2");
     me2.setMapElementId("03740626bab2ea5f01106456dafc957e");
+    me2.setCustomElement("");
     list.add(me2);
     String content = JSON.toJSONString(list);
     JSONObject jsonObject = doPost(url, content, null);
@@ -193,6 +195,7 @@ public class MapElementControllerTest extends BaseTest {
   public void updateObjectStateInner() throws Exception {
     String url = "/map-element/update-object-state";
     MapElementUpdateDTO meu = new MapElementUpdateDTO();
+    meu.setMapElementObjectStateVoList(new ArrayList<>());
     String content = JSON.toJSONString(meu);
     JSONObject jsonObject = doPost(url, content, null, true, false);
     Assert.assertEquals(jsonObject.get("code"), CommonConstants.FAIL);
