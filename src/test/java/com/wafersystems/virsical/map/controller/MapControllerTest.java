@@ -274,6 +274,7 @@ public class MapControllerTest extends BaseTest {
     mapElement.setMapWebId("aaa001");
     mapElement.setObjectId("A001");
     mapElement.setObjectName("张三");
+    mapElement.setObjectBusiness("1");
     mapElement.setMapElementId(RandomUtil.randomString(10));
     mapElement.insert();
 
@@ -283,7 +284,7 @@ public class MapControllerTest extends BaseTest {
 
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("spaceId", "1");
-    params.add("key", "common");
+    params.add("key", "会议室");
     JSONObject jsonObject1 = doGet(url, false, false, params);
     Assert.assertEquals(jsonObject1.get("code"), CommonConstants.SUCCESS);
   }
