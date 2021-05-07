@@ -38,7 +38,7 @@ public class MapCacheManager {
     key = TenantContextHolder.getUsername() + CommonConstants.COMMA + key;
     if (cacheValue != null && !key.equals(cacheValue)) {
       Long expire = stringRedisTemplate.getExpire(MapConstants.MAP_EDIT_PERMISSION + mapId, TimeUnit.SECONDS);
-      if (expire != null && expire > 0) {
+      if (expire > 0) {
         Map<String, String> map = new HashMap<>(2);
         map.put("expire", expire.toString());
         map.put("username", cacheValue.split(CommonConstants.COMMA)[0]);
@@ -69,7 +69,7 @@ public class MapCacheManager {
    */
   public void releaseEditPermission(Integer mapId) {
     Boolean b = stringRedisTemplate.hasKey(MapConstants.MAP_EDIT_PERMISSION + mapId);
-    if (b != null && b) {
+    if (b) {
       stringRedisTemplate.delete(MapConstants.MAP_EDIT_PERMISSION + mapId);
     }
   }
