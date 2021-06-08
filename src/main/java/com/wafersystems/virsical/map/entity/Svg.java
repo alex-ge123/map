@@ -72,7 +72,7 @@ public class Svg extends Model<Svg> {
   private Integer fontSize;
 
   @ApiModelProperty(value = "字体颜色", example = "0")
-  private Integer fontColor;
+  private String fontColor;
 
   @ApiModelProperty(value = "逻辑删除：0-正常，1-删除", example = "0")
   @JsonIgnore
