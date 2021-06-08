@@ -17,6 +17,7 @@
     <result column="direction" property="direction"/>
     <result column="state" property="state"/>
     <result column="font_size" property="fontSize"/>
+    <result column="font_color" property="fontColor"/>
     <result column="del_flag" property="delFlag"/>
     <result column="create_time" property="createTime"/>
     <result column="update_time" property="updateTime"/>
@@ -24,7 +25,7 @@
 
   <!-- 通用查询结果列 -->
   <sql id="Base_Column_List">
-        svg_id, tenant_id, svg_type_code, svg_name, svg_width, svg_height, svg_element, view_box, axisx, axixy, direction, state, font_size, del_flag, create_time, update_time
+        svg_id, tenant_id, svg_type_code, svg_name, svg_width, svg_height, svg_element, view_box, axisx, axixy, direction, state, font_size, font_color, del_flag, create_time, update_time
   </sql>
 
   <select id="selectSvgPage" resultType="com.wafersystems.virsical.map.entity.Svg">

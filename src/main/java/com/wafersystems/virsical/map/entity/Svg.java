@@ -71,6 +71,9 @@ public class Svg extends Model<Svg> {
   @ApiModelProperty(value = "字体大小", example = "0")
   private Integer fontSize;
 
+  @ApiModelProperty(value = "字体颜色", example = "0")
+  private Integer fontColor;
+
   @ApiModelProperty(value = "逻辑删除：0-正常，1-删除", example = "0")
   @JsonIgnore
   @TableLogic
