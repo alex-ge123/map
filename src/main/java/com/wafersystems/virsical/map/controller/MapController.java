@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wafersystems.virsical.common.core.constant.CommonConstants;
+import com.wafersystems.virsical.common.core.constant.SysDictConstants;
 import com.wafersystems.virsical.common.core.dto.Page;
 import com.wafersystems.virsical.common.core.tenant.TenantContextHolder;
 import com.wafersystems.virsical.common.core.util.R;
@@ -95,7 +97,13 @@ public class MapController extends BaseController {
   @ApiImplicitParam(name = "id", value = "地图id", required = true, dataType = "Integer")
   @GetMapping("/{id}")
   public R<Map> get(@PathVariable Integer id) {
-    return R.ok(mapService.getById(id));
+    final Map map = mapService.getById(id);
+    final java.util.Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(CommonConstants.SYS_DICT + SysDictConstants.MAP_CONF_TYPE + ":" + TenantContextHolder.getTenantId());
+    if (CollUtil.isNotEmpty(entries)) {
+      map.setColors(String.valueOf(entries.get(SysDictConstants.MAP_COLORS)));
+      map.setIcon(String.valueOf(entries.get(SysDictConstants.MAP_ICON)));
+    }
+    return R.ok(map);
   }
 
   @ApiOperation(value = "根据地图id或区域id获取地图", notes = "根据地图id或区域id获取地图")

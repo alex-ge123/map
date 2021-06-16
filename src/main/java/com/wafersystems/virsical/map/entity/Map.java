@@ -1,6 +1,7 @@
 package com.wafersystems.virsical.map.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -98,6 +99,14 @@ public class Map extends Model<Map> {
 
   @ApiModelProperty(value = "修改时间")
   private LocalDateTime updateTime;
+
+  @ApiModelProperty(value = "地图颜色设置")
+  @TableField(exist = false)
+  private String colors;
+
+  @ApiModelProperty(value = "地图图标设置")
+  @TableField(exist = false)
+  private String icon;
 
 
   @Override
