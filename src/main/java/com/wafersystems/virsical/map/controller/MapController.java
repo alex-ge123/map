@@ -3,6 +3,7 @@ package com.wafersystems.virsical.map.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -99,7 +100,7 @@ public class MapController extends BaseController {
   public R<Map> get(@PathVariable Integer id) {
     final Map map = mapService.getById(id);
     final java.util.Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(CommonConstants.SYS_DICT + SysDictConstants.MAP_CONF_TYPE + ":" + TenantContextHolder.getTenantId());
-    if (CollUtil.isNotEmpty(entries)) {
+    if (CollUtil.isNotEmpty(entries) && ObjectUtil.isNotEmpty(map)) {
       map.setColors(String.valueOf(entries.get(SysDictConstants.MAP_COLORS)));
       map.setIcon(String.valueOf(entries.get(SysDictConstants.MAP_ICON)));
     }
@@ -275,11 +276,11 @@ public class MapController extends BaseController {
     }
     final Map map = list.get(0);
     final java.util.Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(CommonConstants.SYS_DICT + SysDictConstants.MAP_CONF_TYPE + ":" + TenantContextHolder.getTenantId());
-    if (CollUtil.isNotEmpty(entries)) {
+    if (CollUtil.isNotEmpty(entries) && ObjectUtil.isNotEmpty(map)) {
       map.setColors(String.valueOf(entries.get(SysDictConstants.MAP_COLORS)));
       map.setIcon(String.valueOf(entries.get(SysDictConstants.MAP_ICON)));
     }
-    return R.ok();
+    return R.ok(map);
   }
 
   /**
