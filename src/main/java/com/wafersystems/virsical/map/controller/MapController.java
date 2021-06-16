@@ -273,7 +273,13 @@ public class MapController extends BaseController {
         }
       }
     }
-    return R.ok(list.get(0));
+    final Map map = list.get(0);
+    final java.util.Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(CommonConstants.SYS_DICT + SysDictConstants.MAP_CONF_TYPE + ":" + TenantContextHolder.getTenantId());
+    if (CollUtil.isNotEmpty(entries)) {
+      map.setColors(String.valueOf(entries.get(SysDictConstants.MAP_COLORS)));
+      map.setIcon(String.valueOf(entries.get(SysDictConstants.MAP_ICON)));
+    }
+    return R.ok();
   }
 
   /**
